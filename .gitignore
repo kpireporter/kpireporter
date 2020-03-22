@@ -1,0 +1,6 @@
+# tox build
+.tox/
+# Python builds
+*.egg-info/
+*.pyc
+__pycache__/

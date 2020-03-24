@@ -1,1 +1,1 @@
-VERSION = '0.0.1'
+from .version import VERSION  # noqa

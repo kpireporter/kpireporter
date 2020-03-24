@@ -12,10 +12,6 @@ class DatasourceError(Exception):
     pass
 
 
-class DatasourceLoadError(DatasourceError):
-    pass
-
-
 class Datasource(ABC):
 
     @abstractmethod
@@ -50,7 +46,7 @@ class DatasourceManager:
                 self._datasources[name] = self._init_datasource(name, conf)
                 LOG.info(f"Initialized datasource {name}")
             except Exception as exc:
-                raise DatasourceLoadError(
+                raise DatasourceError(
                     f"Failed to load datasource {name}") from exc
 
     def query(self, name, *args, **kwargs):

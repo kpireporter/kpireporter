@@ -4,7 +4,7 @@ import stevedore
 import unittest
 from unittest.mock import MagicMock
 
-from reportcard.datasource import DatasourceError, DatasourceLoadError
+from reportcard.datasource import DatasourceError
 from reportcard.datasource import DatasourceManager
 
 DATASOURCE = "my_datasource"
@@ -27,7 +27,7 @@ class TestDatasource(unittest.TestCase):
         self.extension_manager_factory = extension_manager_factory
 
     def test_missing_plugin(self):
-        with self.assertRaises(DatasourceLoadError):
+        with self.assertRaises(DatasourceError):
             DatasourceManager({DATASOURCE: {}})
 
     def _make_datasource_with_plugins(self, plugins=None,
@@ -37,13 +37,13 @@ class TestDatasource(unittest.TestCase):
         return DatasourceManager(conf, extension_manager_factory=factory)
 
     def test_invalid_plugin(self):
-        with self.assertRaises(DatasourceLoadError):
+        with self.assertRaises(DatasourceError):
             DatasourceManager(
                 {DATASOURCE: {"plugin": "missing"}},
             )
 
     def test_invalid_args(self):
-        with self.assertRaises(DatasourceLoadError):
+        with self.assertRaises(DatasourceError):
             DatasourceManager(
                 {DATASOURCE: {"plugin": PLUGIN, "args": "foo"}},
                 extension_manager_factory=self.extension_manager_factory
@@ -53,7 +53,7 @@ class TestDatasource(unittest.TestCase):
         def test_plugin():
             raise ValueError("I'm a bad plugin!")
 
-        with self.assertRaises(DatasourceLoadError):
+        with self.assertRaises(DatasourceError):
             self._make_datasource_with_plugins([(PLUGIN, test_plugin)])
 
     def test_invalid_query_return_type(self):

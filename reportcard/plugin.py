@@ -8,8 +8,9 @@ class PluginManager:
     exc_class = Exception
     type_noun = "plugin"
 
-    def __init__(self, config, extension_manager=None):
+    def __init__(self, config, report=None, extension_manager=None):
         self.log = logging.getLogger(__name__)
+        self.report = report
 
         if not self.namespace:
             self.namespace = f"reportcard.{self.type_noun}"
@@ -30,19 +31,26 @@ class PluginManager:
         self._instances = {}
         for name, conf in config.items():
             try:
-                self._instances[name] = self._instantiate_plugin(conf)
+                self._instances[name] = self.create_instance(conf)
                 self.log.info(f"Initialized {self.type_noun} {name}")
             except Exception as exc:
                 raise self.exc_class(
                     f"Failed to load {self.type_noun} {name}") from exc
 
-    def call_instance(self, name, method, *args, **kwargs):
+    def instances(self):
+        return self._instances.keys()
+
+    def get_instance_attr(self, name: str, attr: str) -> any:
         if name not in self._instances:
             raise self.exc_class((
                 f"Could not find {self.type_noun} {name}; is it loaded?"))
 
         plugin = self._instances[name]
-        fn = getattr(plugin, method)
+        
+        return getattr(plugin, attr)
+
+    def call_instance(self, name: str, method: str, *args, **kwargs) -> any:
+        fn = self.get_instance_attr(name, method)
 
         if not callable(fn):
             raise self.exc_class((
@@ -50,7 +58,7 @@ class PluginManager:
 
         return fn(*args, **kwargs)
 
-    def _instantiate_plugin(self, config):
+    def create_instance(self, config: dict) -> any:
         plugin = config.get("plugin")
 
         if not plugin:
@@ -66,4 +74,7 @@ class PluginManager:
                 f"Malformed plugin arguments: expected dict, "
                 f"got {plugin_kwargs}"))
 
-        return self._mgr[plugin].plugin(**plugin_kwargs)
+        return self.plugin_factory(self._mgr[plugin].plugin, plugin_kwargs)
+
+    def plugin_factory(self, plugin_ctor, plugin_kwargs):
+        return plugin_ctor(**plugin_kwargs)

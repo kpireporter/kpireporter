@@ -1,0 +1,35 @@
+---
+version: "3.7"
+
+services:
+  mysql:
+    image: mariadb:latest
+    environment:
+      MYSQL_DATABASE: reportcard
+      MYSQL_USER: reportcard
+      MYSQL_PASSWORD: reportcard_pass
+      MYSQL_ROOT_PASSWORD: root_pass
+    volumes:
+      - type: bind
+        source: ./datasources/mysql
+        target: /docker-entrypoint-initdb.d
+        read_only: True
+
+  reportcard:
+    build:
+      context: ..
+    entrypoint: /bin/bash
+    stdin_open: True
+    tty: True
+    volumes:
+      - type: bind
+        source: ../reportcard
+        target: /opt/reportcard/reportcard
+      - type: bind
+        source: ../setup.cfg
+        target: /opt/reportcard/setup.cfg
+        read_only: True
+      - type: bind
+        source: ../examples
+        target: /opt/reportcard/examples
+        read_only: True

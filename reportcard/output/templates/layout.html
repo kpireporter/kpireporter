@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>{{ title }}</title>
+    {% include "styles.html" %}
+  </head>
+  <body class="">
+    <span class="preheader">{{ preview }}</span>
+    <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="body">
+      <tr>
+        <td>&nbsp;</td>
+        <td class="container">
+          <div class="content">
+
+            <!-- START CENTERED WHITE CONTAINER -->
+            <table role="presentation" class="main">
+
+              <!-- START MAIN CONTENT AREA -->
+              <tr>
+                <td class="wrapper">
+                  <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                    {% for view in views %}
+                    <tr>
+                      <td>
+                        <h4>{{ view.title }}</h4>
+                        <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="">
+                          <tbody>
+                            <tr>
+                              <td align="left">
+                                <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                                  <tbody>
+                                    <tr>
+                                      <td>{{ view.html }}</td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </table>
+                </td>
+              </tr>
+
+            <!-- END MAIN CONTENT AREA -->
+            </table>
+            <!-- END CENTERED WHITE CONTAINER -->
+
+            <!-- START FOOTER -->
+            <div class="footer">
+              <table role="presentation" border="0" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td class="content-block">
+                    <span class="apple-link">Company Inc, 3 Abbey Road, San Francisco CA 94102</span>
+                    <br> Don't like these emails? <a href="http://i.imgur.com/CScmqnj.gif">Unsubscribe</a>.
+                  </td>
+                </tr>
+                <tr>
+                  <td class="content-block powered-by">
+                    Powered by <a href="http://htmlemail.io">HTMLemail</a>.
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <!-- END FOOTER -->
+
+          </div>
+        </td>
+        <td>&nbsp;</td>
+      </tr>
+    </table>
+  </body>
+</html>

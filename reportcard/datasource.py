@@ -1,6 +1,5 @@
 from abc import ABC, abstractmethod
 import pandas as pd
-import stevedore
 
 from reportcard.plugin import PluginManager
 
@@ -16,6 +15,13 @@ class DatasourceError(Exception):
 
 class Datasource(ABC):
 
+    def __init__(self, report, **kwargs):
+        self.report = report
+        self.init(**kwargs)
+
+    def init(self, **kwargs):
+        pass
+
     @abstractmethod
     def query(self, input: str) -> pd.DataFrame:
         pass
@@ -27,11 +33,14 @@ class DatasourceManager(PluginManager):
     type_noun = "datasource"
     exc_class = DatasourceError
 
+    def plugin_factory(self, plugin_ctor, plugin_kwargs):
+        return plugin_ctor(self.report, **plugin_kwargs)
+
     def query(self, name, *args, **kwargs):
         result = self.call_instance(name, "query", *args, **kwargs)
 
         if not isinstance(result, pd.DataFrame):
-            raise DatasourceError(
+            raise self.exc_class(
                 f"Datasource {name} returned unexpected query result type")
 
         return result

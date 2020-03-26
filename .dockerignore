@@ -1,0 +1,6 @@
+# Version control
+.git/*
+# Python builds
+.tox/*
+__pycache__/*
+*.pyc

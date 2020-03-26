@@ -1,0 +1,6 @@
+pandas
+premailer
+pyyaml
+stevedore
+# [mysql]
+mysqlclient

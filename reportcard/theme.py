@@ -1,0 +1,4 @@
+class Theme:
+    primary = ""
+    secondary = ""
+    

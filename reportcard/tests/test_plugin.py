@@ -12,6 +12,11 @@ class TestException(Exception):
     pass
 
 
+class BaseTestPlugin:
+    def __init__(self, report):
+        pass
+
+
 class TestPluginManager(PluginManager):
     exc_class = TestException
 
@@ -21,7 +26,7 @@ class PluginManagerTestCase(unittest.TestCase):
     def _make_plugin_manager(self, conf={NAME: {"plugin": PLUGIN}},
                              plugins=[(PLUGIN, MagicMock())]):
         mgr = make_test_extension_manager(plugins)
-        return TestPluginManager(conf, extension_manager=mgr)
+        return TestPluginManager(MagicMock(), conf, extension_manager=mgr)
 
     def test_missing_plugin(self):
         with self.assertRaises(TestException):
@@ -45,7 +50,7 @@ class PluginManagerTestCase(unittest.TestCase):
             self._make_plugin_manager(plugins=[(PLUGIN, test_plugin)])
 
     def test_call_instance(self):
-        class TestPlugin():
+        class TestPlugin(BaseTestPlugin):
             def my_method(self, posarg, kwarg=None):
                 return (posarg, kwarg)
 
@@ -55,7 +60,7 @@ class PluginManagerTestCase(unittest.TestCase):
             (1, 2))
 
     def test_multiple_instances(self):
-        class TestPlugin():
+        class TestPlugin(BaseTestPlugin):
             def my_method(self, posarg):
                 return posarg
 
@@ -71,11 +76,11 @@ class PluginManagerTestCase(unittest.TestCase):
             "arg")
 
     def test_multiple_plugins(self):
-        class FirstTestPlugin():
+        class FirstTestPlugin(BaseTestPlugin):
             def my_method(self, input):
                 return None
 
-        class SecondTestPlugin():
+        class SecondTestPlugin(BaseTestPlugin):
             def my_method(self, input):
                 return input
 

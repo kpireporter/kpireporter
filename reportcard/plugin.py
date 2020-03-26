@@ -8,7 +8,7 @@ class PluginManager:
     exc_class = Exception
     type_noun = "plugin"
 
-    def __init__(self, config, report=None, extension_manager=None):
+    def __init__(self, report, config, extension_manager=None):
         self.log = logging.getLogger(__name__)
         self.report = report
 
@@ -29,13 +29,13 @@ class PluginManager:
             )
 
         self._instances = {}
-        for name, conf in config.items():
+        for id, conf in config.items():
             try:
-                self._instances[name] = self.create_instance(conf)
-                self.log.info(f"Initialized {self.type_noun} {name}")
+                self._instances[id] = self.create_instance(id, conf)
+                self.log.info(f"Initialized {self.type_noun} {id}")
             except Exception as exc:
                 raise self.exc_class(
-                    f"Failed to load {self.type_noun} {name}") from exc
+                    f"Failed to load {self.type_noun} {id}") from exc
 
     def instances(self):
         return self._instances.keys()
@@ -46,7 +46,7 @@ class PluginManager:
                 f"Could not find {self.type_noun} {name}; is it loaded?"))
 
         plugin = self._instances[name]
-        
+
         return getattr(plugin, attr)
 
     def call_instance(self, name: str, method: str, *args, **kwargs) -> any:
@@ -58,7 +58,7 @@ class PluginManager:
 
         return fn(*args, **kwargs)
 
-    def create_instance(self, config: dict) -> any:
+    def create_instance(self, id: str, config: dict) -> any:
         plugin = config.get("plugin")
 
         if not plugin:
@@ -74,7 +74,9 @@ class PluginManager:
                 f"Malformed plugin arguments: expected dict, "
                 f"got {plugin_kwargs}"))
 
+        plugin_kwargs.setdefault("id", id)
+
         return self.plugin_factory(self._mgr[plugin].plugin, plugin_kwargs)
 
-    def plugin_factory(self, plugin_ctor, plugin_kwargs):
-        return plugin_ctor(**plugin_kwargs)
+    def plugin_factory(self, Plugin, plugin_kwargs):
+        return Plugin(self.report, **plugin_kwargs)

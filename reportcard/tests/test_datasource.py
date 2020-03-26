@@ -10,15 +10,20 @@ NAME = "my_datasource"
 PLUGIN = "my_plugin"
 
 
+class BaseTestPlugin:
+    def __init__(self, report):
+        pass
+
+
 class DatasourceManagerTestCase(unittest.TestCase):
 
     def _make_datasource_manager(self, conf={NAME: {"plugin": PLUGIN}},
                                  plugins=[(PLUGIN, MagicMock())]):
         mgr = make_test_extension_manager(plugins)
-        return DatasourceManager(conf, extension_manager=mgr)
+        return DatasourceManager(MagicMock(), conf, extension_manager=mgr)
 
     def test_invalid_query_return_type(self):
-        class TestPlugin():
+        class TestPlugin(BaseTestPlugin):
             def query(self, input):
                 return None
 
@@ -30,7 +35,7 @@ class DatasourceManagerTestCase(unittest.TestCase):
     def test_valid_query_result(self):
         df = pd.DataFrame()
 
-        class TestPlugin():
+        class TestPlugin(BaseTestPlugin):
             def query(self, input):
                 return df
 
@@ -41,7 +46,7 @@ class DatasourceManagerTestCase(unittest.TestCase):
     def test_multiple_datasources(self):
         df = pd.DataFrame()
 
-        class TestPlugin():
+        class TestPlugin(BaseTestPlugin):
             def query(self, input):
                 return df
 
@@ -57,11 +62,11 @@ class DatasourceManagerTestCase(unittest.TestCase):
     def test_multiple_plugins(self):
         df = pd.DataFrame()
 
-        class FirstTestPlugin():
+        class FirstTestPlugin(BaseTestPlugin):
             def query(self, input):
                 return None
 
-        class SecondTestPlugin():
+        class SecondTestPlugin(BaseTestPlugin):
             def query(self, input):
                 return df
 

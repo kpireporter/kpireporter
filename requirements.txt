@@ -1,6 +1,8 @@
+jinja2
 pandas
 premailer
 pyyaml
 stevedore
+matplotlib
 # [mysql]
 mysqlclient

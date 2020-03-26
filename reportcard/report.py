@@ -5,9 +5,10 @@ from reportcard.view import ViewManager
 
 
 class Report:
-    def __init__(self, date_from=None, date_to=None):
-        self.date_from = date_from
-        self.date_to = date_to
+    def __init__(self, start_date=None, end_date=None, theme=None):
+        self.start_date = start_date
+        self.end_date = end_date
+        self.theme = theme
 
 
 class ReportFactory:
@@ -16,13 +17,13 @@ class ReportFactory:
         view_conf = config.get("views", [])
 
         interval = config.get("interval_days", 7)
-        now = datetime.now()
-        report = Report(date_from=now - timedelta(days=interval),
-                        date_to=now)
-                        
-        self.dm = DatasourceManager(datasource_conf, report=report)
-        self.vm = ViewManager(view_conf, report=report)
+        end_date = config.get("end_date", datetime.now())
+        start_date = config.get("start_date",
+                                end_date - timedelta(days=interval))
+        report = Report(start_date=start_date, end_date=end_date)
+
+        self.dm = DatasourceManager(report, datasource_conf)
+        self.vm = ViewManager(self.dm, report, view_conf)
 
     def create(self):
-        return self.vm.render(self.dm)
-                
+        return self.vm.render()

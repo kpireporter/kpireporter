@@ -15,8 +15,14 @@ class DatasourceError(Exception):
 
 class Datasource(ABC):
 
+    id = None
+
     def __init__(self, report, **kwargs):
         self.report = report
+
+        if "id" in kwargs:
+            self.id = kwargs.pop("id")
+
         self.init(**kwargs)
 
     def init(self, **kwargs):
@@ -33,10 +39,7 @@ class DatasourceManager(PluginManager):
     type_noun = "datasource"
     exc_class = DatasourceError
 
-    def plugin_factory(self, plugin_ctor, plugin_kwargs):
-        return plugin_ctor(self.report, **plugin_kwargs)
-
-    def query(self, name, *args, **kwargs):
+    def query(self, name, *args, **kwargs) -> pd.DataFrame:
         result = self.call_instance(name, "query", *args, **kwargs)
 
         if not isinstance(result, pd.DataFrame):

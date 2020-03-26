@@ -16,8 +16,8 @@ views:
     args:
       datasource: db
       query: |
-        select * from users.signups
-        where created_at >= {{ from }} and created_at < {{ to }}
+        select * from reportcard.signups
+        where created_at >= {from} and created_at < {to}
   # Additionally, show a stat indicating how much the total signups have
   # increased (or decreased) in comparison to the previous report period.
   signups_change:
@@ -26,11 +26,11 @@ views:
     args:
       datasource: db
       query: |
-        select count(*) from users.signups
-        where created_at >= {{ from }} and created_at < {{ to }}
+        select count(*) from reportcard.signups
+        where created_at >= {from} and created_at < {to}
       comparison_query: |
-        select count(*) from users.signups
-        where created_at >= date_sub({{ from }} {{ interval }})
-          and created_at < {{ from }}
+        select count(*) from reportcard.signups
+        where created_at >= date_sub({from} {interval})
+          and created_at < {from}
       #comparison_type: percent
       comparison_type: raw

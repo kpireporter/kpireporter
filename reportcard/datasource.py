@@ -25,6 +25,7 @@ class Datasource(ABC):
 
         self.init(**kwargs)
 
+    @abstractmethod
     def init(self, **kwargs):
         pass
 

@@ -5,16 +5,16 @@ from reportcard.view import View
 
 
 class Plot(View):
-    def init(self):
-        missing = [k for k in ["datasource", "query"] if not self.get(k)]
+    def init(self, datasource=None, query=None):
+        self.datasource = datasource
+        self.query = query
 
-        if missing:
-            raise ValueError(f"Missing required parameters: {missing}")
+        if not (self.datasource and self.query):
+            raise ValueError((
+                "Both a 'datasource' and 'query' parameter are required"))
 
     def render(self):
-        ds = self.get("datasource")
-        query = self.get("query")
-        df = self.datasources.query(ds, query)
+        df = self.datasources.query(self.datasource, self.query)
 
         fig, ax = plt.subplots(nrows=1, ncols=1)
         df.plot(ax=ax)
@@ -32,5 +32,8 @@ class Plot(View):
 
 
 class SingleStat(View):
+    def init(self, **kwargs):
+        pass
+    
     def render(self):
         pass

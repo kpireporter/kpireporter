@@ -23,7 +23,6 @@ class View(ABC):
         if "title" in kwargs:
             self.title = kwargs.pop("title")
 
-        self._params = kwargs
         self._blobs = {}
 
         def module_root(module_str):
@@ -41,12 +40,14 @@ class View(ABC):
         )
         self.j2.filters["blob"] = self.render_blob
 
-        self.init()
+        self.init(**kwargs)
 
-    def get(self, param, default=None) -> any:
-        return self._params.get(param, default)
+    @abstractmethod
+    def init(self, **kwargs):
+        pass
 
-    def init(self):
+    @abstractmethod
+    def render(self) -> str:
         pass
 
     def add_blob(self, name, blob):
@@ -61,10 +62,6 @@ class View(ABC):
             raise ValueError(f"Could not find blob {name}")
 
         return Markup(f"""<img src="{self.id}/{name}" />""")
-
-    @abstractmethod
-    def render(self) -> str:
-        pass
 
 
 class ViewManager(PluginManager):
@@ -83,18 +80,18 @@ class ViewManager(PluginManager):
 
     def render(self) -> list:
         blocks = []
-        for name in self.instances():
+        for id in self.instances():
             try:
                 blocks.append(dict(
-                    name=name,
-                    title=self.get_instance_attr(name, "title"),
-                    output=self.call_instance(name, "render")
+                    id=id,
+                    title=self.get_instance_attr(id, "title"),
+                    output=self.call_instance(id, "render")
                 ))
             except ViewException as exc:
                 self.log.error((
-                    f"Error rendering {self.type_noun} {name}: {exc}"))
+                    f"Error rendering {self.type_noun} {id}: {exc}"))
                 blocks.append(dict(
-                    title=f"Error rendering {name}",
+                    title=f"Error rendering {id}",
                     output=None
                 ))
         return blocks

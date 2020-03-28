@@ -28,6 +28,8 @@ class View(ABC):
             self.title = kwargs.pop("title")
         if "cols" in kwargs:
             self.cols = kwargs.pop("cols")
+        else:
+            self.cols = report.theme.num_columns
 
         self.init(**kwargs)
 
@@ -63,8 +65,10 @@ class ViewManager(PluginManager):
         super(ViewManager, self).__init__(report, config, extension_manager)
 
     def plugin_factory(self, Plugin, plugin_kwargs, config):
-        plugin_kwargs.setdefault("title", config.get("title"))
-        plugin_kwargs.setdefault("cols", config.get("cols"))
+        for attr in ["title", "cols"]:
+            value = config.get(attr)
+            if value:
+                plugin_kwargs.setdefault(attr, value)
 
         return Plugin(self.report, self.datasource_manager, **plugin_kwargs)
 
@@ -76,8 +80,8 @@ class ViewManager(PluginManager):
             blob = self.call_instance(view_id, "get_blob", blob_id)
             if not blob:
                 raise ViewException((
-                    f"Missing content for blob {blob_id}. Make sure the blob was"
-                    "added before rendering the View template"))
+                    f"Missing content for blob {blob_id}. Make sure the blob "
+                    "was added before rendering the View template"))
 
             return output_driver.render_blob_inline(blob)
 
@@ -106,6 +110,7 @@ class ViewManager(PluginManager):
                 blocks.append(dict(
                     id=id,
                     title=view.title,
+                    cols=view.cols,
                     output=output
                 ))
             except Exception as exc:
@@ -114,6 +119,7 @@ class ViewManager(PluginManager):
                 blocks.append(dict(
                     id=id,
                     title=f"Error rendering {id}",
+                    cols=view.cols,
                     output=None
                 ))
         return blocks

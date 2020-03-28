@@ -35,3 +35,8 @@ views:
           and created_at < {from}
       #comparison_type: percent
       comparison_type: raw
+  test:
+    plugin: plot
+    args:
+      datasource: db
+      query: select * from reportcard.signups

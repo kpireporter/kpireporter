@@ -10,11 +10,13 @@ import logging
 LOG = logging.getLogger(__name__)
 
 
-DEFAULT_OUTPUT_CONFIG = {}
+class Theme:
+    def __init__(self, num_columns=6):
+        self.num_columns = num_columns
 
 
 class Report:
-    def __init__(self, start_date=None, end_date=None, theme=None):
+    def __init__(self, start_date=None, end_date=None, theme=Theme()):
         self.start_date = start_date
         self.end_date = end_date
         self.theme = theme
@@ -31,7 +33,10 @@ class ReportFactory:
         start_date = config.get("start_date",
                                 end_date - timedelta(days=interval))
 
-        report = Report(start_date=start_date, end_date=end_date)
+        self.theme = Theme()
+
+        report = Report(start_date=start_date, end_date=end_date,
+                        theme=self.theme)
         self.dm = DatasourceManager(report, datasource_conf)
         self.vm = ViewManager(self.dm, report, view_conf)
         self.odm = OutputDriverManager(report, output_conf)
@@ -46,5 +51,5 @@ class ReportFactory:
             LOG.info(f"Sending report via output driver {id}")
             views = self.vm.render(self.env, output_driver)
             template = self.env.get_template("layout/default.html")
-            content = template.render(views=views)
+            content = template.render(views=views, theme=self.theme)
             output_driver.render_output(content, self.vm.blobs)

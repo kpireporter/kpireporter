@@ -90,6 +90,13 @@ class ViewManager(PluginManager):
     def render(self, env: Environment, output_driver: OutputDriver) -> list:
         blocks = []
         for id, view in self.instances:
+            block = dict(
+                id=id,
+                title="",
+                cols=view.cols,
+                tags=[]
+            )
+
             try:
                 # Allow any extending package to optionally define its own
                 # ./templates directory at the root module level.
@@ -107,21 +114,14 @@ class ViewManager(PluginManager):
                     raise ViewException((
                         "The view did not render a valid string"))
 
-                blocks.append(dict(
-                    id=id,
-                    title=view.title or "",
-                    cols=view.cols,
-                    output=output
-                ))
+                block.update(title=view.title or "", output=output)
             except Exception as exc:
                 self.log.error((
                     f"Error rendering {self.type_noun} {id}: {exc}"))
-                blocks.append(dict(
-                    id=id,
-                    title="",
-                    cols=view.cols,
-                    output=f"Error rendering {id}"
-                ))
+                block.update(output=f"Error rendering {id}", tags=["error"])
+
+            blocks.append(block)
+
         return blocks
 
     @property

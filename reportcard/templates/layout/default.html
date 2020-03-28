@@ -4,7 +4,7 @@
     <meta name="viewport" content="width=device-width" />
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
     <title>{{ title }}</title>
-    {% include "styles.html" %}
+    {% include "layout/styles.html" %}
   </head>
   <body class="">
     <span class="preheader">{{ preview }}</span>
@@ -32,7 +32,7 @@
                                 <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                   <tbody>
                                     <tr>
-                                      <td>{{ view.html }}</td>
+                                      <td>{{ view.output }}</td>
                                     </tr>
                                   </tbody>
                                 </table>

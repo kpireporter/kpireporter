@@ -5,3 +5,5 @@
 *.pyc
 __pycache__/
 dist/
+# Report generation
+_build/

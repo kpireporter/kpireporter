@@ -27,10 +27,12 @@ class MySQLDatasource(Datasource):
                 params.append(self.report.start_date)
             elif token == "to":
                 params.append(self.report.end_date)
+            elif token == "interval":
+                params.append(f"interval {self.report.interval} day")
             else:
                 raise ValueError(f"Unexpected token {token}")
             return "%s"
 
-        replaced = re.sub(r"\{(from|to)\}", collect_params, sql)
+        replaced = re.sub(r"\{(interval|from|to)\}", collect_params, sql)
 
         return replaced, params

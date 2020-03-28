@@ -37,24 +37,24 @@ class PluginManager:
                 raise self.exc_class(
                     f"Failed to load {self.type_noun} {id}") from exc
 
+    @property
     def instances(self):
-        return self._instances.keys()
+        return self._instances.items()
 
-    def get_instance_attr(self, name: str, attr: str) -> any:
-        if name not in self._instances:
+    def get_instance(self, id: str) -> any:
+        if id not in self._instances:
             raise self.exc_class((
-                f"Could not find {self.type_noun} {name}; is it loaded?"))
+                f"Could not find {self.type_noun} {id}; is it loaded?"))
 
-        plugin = self._instances[name]
+        return self._instances[id]
 
-        return getattr(plugin, attr)
-
-    def call_instance(self, name: str, method: str, *args, **kwargs) -> any:
-        fn = self.get_instance_attr(name, method)
+    def call_instance(self, id: str, method: str, *args, **kwargs) -> any:
+        instance = self.get_instance(id)
+        fn = getattr(instance, method)
 
         if not callable(fn):
             raise self.exc_class((
-                f"No such method {method} for {self.type_noun} {name}"))
+                f"No such method {method} for {self.type_noun} {id}"))
 
         return fn(*args, **kwargs)
 

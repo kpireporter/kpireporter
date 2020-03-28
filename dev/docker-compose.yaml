@@ -33,3 +33,6 @@ services:
         source: ../examples
         target: /opt/reportcard/examples
         read_only: True
+      - type: bind
+        source: ../_build
+        target: /opt/reportcard/_build

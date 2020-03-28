@@ -19,6 +19,7 @@ parser = argparse.ArgumentParser(
 parser.add_argument("--config-file", type=argparse.FileType("r"),
                     default="reportcard.yaml")
 parser.add_argument("--start-date", type=simple_date)
+parser.add_argument("--theme-dir", default="/etc/reportcard/theme")
 
 args = parser.parse_args(sys.argv[1:])
 

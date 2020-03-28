@@ -13,7 +13,7 @@ class Plot(View):
             raise ValueError((
                 "Both a 'datasource' and 'query' parameter are required"))
 
-    def render(self):
+    def render(self, env):
         df = self.datasources.query(self.datasource, self.query)
 
         fig, ax = plt.subplots(nrows=1, ncols=1)
@@ -26,7 +26,7 @@ class Plot(View):
 
         plt.close(fig)
 
-        template = self.j2.get_template("plot.html")
+        template = env.get_template("plot.html")
 
         return template.render(figure=figname)
 
@@ -34,6 +34,6 @@ class Plot(View):
 class SingleStat(View):
     def init(self, **kwargs):
         pass
-    
-    def render(self):
+
+    def render(self, env):
         pass

@@ -109,7 +109,7 @@ class ViewManager(PluginManager):
 
                 blocks.append(dict(
                     id=id,
-                    title=view.title,
+                    title=view.title or "",
                     cols=view.cols,
                     output=output
                 ))
@@ -118,9 +118,9 @@ class ViewManager(PluginManager):
                     f"Error rendering {self.type_noun} {id}: {exc}"))
                 blocks.append(dict(
                     id=id,
-                    title=f"Error rendering {id}",
+                    title="",
                     cols=view.cols,
-                    output=None
+                    output=f"Error rendering {id}"
                 ))
         return blocks
 

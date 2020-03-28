@@ -20,4 +20,4 @@ class HTMLOutputDriver(OutputDriver):
             blob_path = os.path.join(self.output_dir, blob["id"])
             os.makedirs(os.path.dirname(blob_path), exist_ok=True)
             with open(blob_path, "wb") as f:
-                f.write(blob["content"].read())
+                f.write(blob["content"].getvalue())

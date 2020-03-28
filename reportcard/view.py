@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from jinja2 import Environment, ChoiceLoader, PackageLoader
-from jinja2 import Markup, evalcontextfilter
+from jinja2 import evalcontextfilter
 
 from reportcard.datasource import DatasourceManager
 from reportcard.output import OutputDriver

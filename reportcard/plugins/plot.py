@@ -15,7 +15,7 @@ class Plot(View):
 
     def render(self, env):
         df = self.datasources.query(self.datasource, self.query)
-
+        df = df.set_index(df.columns[0])
         fig, ax = plt.subplots(nrows=1, ncols=1)
         df.plot(ax=ax)
 

@@ -16,7 +16,8 @@ views:
     args:
       datasource: db
       query: |
-        select * from reportcard.signups
+        select created_at, row_number() over (order by created_at) as total_signups
+        from reportcard.signups
         where created_at >= {from} and created_at < {to}
   # Additionally, show a stat indicating how much the total signups have
   # increased (or decreased) in comparison to the previous report period.

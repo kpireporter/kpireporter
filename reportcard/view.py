@@ -26,6 +26,8 @@ class View(ABC):
             self.id = kwargs.pop("id")
         if "title" in kwargs:
             self.title = kwargs.pop("title")
+        if "cols" in kwargs:
+            self.cols = kwargs.pop("cols")
 
         self.init(**kwargs)
 
@@ -60,7 +62,10 @@ class ViewManager(PluginManager):
         self.datasource_manager = datasource_manager
         super(ViewManager, self).__init__(report, config, extension_manager)
 
-    def plugin_factory(self, Plugin, plugin_kwargs):
+    def plugin_factory(self, Plugin, plugin_kwargs, config):
+        plugin_kwargs.setdefault("title", config.get("title"))
+        plugin_kwargs.setdefault("cols", config.get("cols"))
+
         return Plugin(self.report, self.datasource_manager, **plugin_kwargs)
 
     def _blob_filter(self, output_driver):

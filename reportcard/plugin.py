@@ -76,7 +76,8 @@ class PluginManager:
 
         plugin_kwargs.setdefault("id", id)
 
-        return self.plugin_factory(self._mgr[plugin].plugin, plugin_kwargs)
+        return self.plugin_factory(self._mgr[plugin].plugin, plugin_kwargs, 
+                                   config)
 
-    def plugin_factory(self, Plugin, plugin_kwargs):
+    def plugin_factory(self, Plugin, plugin_kwargs, config):
         return Plugin(self.report, **plugin_kwargs)

@@ -11,14 +11,24 @@ views:
   # Show a time series of user signups over the report period.
   signups_over_time:
     plugin: plot
-    title: New sign-ups
-    cols: 4
+    title: Total sign-ups
     args:
       datasource: db
       query: |
         select created_at, row_number() over (order by created_at) as total_signups
         from reportcard.signups
         where created_at >= {from} and created_at < {to}
+  new_signups:
+    plugin: plot
+    title: Daily new sign-ups
+    cols: 4
+    args:
+      datasource: db
+      query: |
+        select created_at, count(*)
+        from reportcard.signups 
+        where created_at >= {from} and created_at < {to}
+        group by day(created_at)
   # Additionally, show a stat indicating how much the total signups have
   # increased (or decreased) in comparison to the previous report period.
   signups_change:

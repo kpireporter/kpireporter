@@ -15,9 +15,10 @@ class Theme:
 
 
 class Report:
-    def __init__(self, title=None, start_date=None, end_date=None,
-                 theme=Theme()):
+    def __init__(self, title=None, interval_days=None,
+                 start_date=None, end_date=None, theme=Theme()):
         self.title = title
+        self.interval_days = interval_days
         self.start_date = start_date
         self.end_date = end_date
         self.theme = theme
@@ -29,15 +30,15 @@ class ReportFactory:
         view_conf = config.get("views", {})
         output_conf = config.get("outputs", {})
 
-        interval = config.get("interval_days", 7)
+        interval_days = config.get("interval_days", 7)
         end_date = config.get("end_date", datetime.now())
         start_date = config.get("start_date",
-                                end_date - timedelta(days=interval))
+                                end_date - timedelta(days=interval_days))
 
         theme = Theme()
         title = config.get("title", "Status report")
 
-        self.report = Report(title=title,
+        self.report = Report(title=title, interval_days=interval_days,
                              start_date=start_date, end_date=end_date,
                              theme=theme)
         self.dm = DatasourceManager(self.report, datasource_conf)

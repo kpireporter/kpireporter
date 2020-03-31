@@ -49,19 +49,50 @@ class Plot(View):
             fig = ax.get_figure()
             figbytes = io.BytesIO()
             fig.savefig(figbytes)
-            figname = "figure2.png"
+            figname = "figure.png"
             self.add_blob(figname, figbytes)
 
             plt.close(fig)
 
-        template = env.get_template("plot.html")
+        template = env.get_template("plugins/plot.html")
 
         return template.render(figure=figname)
 
 
 class SingleStat(View):
-    def init(self, **kwargs):
-        pass
+    def init(self, datasource=None, query=None, comparison_query=None,
+             comparison_type="raw"):
+        self.datasource = datasource
+        self.query = query
+        self.comparison_query = comparison_query
+        self.comparison_type = comparison_type
+
+        if not (self.datasource and self.query):
+            raise ValueError((
+                "Both a 'datasource' and 'query' parameter are required"))
 
     def render(self, env):
-        pass
+        df = self.datasources.query(self.datasource, self.query)
+        stat_value = df[df.columns[0]].iloc[0]
+        stat_delta = None
+        stat_delta_direction = None
+
+        if self.comparison_query:
+            df_cmp = self.datasources.query(self.datasource,
+                                            self.comparison_query)
+            stat_cmp_value = df_cmp[df_cmp.columns[0]].iloc[0]
+            stat_delta = stat_value - stat_cmp_value
+            stat_delta_direction = "up" if stat_delta >= 0 else "down"
+            
+            if self.comparison_type == "percent":
+                if stat_cmp_value == 0:
+                    # Avoid divide by zero
+                    stat_delta = None
+                else:
+                    stat_delta = f"{stat_delta / stat_cmp_value:.2f}%"
+
+        template = env.get_template("plugins/single_stat.html")
+
+        return template.render(theme=self.report.theme, stat=stat_value,
+                               stat_delta=stat_delta,
+                               direction=stat_delta_direction)

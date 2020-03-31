@@ -43,10 +43,10 @@ views:
         where created_at >= {from} and created_at < {to}
       comparison_query: |
         select count(*) from reportcard.signups
-        where created_at >= date_sub({from} {interval})
+        where created_at >= date_sub({from}, {interval})
           and created_at < {from}
-      #comparison_type: percent
-      comparison_type: raw
+      comparison_type: percent
+      # comparison_type: raw
   test:
     plugin: plot
     args:

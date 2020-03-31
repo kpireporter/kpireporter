@@ -28,7 +28,7 @@ class MySQLDatasource(Datasource):
             elif token == "to":
                 params.append(self.report.end_date)
             elif token == "interval":
-                params.append(f"interval {self.report.interval} day")
+                return f"interval {int(self.report.interval_days)} day"
             else:
                 raise ValueError(f"Unexpected token {token}")
             return "%s"

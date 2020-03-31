@@ -23,6 +23,7 @@ EnvAwareLoader.add_constructor("!path", path_constructor)
 def load(file) -> dict:
     conf = yaml.load(file, Loader=EnvAwareLoader)
 
+    conf.setdefault("title", "Status report {from}-{to}")
     conf.setdefault("datasources", {})
     conf.setdefault("views", {})
     conf.setdefault("outputs", {

@@ -1,4 +1,6 @@
 ---
+title: Top-of-funnel report
+
 datasources:
   db:
     plugin: mysql

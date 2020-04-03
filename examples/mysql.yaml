@@ -35,6 +35,7 @@ views:
   # increased (or decreased) in comparison to the previous report period.
   signups_change:
     plugin: single_stat
+    title: Week total
     cols: 2
     args:
       datasource: db

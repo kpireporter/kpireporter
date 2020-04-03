@@ -1,4 +1,23 @@
-{{ stat }}
-{% if stat_delta is not none %}
-<span>{{ direction }} {{ stat_delta }}</span>
-{% endif %}
+<style>
+.reportcard__stat {
+    width: 100%;
+    font-size: 36px;
+}
+
+.reportcard__stat .delta {
+    font-size: 50%;
+}
+  .reportcard__stat .delta.up {
+      color: green;
+  }
+  .reportcard__stat .delta.down {
+      color: red;
+  }
+</style>
+
+<div class="reportcard__stat">
+    {{ label }}
+    {% if stat_delta is not none %}
+    <span class="delta {{ direction }}">{% if direction == "up" %}▲{% else %}▼{% endif %}{{ stat_delta }}</span>
+    {% endif %}
+</div>

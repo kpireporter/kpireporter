@@ -60,10 +60,11 @@ class Plot(View):
 
 
 class SingleStat(View):
-    def init(self, datasource=None, query=None, comparison_query=None,
-             comparison_type="raw"):
+    def init(self, datasource=None, query=None, label="{stat}",
+             comparison_query=None, comparison_type="raw"):
         self.datasource = datasource
         self.query = query
+        self.label = label
         self.comparison_query = comparison_query
         self.comparison_type = comparison_type
 
@@ -83,16 +84,17 @@ class SingleStat(View):
             stat_cmp_value = df_cmp[df_cmp.columns[0]].iloc[0]
             stat_delta = stat_value - stat_cmp_value
             stat_delta_direction = "up" if stat_delta >= 0 else "down"
-            
+
             if self.comparison_type == "percent":
                 if stat_cmp_value == 0:
                     # Avoid divide by zero
                     stat_delta = None
                 else:
-                    stat_delta = f"{stat_delta / stat_cmp_value:.2f}%"
+                    stat_delta = f"{(stat_delta / stat_cmp_value) * 100:.1f}%"
 
+        label = self.label.format(stat=stat_value)
         template = env.get_template("plugins/single_stat.html")
 
-        return template.render(theme=self.report.theme, stat=stat_value,
+        return template.render(theme=self.report.theme, label=label,
                                stat_delta=stat_delta,
                                direction=stat_delta_direction)

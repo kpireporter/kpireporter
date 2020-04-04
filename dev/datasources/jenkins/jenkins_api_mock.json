@@ -1,7 +1,7 @@
 [
   {
     "httpRequest": {
-      "path": "/view/all/api/json"
+      "path": "/api/json"
     },
     "httpResponse": {
       "body": {
@@ -15,7 +15,7 @@
   },
   {
     "httpRequest": {
-      "path": "/job/v2-app"
+      "path": "/job/v2-app/api/json"
     },
     "httpResponse": {
       "body": {
@@ -28,7 +28,7 @@
   },
   {
     "httpRequest": {
-      "path": "/job/legacy-app"
+      "path": "/job/legacy-app/api/json"
     },
     "httpResponse": {
       "body": {
@@ -41,7 +41,7 @@
   },
   {
     "httpRequest": {
-      "path": "/job/security-scan"
+      "path": "/job/security-scan/api/json"
     },
     "httpResponse": {
       "body": {
@@ -54,7 +54,7 @@
   },
   {
     "httpRequest": {
-      "path": "/job/v2-app/job/master"
+      "path": "/job/v2-app/job/master/api/json"
     },
     "httpResponse": {
       "body": {
@@ -67,7 +67,7 @@
   },
   {
     "httpRequest": {
-      "path": "/job/v2-app/job/devel"
+      "path": "/job/v2-app/job/devel/api/json"
     },
     "httpResponse": {
       "body": {
@@ -80,7 +80,7 @@
   },
   {
     "httpRequest": {
-      "path": "/job/legacy-app/job/master"
+      "path": "/job/legacy-app/job/master/api/json"
     },
     "httpResponse": {
       "body": {
@@ -93,7 +93,7 @@
   },
   {
     "httpRequest": {
-      "path": "/job/legacy-app/job/devel"
+      "path": "/job/legacy-app/job/devel/api/json"
     },
     "httpResponse": {
       "body": {

@@ -1,11 +1,13 @@
 import argparse
 from datetime import datetime
+import logging
 import sys
 from timeit import default_timer as timer
 
 from reportcard.config import load
 from reportcard.report import ReportFactory
 
+logging.basicConfig(level=logging.DEBUG)
 
 def simple_date(date_str):
     try:

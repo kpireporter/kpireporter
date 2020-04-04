@@ -5,5 +5,7 @@ pyyaml
 requests
 stevedore
 matplotlib
+# [jenkins]
+python-jenkins
 # [mysql]
 mysqlclient

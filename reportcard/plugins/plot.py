@@ -53,9 +53,10 @@ class Plot(View):
 
             """
             Pandas is not great at handling custom date formats in a bar
-            chart context; switch to using raw matplotlib for this type.
+            chart context; switch to using raw matplotlib for this type,
+            if the index looks like it contains date/time data.
             """
-            if self.kind == "bar":
+            if self.kind == "bar" and isinstance(df.index, pd.DatetimeIndex):
                 plt.bar(pd.to_datetime(df.index), df[df.columns[0]])
             else:
                 df.plot(ax=ax, legend=None, title=None, kind=self.kind)

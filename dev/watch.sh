@@ -2,7 +2,14 @@
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
-docker-compose -f "$DIR/docker-compose.yaml" -p reportcard up -d
+_dockercompose() {
+  docker-compose -f "$DIR/docker-compose.yaml" -p reportcard "$@"
+}
+
+# Perform rebuild
+_dockercompose build reportcard
+_dockercompose rm -f --stop reportcard
+_dockercompose up -d
 
 for bin in ag entr; do
   if ! type -f "$bin" >/dev/null 2>&1; then
@@ -16,6 +23,8 @@ echo
 echo "Starting watcher ..."
 echo
 
+# Can't use an alias here as the 'entr' binary needs to be able to resolve
+# its command.
 ag -l -G 'examples|reportcard' . "$DIR/.." \
   | entr docker-compose -f "$DIR/docker-compose.yaml" -p reportcard \
       exec reportcard "$@"

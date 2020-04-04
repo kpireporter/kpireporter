@@ -2,6 +2,7 @@ jinja2
 pandas
 premailer
 pyyaml
+requests
 stevedore
 matplotlib
 # [mysql]

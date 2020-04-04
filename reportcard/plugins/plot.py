@@ -1,13 +1,19 @@
 import io
 import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+import pandas as pd
 
 from reportcard.view import View
 
 
+DATE_FORMAT = "%b %-d\n(%a)"
+
+
 class Plot(View):
-    def init(self, datasource=None, query=None):
+    def init(self, datasource=None, query=None, kind="line"):
         self.datasource = datasource
         self.query = query
+        self.kind = kind
 
         if not (self.datasource and self.query):
             raise ValueError((
@@ -32,7 +38,7 @@ class Plot(View):
             "ytick.labelsize": 8,
             "ytick.color": text_color,
             "ytick.direction": "in",
-            "date.autoformatter.day": "%b %-d\n(%a)",
+            "date.autoformatter.day": DATE_FORMAT,
             "figure.dpi": 300,
             "savefig.bbox": "tight",
             "savefig.pad_inches": 0,
@@ -43,7 +49,17 @@ class Plot(View):
         df = df.set_index(df.columns[0])
 
         with plt.rc_context(self.matplotlib_rc):
-            ax = df.plot(figsize=[self.cols, 2], legend=None, title=None)
+            fig, ax = plt.subplots(figsize=[self.cols, 2])
+
+            """
+            Pandas is not great at handling custom date formats in a bar
+            chart context; switch to using raw matplotlib for this type.
+            """
+            if self.kind == "bar":
+                plt.bar(pd.to_datetime(df.index), df[df.columns[0]])
+            else:
+                df.plot(ax=ax, legend=None, title=None, kind=self.kind)
+
             ax.set_xlabel("")
 
             fig = ax.get_figure()

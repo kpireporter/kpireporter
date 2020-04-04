@@ -1,6 +1,7 @@
 import argparse
 from datetime import datetime
 import sys
+from timeit import default_timer as timer
 
 from reportcard.config import load
 from reportcard.report import ReportFactory
@@ -31,6 +32,9 @@ if args.start_date:
 if args.end_date:
     conf.update(end_date=args.end_date)
 
-output = ReportFactory(conf).create()
+start = timer()
 
-print(output)
+ReportFactory(conf).create()
+
+end = timer()
+print(f"Generated report in {(end - start) * 1000:.2f}ms.")

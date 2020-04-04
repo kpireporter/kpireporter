@@ -1,13 +1,13 @@
 ---
-title: Top-of-funnel report
+title: CI report
 
 datasources:
-  db:
-    plugin: mysql
+  jenkins:
+    plugin: jenkins
     args:
-      host: mysql
-      user: reportcard
-      passwd: reportcard_pass
+      host: jenkins
+      user: jenkins_user
+      api_token: jenkins_token
 
 views:
   # Show a time series of user signups over the report period.
@@ -17,10 +17,7 @@ views:
     args:
       datasource: db
       query: |
-        select created_at, 
-        count(*) over (order by created_at) 
-          + (select count(*) from reportcard.signups where created_at < {from})
-          as total_signups
+        select created_at, row_number() over (order by created_at) as total_signups
         from reportcard.signups
         where created_at >= {from} and created_at < {to}
   new_signups:
@@ -28,10 +25,9 @@ views:
     title: Daily new sign-ups
     cols: 4
     args:
-      kind: bar
       datasource: db
       query: |
-        select date_format(created_at, '%%Y-%%m-%%d') as day, count(*) as daily_total
+        select created_at, count(*)
         from reportcard.signups 
         where created_at >= {from} and created_at < {to}
         group by day(created_at)
@@ -52,3 +48,8 @@ views:
           and created_at < {from}
       comparison_type: percent
       # comparison_type: raw
+  test:
+    plugin: plot
+    args:
+      datasource: db
+      query: select * from reportcard.signups

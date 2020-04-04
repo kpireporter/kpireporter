@@ -1,0 +1,107 @@
+[
+  {
+    "httpRequest": {
+      "path": "/view/all/api/json"
+    },
+    "httpResponse": {
+      "body": {
+        "jobs": [
+          { "name": "v2-app", "color": "blue" },
+          { "name": "legacy-app", "color": "red" },
+          { "name": "security-scan", "color": "blue" }
+        ]
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "path": "/job/v2-app"
+    },
+    "httpResponse": {
+      "body": {
+        "jobs": [
+          { "name": "master", "color": "blue" },
+          { "name": "devel", "color": "red" }
+        ]
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "path": "/job/legacy-app"
+    },
+    "httpResponse": {
+      "body": {
+        "jobs": [
+          { "name": "master", "color": "red" },
+          { "name": "devel", "color": "red" }
+        ]
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "path": "/job/security-scan"
+    },
+    "httpResponse": {
+      "body": {
+        "builds": [],
+        "healthReport": {
+          "score": 100
+        }
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "path": "/job/v2-app/job/master"
+    },
+    "httpResponse": {
+      "body": {
+        "builds": [],
+        "healthReport": {
+          "score": 100
+        }
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "path": "/job/v2-app/job/devel"
+    },
+    "httpResponse": {
+      "body": {
+        "builds": [],
+        "healthReport": {
+          "score": 80
+        }
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "path": "/job/legacy-app/job/master"
+    },
+    "httpResponse": {
+      "body": {
+        "builds": [],
+        "healthReport": {
+          "score": 60
+        }
+      }
+    }
+  },
+  {
+    "httpRequest": {
+      "path": "/job/legacy-app/job/devel"
+    },
+    "httpResponse": {
+      "body": {
+        "builds": [],
+        "healthReport": {
+          "score": 0
+        }
+      }
+    }
+  }
+]

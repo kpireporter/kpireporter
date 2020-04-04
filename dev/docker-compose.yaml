@@ -2,6 +2,17 @@
 version: "3.7"
 
 services:
+  jenkins:
+    image: mockserver/mockserver
+    environment:
+      MOCKSERVER_INITIALIZATION_JSON_PATH: /config/jenkins_api_mock.json
+    volumes:
+      - type: bind
+        source: ./datasources/jenkins
+        target: /config
+        read_only: True
+    command: -serverPort 8080
+
   mysql:
     image: mariadb:latest
     environment:

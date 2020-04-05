@@ -12,4 +12,7 @@ datasources:
 views:
   build_summary:
     plugin: jenkins.build_summary
-    args: {}
+    title: Problem builds
+    args:
+      filter:
+        name: -app

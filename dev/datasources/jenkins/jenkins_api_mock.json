@@ -6,46 +6,48 @@
     "httpResponse": {
       "body": {
         "jobs": [
-          { "name": "v2-app", "color": "blue" },
-          { "name": "legacy-app", "color": "red" },
-          { "name": "security-scan", "color": "blue" }
+          { 
+            "name": "v2-app", 
+            "color": "blue",
+            "jobs": [
+              { "url": "/job/v2-app/job/master", "name": "master", "color": "blue" },
+              { "url": "/job/v2-app/job/devel", "name": "devel", "color": "red" }
+            ]
+          },
+          {
+            "name": "legacy-app",
+            "color": "red",
+            "jobs": [
+              { "url": "/job/legacy-app/job/master", "name": "master", "color": "red" },
+              { "url": "/job/legacy-app/job/devel", "name": "devel", "color": "red" }
+            ]
+          },
+          { "url": "/job/security-scan", "name": "security-scan", "color": "blue" }
         ]
       }
     }
   },
   {
     "httpRequest": {
-      "path": "/job/v2-app/api/json"
-    },
-    "httpResponse": {
-      "body": {
-        "jobs": [
-          { "name": "master", "color": "blue" },
-          { "name": "devel", "color": "red" }
-        ]
+      "path": "/job/security-scan/api/json",
+      "queryStringParameters": {
+        "depth": ["1"]
       }
-    }
-  },
-  {
-    "httpRequest": {
-      "path": "/job/legacy-app/api/json"
     },
     "httpResponse": {
       "body": {
-        "jobs": [
-          { "name": "master", "color": "red" },
-          { "name": "devel", "color": "red" }
-        ]
-      }
-    }
-  },
-  {
-    "httpRequest": {
-      "path": "/job/security-scan/api/json"
-    },
-    "httpResponse": {
-      "body": {
-        "builds": [],
+        "builds": [
+          { "id": "10", "result": "SUCCESS" },
+          { "id": "9", "result": "SUCCESS" },
+          { "id": "8", "result": "SUCCESS" },
+          { "id": "7", "result": "SUCCESS" },
+          { "id": "6", "result": "SUCCESS" },
+          { "id": "5", "result": "SUCCESS" },
+          { "id": "4", "result": "SUCCESS" },
+          { "id": "3", "result": "SUCCESS" },
+          { "id": "2", "result": "SUCCESS" },
+          { "id": "1", "result": "SUCCESS" }
+        ],
         "healthReport": {
           "score": 100
         }
@@ -54,11 +56,25 @@
   },
   {
     "httpRequest": {
-      "path": "/job/v2-app/job/master/api/json"
+      "path": "/job/v2-app/job/master/api/json",
+      "queryStringParameters": {
+        "depth": ["1"]
+      }
     },
     "httpResponse": {
       "body": {
-        "builds": [],
+        "builds": [
+          { "id": "57", "result": "SUCCESS" },
+          { "id": "56", "result": "SUCCESS" },
+          { "id": "55", "result": "SUCCESS" },
+          { "id": "54", "result": "SUCCESS" },
+          { "id": "53", "result": "SUCCESS" },
+          { "id": "52", "result": "SUCCESS" },
+          { "id": "51", "result": "SUCCESS" },
+          { "id": "50", "result": "SUCCESS" },
+          { "id": "49", "result": "SUCCESS" },
+          { "id": "48", "result": "SUCCESS" } 
+        ],
         "healthReport": {
           "score": 100
         }
@@ -67,11 +83,25 @@
   },
   {
     "httpRequest": {
-      "path": "/job/v2-app/job/devel/api/json"
+      "path": "/job/v2-app/job/devel/api/json",
+      "queryStringParameters": {
+        "depth": ["1"]
+      }
     },
     "httpResponse": {
       "body": {
-        "builds": [],
+        "builds": [
+          { "id": "15", "result": "SUCCESS" },
+          { "id": "14", "result": "FAILURE" },
+          { "id": "13", "result": "SUCCESS" },
+          { "id": "12", "result": "SUCCESS" },
+          { "id": "11", "result": "SUCCESS" },
+          { "id": "10", "result": "SUCCESS" },
+          { "id": "9", "result": "FAILURE" },
+          { "id": "8", "result": "FAILURE" },
+          { "id": "7", "result": "SUCCESS" },
+          { "id": "6", "result": "SUCCESS" }
+        ],
         "healthReport": {
           "score": 80
         }
@@ -80,11 +110,25 @@
   },
   {
     "httpRequest": {
-      "path": "/job/legacy-app/job/master/api/json"
+      "path": "/job/legacy-app/job/master/api/json",
+      "queryStringParameters": {
+        "depth": ["1"]
+      }
     },
     "httpResponse": {
       "body": {
-        "builds": [],
+        "builds": [
+          { "id": "20", "result": "FAILURE" },
+          { "id": "19", "result": "FAILURE" },
+          { "id": "18", "result": "SUCCESS" },
+          { "id": "17", "result": "SUCCESS" },
+          { "id": "16", "result": "SUCCESS" },
+          { "id": "15", "result": "FAILURE" },
+          { "id": "14", "result": "SUCCESS" },
+          { "id": "13", "result": "FAILURE" },
+          { "id": "12", "result": "SUCCESS" },
+          { "id": "11", "result": "SUCCESS" }
+        ],
         "healthReport": {
           "score": 60
         }
@@ -93,11 +137,25 @@
   },
   {
     "httpRequest": {
-      "path": "/job/legacy-app/job/devel/api/json"
+      "path": "/job/legacy-app/job/devel/api/json",
+      "queryStringParameters": {
+        "depth": ["1"]
+      }
     },
     "httpResponse": {
       "body": {
-        "builds": [],
+        "builds": [
+          { "id": "25", "result": "FAILURE" },
+          { "id": "24", "result": "FAILURE" },
+          { "id": "23", "result": "FAILURE" },
+          { "id": "22", "result": "FAILURE" },
+          { "id": "21", "result": "FAILURE" },
+          { "id": "20", "result": "FAILURE" },
+          { "id": "19", "result": "FAILURE" },
+          { "id": "18", "result": "FAILURE" },
+          { "id": "17", "result": "FAILURE" },
+          { "id": "16", "result": "FAILURE" }
+        ],
         "healthReport": {
           "score": 0
         }

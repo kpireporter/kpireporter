@@ -1,0 +1,14 @@
+<style>
+  .jenkinsList {
+    list-style: none;
+  }
+</style>
+
+<ol class="jenkinsList">
+{% for job in summary %}
+  <li class="jenkinsBuild">
+    <span>{{ job.name }}</span>
+    {% for build in job.builds %}<span class="jenkinsBuild_status {% if build.result == 'FAILURE' %}error{% else %}success{% endif %}">*</span>{% endfor %}
+  </li>
+{% endfor %}
+</ol>

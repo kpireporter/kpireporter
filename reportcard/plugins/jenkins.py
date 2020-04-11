@@ -91,9 +91,6 @@ class JenkinsBuildSummary(View):
                 builds=build_list,
             ))
 
-        # Show "worst off" builds first
-        summary = sorted(summary, key=operator.itemgetter("score"))
-
         template = env.get_template("plugins/jenkins_build_summary.html")
 
         return template.render(summary=summary)

@@ -8,7 +8,7 @@ def module_root(module_str):
 
 def create_jinja_environment():
     def datetime_format(value):
-        return datetime.strftime(value, "%Y-%m-%d")
+        return datetime.strftime(value, "%b %d")
 
     env = Environment(
         loader=create_jinja_loader(),

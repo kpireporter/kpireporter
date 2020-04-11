@@ -4,6 +4,7 @@ from reportcard.datasource import DatasourceManager
 from reportcard.output import OutputDriverManager
 from reportcard.view import ViewManager
 from reportcard.utils import create_jinja_environment
+from reportcard.version import VERSION
 
 import logging
 LOG = logging.getLogger(__name__)
@@ -15,6 +16,8 @@ class Theme:
 
 
 class Report:
+    version = VERSION
+
     def __init__(self, title=None, interval_days=None,
                  start_date=None, end_date=None, theme=Theme()):
         self.title = title

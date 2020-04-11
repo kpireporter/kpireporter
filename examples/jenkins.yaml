@@ -10,9 +10,16 @@ datasources:
       api_token: jenkins_token
 
 views:
-  build_summary:
+  app_build_summary:
     plugin: jenkins.build_summary
-    title: Problem builds
+    title: Problem application builds
     args:
-      filter:
+      filters:
+        name: -app
+  other_builds:
+    plugin: jenkins.build_summary
+    title: Other builds
+    args:
+      filters:
+        invert: True
         name: -app

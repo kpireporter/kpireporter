@@ -6,23 +6,23 @@
     "httpResponse": {
       "body": {
         "jobs": [
-          { 
-            "name": "v2-app", 
+          {
+            "name": "v2-app",
             "color": "blue",
             "jobs": [
-              { "url": "/job/v2-app/job/master", "name": "master", "color": "blue" },
-              { "url": "/job/v2-app/job/devel", "name": "devel", "color": "red" }
+              { "url": "https://jenkins.example.com/job/v2-app/job/master", "name": "master", "color": "blue" },
+              { "url": "https://jenkins.example.com/job/v2-app/job/devel", "name": "devel", "color": "red" }
             ]
           },
           {
             "name": "legacy-app",
             "color": "red",
             "jobs": [
-              { "url": "/job/legacy-app/job/master", "name": "master", "color": "red" },
-              { "url": "/job/legacy-app/job/devel", "name": "devel", "color": "red" }
+              { "url": "https://jenkins.example.com/job/legacy-app/job/master", "name": "master", "color": "red" },
+              { "url": "https://jenkins.example.com/job/legacy-app/job/devel", "name": "devel", "color": "red" }
             ]
           },
-          { "url": "/job/security-scan", "name": "security-scan", "color": "blue" }
+          { "url": "https://jenkins.example.com/job/security-scan", "name": "security-scan", "color": "blue" }
         ]
       }
     }
@@ -37,16 +37,16 @@
     "httpResponse": {
       "body": {
         "builds": [
-          { "id": "10", "result": "SUCCESS" },
-          { "id": "9", "result": "SUCCESS" },
-          { "id": "8", "result": "SUCCESS" },
-          { "id": "7", "result": "SUCCESS" },
-          { "id": "6", "result": "SUCCESS" },
-          { "id": "5", "result": "SUCCESS" },
-          { "id": "4", "result": "SUCCESS" },
-          { "id": "3", "result": "SUCCESS" },
-          { "id": "2", "result": "SUCCESS" },
-          { "id": "1", "result": "SUCCESS" }
+          { "id": "10", "url": "https://jenkins.example.com/job/security-scan/10", "result": "SUCCESS" },
+          { "id": "9", "url": "https://jenkins.example.com/job/security-scan/9", "result": "SUCCESS" },
+          { "id": "8", "url": "https://jenkins.example.com/job/security-scan/8", "result": "SUCCESS" },
+          { "id": "7", "url": "https://jenkins.example.com/job/security-scan/7", "result": "SUCCESS" },
+          { "id": "6", "url": "https://jenkins.example.com/job/security-scan/6", "result": "SUCCESS" },
+          { "id": "5", "url": "https://jenkins.example.com/job/security-scan/5", "result": "SUCCESS" },
+          { "id": "4", "url": "https://jenkins.example.com/job/security-scan/4", "result": "SUCCESS" },
+          { "id": "3", "url": "https://jenkins.example.com/job/security-scan/3", "result": "SUCCESS" },
+          { "id": "2", "url": "https://jenkins.example.com/job/security-scan/2", "result": "SUCCESS" },
+          { "id": "1", "url": "https://jenkins.example.com/job/security-scan/1", "result": "SUCCESS" }
         ],
         "healthReport": {
           "score": 100
@@ -64,16 +64,16 @@
     "httpResponse": {
       "body": {
         "builds": [
-          { "id": "57", "result": "SUCCESS" },
-          { "id": "56", "result": "SUCCESS" },
-          { "id": "55", "result": "SUCCESS" },
-          { "id": "54", "result": "SUCCESS" },
-          { "id": "53", "result": "SUCCESS" },
-          { "id": "52", "result": "SUCCESS" },
-          { "id": "51", "result": "SUCCESS" },
-          { "id": "50", "result": "SUCCESS" },
-          { "id": "49", "result": "SUCCESS" },
-          { "id": "48", "result": "SUCCESS" } 
+          { "id": "57", "url": "https://jenkins.example.com/job/v2-app/job/master/57", "result": "SUCCESS" },
+          { "id": "56", "url": "https://jenkins.example.com/job/v2-app/job/master/56", "result": "SUCCESS" },
+          { "id": "55", "url": "https://jenkins.example.com/job/v2-app/job/master/55", "result": "SUCCESS" },
+          { "id": "54", "url": "https://jenkins.example.com/job/v2-app/job/master/54", "result": "SUCCESS" },
+          { "id": "53", "url": "https://jenkins.example.com/job/v2-app/job/master/53", "result": "SUCCESS" },
+          { "id": "52", "url": "https://jenkins.example.com/job/v2-app/job/master/52", "result": "SUCCESS" },
+          { "id": "51", "url": "https://jenkins.example.com/job/v2-app/job/master/51", "result": "SUCCESS" },
+          { "id": "50", "url": "https://jenkins.example.com/job/v2-app/job/master/50", "result": "SUCCESS" },
+          { "id": "49", "url": "https://jenkins.example.com/job/v2-app/job/master/49", "result": "SUCCESS" },
+          { "id": "48", "url": "https://jenkins.example.com/job/v2-app/job/master/48", "result": "SUCCESS" }
         ],
         "healthReport": {
           "score": 100
@@ -91,16 +91,16 @@
     "httpResponse": {
       "body": {
         "builds": [
-          { "id": "15", "result": "SUCCESS" },
-          { "id": "14", "result": "FAILURE" },
-          { "id": "13", "result": "SUCCESS" },
-          { "id": "12", "result": "SUCCESS" },
-          { "id": "11", "result": "SUCCESS" },
-          { "id": "10", "result": "SUCCESS" },
-          { "id": "9", "result": "FAILURE" },
-          { "id": "8", "result": "FAILURE" },
-          { "id": "7", "result": "SUCCESS" },
-          { "id": "6", "result": "SUCCESS" }
+          { "id": "15", "url": "https://jenkins.example.com/job/v2-app/job/devel/15", "result": "SUCCESS" },
+          { "id": "14", "url": "https://jenkins.example.com/job/v2-app/job/devel/14", "result": "FAILURE" },
+          { "id": "13", "url": "https://jenkins.example.com/job/v2-app/job/devel/13", "result": "SUCCESS" },
+          { "id": "12", "url": "https://jenkins.example.com/job/v2-app/job/devel/12", "result": "SUCCESS" },
+          { "id": "11", "url": "https://jenkins.example.com/job/v2-app/job/devel/11", "result": "SUCCESS" },
+          { "id": "10", "url": "https://jenkins.example.com/job/v2-app/job/devel/10", "result": "SUCCESS" },
+          { "id": "9", "url": "https://jenkins.example.com/job/v2-app/job/devel/9", "result": "FAILURE" },
+          { "id": "8", "url": "https://jenkins.example.com/job/v2-app/job/devel/8", "result": "FAILURE" },
+          { "id": "7", "url": "https://jenkins.example.com/job/v2-app/job/devel/7", "result": "SUCCESS" },
+          { "id": "6", "url": "https://jenkins.example.com/job/v2-app/job/devel/6", "result": "SUCCESS" }
         ],
         "healthReport": {
           "score": 80
@@ -118,16 +118,16 @@
     "httpResponse": {
       "body": {
         "builds": [
-          { "id": "20", "result": "FAILURE" },
-          { "id": "19", "result": "FAILURE" },
-          { "id": "18", "result": "SUCCESS" },
-          { "id": "17", "result": "SUCCESS" },
-          { "id": "16", "result": "SUCCESS" },
-          { "id": "15", "result": "FAILURE" },
-          { "id": "14", "result": "SUCCESS" },
-          { "id": "13", "result": "FAILURE" },
-          { "id": "12", "result": "SUCCESS" },
-          { "id": "11", "result": "SUCCESS" }
+          { "id": "20", "url": "https://jenkins.example.com/job/legacy-app/job/master/20", "result": "FAILURE" },
+          { "id": "19", "url": "https://jenkins.example.com/job/legacy-app/job/master/19", "result": "FAILURE" },
+          { "id": "18", "url": "https://jenkins.example.com/job/legacy-app/job/master/18", "result": "SUCCESS" },
+          { "id": "17", "url": "https://jenkins.example.com/job/legacy-app/job/master/17", "result": "SUCCESS" },
+          { "id": "16", "url": "https://jenkins.example.com/job/legacy-app/job/master/16", "result": "SUCCESS" },
+          { "id": "15", "url": "https://jenkins.example.com/job/legacy-app/job/master/15", "result": "FAILURE" },
+          { "id": "14", "url": "https://jenkins.example.com/job/legacy-app/job/master/14", "result": "SUCCESS" },
+          { "id": "13", "url": "https://jenkins.example.com/job/legacy-app/job/master/13", "result": "FAILURE" },
+          { "id": "12", "url": "https://jenkins.example.com/job/legacy-app/job/master/12", "result": "SUCCESS" },
+          { "id": "11", "url": "https://jenkins.example.com/job/legacy-app/job/master/11", "result": "SUCCESS" }
         ],
         "healthReport": {
           "score": 60
@@ -145,16 +145,16 @@
     "httpResponse": {
       "body": {
         "builds": [
-          { "id": "25", "result": "FAILURE" },
-          { "id": "24", "result": "FAILURE" },
-          { "id": "23", "result": "FAILURE" },
-          { "id": "22", "result": "FAILURE" },
-          { "id": "21", "result": "FAILURE" },
-          { "id": "20", "result": "FAILURE" },
-          { "id": "19", "result": "FAILURE" },
-          { "id": "18", "result": "FAILURE" },
-          { "id": "17", "result": "FAILURE" },
-          { "id": "16", "result": "FAILURE" }
+          { "id": "25", "url": "https://jenkins.example.com/job/legacy-app/job/devel/25", "result": "FAILURE" },
+          { "id": "24", "url": "https://jenkins.example.com/job/legacy-app/job/devel/24", "result": "FAILURE" },
+          { "id": "23", "url": "https://jenkins.example.com/job/legacy-app/job/devel/23", "result": "FAILURE" },
+          { "id": "22", "url": "https://jenkins.example.com/job/legacy-app/job/devel/22", "result": "FAILURE" },
+          { "id": "21", "url": "https://jenkins.example.com/job/legacy-app/job/devel/21", "result": "FAILURE" },
+          { "id": "20", "url": "https://jenkins.example.com/job/legacy-app/job/devel/20", "result": "FAILURE" },
+          { "id": "19", "url": "https://jenkins.example.com/job/legacy-app/job/devel/19", "result": "FAILURE" },
+          { "id": "18", "url": "https://jenkins.example.com/job/legacy-app/job/devel/18", "result": "FAILURE" },
+          { "id": "17", "url": "https://jenkins.example.com/job/legacy-app/job/devel/17", "result": "FAILURE" },
+          { "id": "16", "url": "https://jenkins.example.com/job/legacy-app/job/devel/16", "result": "FAILURE" }
         ],
         "healthReport": {
           "score": 0

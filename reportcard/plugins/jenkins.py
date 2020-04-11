@@ -1,5 +1,7 @@
 import jenkins
+import operator
 import pandas as pd
+import re
 
 from reportcard.datasource import Datasource
 from reportcard.view import View
@@ -13,50 +15,84 @@ class JenkinsDatasource(Datasource):
         self.client = jenkins.Jenkins(host, username=user, password=api_token)
 
     def query(self, fn_name, *args, **kwargs):
-        fn = getattr(self.client, fn_name, None)
+        fn = getattr(self, fn_name, None)
         if not (fn and callable(fn)):
             raise ValueError(f"No such method {fn_name} for Jenkins client")
 
-        extract_key = kwargs.pop("extract_key", None)
+        return fn(*args, **kwargs)
 
-        res = fn(*args, **kwargs)
-        
-        if extract_key:
-            res = res.get(extract_key)
+    def get_all_jobs(self):
+        jobs = pd.DataFrame.from_records(self.client.get_all_jobs())
+        # Filter by jobs that don't have child jobs
+        leaf_jobs = jobs[jobs.jobs.isna()]
+        return leaf_jobs
 
-        return pd.DataFrame.from_records(res)
+    def get_job_info(self, job_name):
+        job_info = self.client.get_job_info(job_name, depth=1)
+        df = pd.json_normalize(job_info, "builds")
+        # Transpose the health report information into our result table--
+        # this is a bit of a hack but it avoids having to make two calls
+        # to our datasource (DataFrames don't handle mixed dict/list data)
+        return df.assign(**job_info["healthReport"])
 
 
-class JenkinsBuildSummary(View):
-    def init(self, datasource="jenkins", filter=None):
-        self.datasource = datasource
-        self.filter = self._process_filters(filter)
+class JenkinsBuildFilter:
+    name_filter = None
+
+    def __init__(self, name=None, invert=False):
+        self.invert = invert
+        if name:
+            self.name_filter = self._process_filters(name)
 
     def _process_filters(self, filters):
-        name_filter = filters.get("name")
-        if not name_filter:
-            raise ValueError("Missing 'name' filter: only 'name' filters are supported")
-        if not (isinstance(name_filter, list) or isinstance(name_filter, str)):
-            raise ValueError("Invalid filter type, only string or list of strings supported")
-        if not isinstance(name_filter, list):
-            name_filter = [name_filter]
-        return name_filter
+        if not (isinstance(filters, list) or isinstance(filters, str)):
+            raise ValueError((
+                "Invalid filter type, only string or "
+                "list of strings supported"))
+        if not isinstance(filters, list):
+            filters = [filters]
+        return [re.compile(f) for f in filters]
 
+    def filter_job(self, job):
+        allow = True
+
+        if self.name_filter:
+            job_name = job["fullname"]
+            allow &= all(f.search(job_name) for f in self.name_filter)
+
+        if self.invert:
+            allow = not allow
+
+        return allow
+
+class JenkinsBuildSummary(View):
+    def init(self, datasource="jenkins", filters={}):
+        self.datasource = datasource
+        self.filters = JenkinsBuildFilter(**filters)
 
     def render(self, env):
         jobs = self.datasources.query(self.datasource, "get_all_jobs")
-        # Filter by jobs that don't have child jobs
-        leaf_jobs = jobs[jobs.jobs.isna()]
 
         summary = []
-        for job_name in leaf_jobs["fullname"]:
-            # TODO: apply filters
+        for _, row in jobs.iterrows():
+            if not self.filters.filter_job(row):
+                continue
+            job_name = row["fullname"]
+            job_url = row["url"]
             builds = self.datasources.query(
-                self.datasource, "get_job_info", job_name,
-                depth=1,
-                extract_key="builds")
-            build_list = builds.T.to_dict().values()
-            summary.append(dict(name=job_name, builds=build_list))
+                self.datasource, "get_job_info", job_name)
+            score = builds["score"].iloc[0]
+            # Reverse order of builds, Jenkins returns most recent ones first
+            build_list = builds.iloc[::-1].T.to_dict().values()
+            summary.append(dict(
+                name=job_name,
+                url=job_url,
+                score=score,
+                builds=build_list,
+            ))
+
+        # Show "worst off" builds first
+        summary = sorted(summary, key=operator.itemgetter("score"))
 
         template = env.get_template("plugins/jenkins_build_summary.html")
 

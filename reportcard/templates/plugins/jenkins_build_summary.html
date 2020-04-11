@@ -1,14 +1,67 @@
 <style>
-  .jenkinsList {
-    list-style: none;
+.jenkinsBuild {
+  table-layout: fixed;
+}
+.jenkinsBuild_header {
+  font-size: 12px;
+  position: absolute;
+  top: 1em;
+  right: 2px;
+  text-align: right;
+}
+
+.jenkinsBuild_status {
+  box-sizing: border-box;
+  width: 10%;
+  display: inline-block;
+  padding-right: 2px;
+}
+  .jenkinsBuild_icon {
+    width: 100%;
+    display: inline-block;
+    background: gray;
+    border-radius: 3px;
+  }
+  .jenkinsBuild_icon.success {
+    background: green;
+  }
+  .jenkinsBuild_icon.failure {
+    background: red;
   }
 </style>
 
-<ol class="jenkinsList">
+{% if summary %}
+<div class="jenkinsBuild_header">Latest build →</div>
+{% endif %}
+
+<table class="jenkinsBuild">
+  <tbody>
 {% for job in summary %}
-  <li class="jenkinsBuild">
-    <span>{{ job.name }}</span>
-    {% for build in job.builds %}<span class="jenkinsBuild_status {% if build.result == 'FAILURE' %}error{% else %}success{% endif %}">*</span>{% endfor %}
-  </li>
+    <tr>
+      <td>
+        {% if job.score >= 80 %}
+        <span class="jenkinsBuild_score">&#x2600;&#xFE0F;</span>
+        {% elif job.score >= 60 %}
+        <span class="jenkinsBuild_score 60-79">&#x1F324;</span>
+        {% elif job.score >= 40 %}
+        <span class="jenkinsBuild_score 40-59">&#x2601;</span>
+        {% elif job.score >= 20 %}
+        <span class="jenkinsBuild_score 20-39">&#x1F327;</span>
+        {% elif job.score >= 0 %}
+        <span class="jenkinsBuild_score 00-19">&#x1F329;</span>
+        {% endif %}
+        <a href="{{ job.url }}" alt="View job {{ job.name }} on Jenkins">{{ job.name }}</a>
+      </td>
+      <td>
+        {% for build in job.builds -%}
+        <span class="jenkinsBuild_status"><a href="{{ build.url }}" alt="View build {{ build.fullDisplayName }} on Jenkins"><i class="jenkinsBuild_icon {{ build.result | lower }}">&nbsp;</i></a></span>
+        {%- endfor %}
+      </td>
+    </tr>
+{% else %}
+    <tr>
+      <td>No jobs found.</td>
+    </tr>
 {% endfor %}
-</ol>
+  </tbody>
+</table>

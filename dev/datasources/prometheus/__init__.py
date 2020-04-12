@@ -14,7 +14,7 @@ def make():
             "httpRequest": {
                 "path": "/api/v1/query_range",
                 "queryStringParameters": {
-                    "query": [""]
+                    "query": [".*ALERTS.*"]
                 }
             },
             "httpResponse": {
@@ -27,7 +27,7 @@ def make():
             "httpRequest": {
                 "path": "/api/v1/query_range",
                 "queryStringParameters": {
-                    "query": [""]
+                    "query": [".*node_cpu_seconds_total.*"]
                 }
             },
             "httpResponse": {

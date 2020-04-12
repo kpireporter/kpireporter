@@ -9,6 +9,8 @@ from reportcard.view import View
 
 class JenkinsDatasource(Datasource):
     def init(self, host=None, user=None, api_token=None):
+        if not host:
+            raise ValueError("Missing required paramter: 'host'")
         if not host.startswith("http"):
             host = f"http://{host}"
 

@@ -43,7 +43,7 @@ class DatasourceManager(PluginManager):
     def query(self, name, *args, **kwargs) -> pd.DataFrame:
         result = self.call_instance(name, "query", *args, **kwargs)
 
-        if not isinstance(result, pd.DataFrame):
+        if not isinstance(result, pd.core.base.PandasObject):
             raise self.exc_class(
                 f"Datasource {name} returned unexpected query result type")
 

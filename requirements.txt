@@ -2,10 +2,11 @@ jinja2
 pandas
 premailer
 pyyaml
-requests
 stevedore
 matplotlib
 # [jenkins]
 python-jenkins
 # [mysql]
 mysqlclient
+# [prometheus]
+requests

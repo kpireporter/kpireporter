@@ -35,7 +35,7 @@ services:
         source: ./datasources/prometheus
         target: /config
         read_only: True
-    command: -serverPort 8080
+    command: -serverPort 9090
 
   reportcard:
     build:

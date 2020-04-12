@@ -16,7 +16,9 @@ class MySQLDatasource(Datasource):
         """
         sql, params = self.format_sql(sql)
         kwargs.setdefault("params", params)
-        return pd.read_sql(sql, self.db, **kwargs)
+        df = pd.read_sql(sql, self.db, **kwargs)
+        df = df.set_index(df.columns[0])
+        return df
 
     def format_sql(self, sql: str) -> (str, list):
         params = []

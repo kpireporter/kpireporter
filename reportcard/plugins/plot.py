@@ -48,7 +48,7 @@ class Plot(View):
     def render(self, env):
         df = self.datasources.query(self.datasource, self.query,
                                     **self.query_args)
-        df = df.set_index(df.columns[0])
+        # df = df.set_index(df.columns[0])
 
         with plt.rc_context(self.matplotlib_rc):
             fig, ax = plt.subplots(figsize=[self.cols, 2])
@@ -64,7 +64,10 @@ class Plot(View):
                 plt.xticks(rotation=30)
                 plt.bar(pd.to_datetime(df.index), df[df.columns[0]])
             else:
-                df.plot(ax=ax, legend=None, title=None, kind=self.kind)
+                df.plot(ax=ax, kind=self.kind, legend=None, title=None)
+
+            if getattr(df, "groups", None):
+                ax.legend(df.groups)
 
             ax.set_xlabel("")
 
@@ -96,14 +99,14 @@ class SingleStat(View):
 
     def render(self, env):
         df = self.datasources.query(self.datasource, self.query)
-        stat_value = df[df.columns[0]].iloc[0]
+        stat_value = df.index.array[0]
         stat_delta = None
         stat_delta_direction = None
 
         if self.comparison_query:
             df_cmp = self.datasources.query(self.datasource,
                                             self.comparison_query)
-            stat_cmp_value = df_cmp[df_cmp.columns[0]].iloc[0]
+            stat_cmp_value = df_cmp.index.array[0]
             stat_delta = stat_value - stat_cmp_value
             stat_delta_direction = "up" if stat_delta >= 0 else "down"
 

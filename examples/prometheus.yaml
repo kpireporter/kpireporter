@@ -1,0 +1,18 @@
+---
+title: Ops report
+
+datasources:
+  prom:
+    plugin: prometheus
+    args:
+      host: prometheus:9090
+
+views:
+  # Show a time series of user signups over the report period.
+  signups_over_time:
+    plugin: plot
+    title: Load
+    args:
+      datasource: prom
+      query: |
+        100 - (avg by(hostname) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100

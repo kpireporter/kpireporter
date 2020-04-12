@@ -17,8 +17,8 @@ views:
     args:
       datasource: db
       query: |
-        select created_at, 
-        count(*) over (order by created_at) 
+        select created_at,
+        count(*) over (order by created_at)
           + (select count(*) from reportcard.signups where created_at < {from})
           as total_signups
         from reportcard.signups
@@ -32,9 +32,14 @@ views:
       datasource: db
       query: |
         select date_format(created_at, '%%Y-%%m-%%d') as day, count(*) as daily_total
-        from reportcard.signups 
+        from reportcard.signups
         where created_at >= {from} and created_at < {to}
         group by day(created_at)
+      query_args:
+        # Because we're roughly grouping by day, and not a full date time,
+        # automatic parsing of dates doesn't quite work, so we need to give
+        # a bit of help to say which columns should be treated as dates.
+        parse_dates: ['day']
   # Additionally, show a stat indicating how much the total signups have
   # increased (or decreased) in comparison to the previous report period.
   signups_change:

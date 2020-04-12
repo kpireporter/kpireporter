@@ -1,4 +1,5 @@
 import io
+import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
 import pandas as pd
 
@@ -9,9 +10,10 @@ DATE_FORMAT = "%b %-d\n(%a)"
 
 
 class Plot(View):
-    def init(self, datasource=None, query=None, kind="line"):
+    def init(self, datasource=None, query=None, query_args={}, kind="line"):
         self.datasource = datasource
         self.query = query
+        self.query_args = query_args
         self.kind = kind
 
         if not (self.datasource and self.query):
@@ -44,7 +46,8 @@ class Plot(View):
         }
 
     def render(self, env):
-        df = self.datasources.query(self.datasource, self.query)
+        df = self.datasources.query(self.datasource, self.query,
+                                    **self.query_args)
         df = df.set_index(df.columns[0])
 
         with plt.rc_context(self.matplotlib_rc):
@@ -56,6 +59,9 @@ class Plot(View):
             if the index looks like it contains date/time data.
             """
             if self.kind == "bar" and isinstance(df.index, pd.DatetimeIndex):
+                ax.xaxis.set_major_formatter(
+                    mdates.DateFormatter(DATE_FORMAT))
+                plt.xticks(rotation=30)
                 plt.bar(pd.to_datetime(df.index), df[df.columns[0]])
             else:
                 df.plot(ax=ax, legend=None, title=None, kind=self.kind)

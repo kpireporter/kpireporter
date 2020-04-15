@@ -25,13 +25,14 @@ class PrometheusDatasource(Datasource):
             raise ValueError("Got error response from Prometheus server")
         result = json.get("data", {}).get("result", [])
         df = pd.DataFrame()
+        labels = set()
         for metric in result:
-            mdf = pd.json_normalize(metric, "values")
-            mdf = mdf.set_index(mdf.columns[0])
-            mdf = mdf.rename(columns={1: "value"})
+            mdf = pd.DataFrame(metric["values"], columns=["t", "value"])
+            mdf["t"] = pd.to_datetime(mdf["t"], unit="s")
+            mdf = mdf.set_index("t")
             mdf = mdf.assign(**metric["metric"])
             mdf = mdf.astype({"value": "float"})
             df = df.append(mdf)
-        # TODO: make this generic!
-        df = df.groupby(["hostname"])
+            labels |= metric["metric"].keys()
+        df = df.groupby(list(labels))
         return df

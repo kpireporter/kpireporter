@@ -16,3 +16,10 @@ views:
       datasource: prom
       query: |
         100 - (avg by(hostname) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100
+  alerts:
+    plugin: plot
+    title: Alerts
+    args:
+      datasource: prom
+      query: |
+        ALERTS

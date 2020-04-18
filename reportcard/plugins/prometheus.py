@@ -21,11 +21,14 @@ class PrometheusDatasource(Datasource):
             query=query.strip()
         ))
         json = res.json()
+
         if json.get("status") != "success":
             raise ValueError("Got error response from Prometheus server")
+
         result = json.get("data", {}).get("result", [])
+
         df = pd.DataFrame()
-        labels = set()
+
         for metric in result:
             mdf = pd.DataFrame(metric["values"], columns=["t", "value"])
             mdf["t"] = pd.to_datetime(mdf["t"], unit="s")
@@ -33,6 +36,5 @@ class PrometheusDatasource(Datasource):
             mdf = mdf.assign(**metric["metric"])
             mdf = mdf.astype({"value": "float"})
             df = df.append(mdf)
-            labels |= metric["metric"].keys()
-        df = df.groupby(list(labels))
+
         return df

@@ -5,6 +5,8 @@ import pandas as pd
 
 from reportcard.view import View
 
+import logging
+LOG = logging.getLogger(__name__)
 
 DATE_FORMAT = "%b %-d\n(%a)"
 
@@ -39,6 +41,11 @@ class Plot(View):
             "ytick.labelsize": 8,
             "ytick.color": text_color,
             "ytick.direction": "in",
+            "legend.loc": "upper left",
+            "legend.frameon": False,
+            "legend.fancybox": False,
+            "legend.borderpad": 0,
+            "legend.fontsize": "small",
             "date.autoformatter.day": DATE_FORMAT,
             "figure.dpi": 300,
             "savefig.bbox": "tight",
@@ -48,7 +55,18 @@ class Plot(View):
     def render(self, env):
         df = self.datasources.query(self.datasource, self.query,
                                     **self.query_args)
-        # df = df.set_index(df.columns[0])
+
+        if df.columns.size == 2:
+            LOG.debug((
+                "Automatically grouping data by "
+                f"column='{df.columns[1]}'"))
+            df = df.groupby(df.columns[1])
+        elif df.columns.size > 2:
+            LOG.warn((
+                f"Dataframe has multiple columns: {list(df.columns)}. "
+                "Two-dimensional plots will work best with only a value "
+                "column and an optional grouping column."
+            ))
 
         with plt.rc_context(self.matplotlib_rc):
             fig, ax = plt.subplots(figsize=[self.cols, 2])
@@ -67,7 +85,7 @@ class Plot(View):
                 df.plot(ax=ax, kind=self.kind, legend=None, title=None)
 
             if getattr(df, "groups", None):
-                ax.legend(df.groups)
+                ax.legend(df.groups, bbox_to_anchor=(1, 1))
 
             ax.set_xlabel("")
 

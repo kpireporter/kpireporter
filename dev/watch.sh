@@ -6,6 +6,9 @@ _dockercompose() {
   docker-compose -f "$DIR/docker-compose.yaml" -p reportcard "$@"
 }
 
+echo "Removing existing containers ..."
+_dockercompose down
+
 echo "Rebuilding application container ..."
 _dockercompose build -q reportcard
 _dockercompose rm -f --stop reportcard

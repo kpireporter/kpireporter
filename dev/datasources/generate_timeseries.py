@@ -10,10 +10,11 @@ def simple_date(datestr):
 
 def generate(start_date=None, end_date=None, interval=60, probability=0.1,
              attack=1.2, attack_interval=60*60*24):
-    if start_date is None:
-        start_date = datetime.now()
     if end_date is None:
-        end_date = start_date + timedelta(days=7)
+        end_date = datetime.now()
+    if start_date is None:
+        start_date = end_date - timedelta(days=7)
+
     # Cycle interval
     delta = timedelta(seconds=interval)
 

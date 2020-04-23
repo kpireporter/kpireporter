@@ -12,10 +12,12 @@ DATE_FORMAT = "%b %-d\n(%a)"
 
 
 class Plot(View):
-    def init(self, datasource=None, query=None, query_args={}, kind="line"):
+    def init(self, datasource=None, query=None, query_args={},
+             time_column="time", kind="line"):
         self.datasource = datasource
         self.query = query
         self.query_args = query_args
+        self.time_column = time_column
         self.kind = kind
 
         if not (self.datasource and self.query):
@@ -55,6 +57,9 @@ class Plot(View):
     def render(self, env):
         df = self.datasources.query(self.datasource, self.query,
                                     **self.query_args)
+
+        if self.time_column in df:
+            df = df.set_index(self.time_column)
 
         if df.columns.size == 2:
             LOG.debug((

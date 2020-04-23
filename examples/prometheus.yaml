@@ -8,8 +8,7 @@ datasources:
       host: prometheus:9090
 
 views:
-  # Show a time series of user signups over the report period.
-  signups_over_time:
+  server_load:
     plugin: plot
     title: Load
     args:
@@ -17,9 +16,7 @@ views:
       query: |
         100 - (avg by(hostname) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100
   alerts:
-    plugin: plot
+    plugin: prometheus.alert_summary
     title: Alerts
     args:
       datasource: prom
-      query: |
-        ALERTS

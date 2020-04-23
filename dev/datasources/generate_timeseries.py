@@ -8,8 +8,8 @@ import sys
 def simple_date(datestr):
     return datetime.strptime(datestr, "%Y-%m-%d")
 
-def generate(start_date=None, end_date=None, interval=60, probability=0.1,
-             attack=1.2, attack_interval=60*60*24):
+def generate(start_date=None, end_date=None, interval=60, probability=0.01,
+             attack=1.01, attack_interval=60*60*24):
     if end_date is None:
         end_date = datetime.now()
     if start_date is None:

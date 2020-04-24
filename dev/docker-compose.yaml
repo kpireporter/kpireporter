@@ -58,3 +58,7 @@ services:
       - type: bind
         source: ../_build
         target: /opt/reportcard/_build
+    depends_on:
+      - jenkins
+      - mysql
+      - prometheus

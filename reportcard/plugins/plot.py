@@ -8,6 +8,10 @@ from reportcard.view import View
 import logging
 LOG = logging.getLogger(__name__)
 
+# Suppress DEBUG output for matplot lib by default, as it
+# is quite noisy.
+logging.getLogger("matplotlib").setLevel(logging.INFO)
+
 DATE_FORMAT = "%b %-d\n(%a)"
 
 

@@ -1,4 +1,5 @@
 from datetime import timedelta
+import numpy as np
 import pandas as pd
 import re
 import requests
@@ -88,10 +89,28 @@ class PrometheusAlertSummary(View):
             offset = pd.tseries.frequencies.to_offset(self.resolution)
             df_a["time"] = df_a["time"].dt.round(offset)
             # Find common label sets and which times those alerts fired
-            df_ag = df_a.groupby(list(df_a.columns[2:]))["time"].apply(list)
-            print(df_ag.index.get_level_values(0))
-            # TODO: process list of times and convert to time windows
-            summary[alertname] = df_ag
+            df_ag = df_a.groupby(list(df_a.columns[2:]))["time"]
+            alerts = {}
+            for labelset, df_ts in df_ag:
+                alerts[labelset] = windows = []
+                curr_window = [None, None]
+                list_ts = df_ts.tolist()
+                for ts in list_ts:
+                    if not curr_window[0]:
+                        curr_window[0] = ts
+                    elif (not curr_window[1] or
+                        ts - curr_window[1] <= self.resolution):
+                        curr_window[1] = ts
+                    else:
+                        windows.append(curr_window)
+                        curr_window = [ts, None]
+                # Close last window
+                if not curr_window[1]:
+                    curr_window[1] = list_ts[-1] + self.resolution
+                windows.append(curr_window)
+            summary[alertname] = alerts
+
+        print(summary)
 
         template = j2.get_template("plugins/prometheus_alert_summary.html")
         return template.render(summary=summary)

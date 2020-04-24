@@ -4,8 +4,11 @@
 
 <table class="prometheusAlerts">
   <tbody>
-  {% for alert in alerts %}
-    <tr><td>{{ alert }}</td></tr>
+  {% for alertname, alerts in summary.items() %}
+    <tr>
+      <td>{{ alertname }}</td>
+      <td>{% for labelset, windows in alerts.items() %}{{ labelset }}{% endfor %}</td>
+    </tr>
   {% endfor %}
   </tbody>
 </table>

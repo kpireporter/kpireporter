@@ -1,13 +1,52 @@
 <style>
-
+  .prometheusAlerts {
+    table-layout: fixed; }
+    .prometheusAlerts th {
+      font-size: 12px;
+      color: #aaaaaa;
+  }
+  .prometheusAlerts_reportRow td {
+    padding-bottom: 10px;
+  }
+  .prometheusAlerts_reportRow th {
+    padding-bottom: 5px;
+  }
+  .prometheusAlerts_blipHolder {
+    width: 100%;
+    height: 15px;
+    margin-bottom: 10px;
+    position: relative;
+    background: #d5ffd5;
+  }
+  .prometheusAlerts_blip {
+    display: block;
+    position: absolute;
+    background-color: red;
+    height: 100%;
+  }
 </style>
 
-<table class="prometheusAlerts">
+<table class="prometheusAlerts" cellpadding="0" cellspacing="0">
   <tbody>
-  {% for alertname, alerts in summary.items() %}
+    {% if show_timeline %}
     <tr>
-      <td>{{ alertname }}</td>
-      <td>{% for labelset, windows in alerts.items() %}{{ labelset }}{% endfor %}</td>
+      <td colspan="8">
+        <div class="prometheusAlerts_blipHolder">
+        {% for w in timeline %}<span class="prometheusAlerts_blip" style="left: {{ w[0] }}%; width: {{ w[1] }}%;">&nbsp;</span>{% endfor %}
+        </div>
+      </td>
+    </tr>
+    {% endif %}
+    <tr class="prometheusAlerts_reportRow">
+      <th colspan="5">Alert name</th>
+      <th colspan="1">Count</th>
+      <th colspan="2">Total time</th>
+    </tr>
+  {% for item in summary %}
+    <tr class="prometheusAlerts_reportRow">
+      <td colspan="5">{{ item.alertname }}</td>
+      <td colspan="1">{{ item.num_firings }}</td>
+      <td colspan="2">{{ item.total_time }}</td>
     </tr>
   {% endfor %}
   </tbody>

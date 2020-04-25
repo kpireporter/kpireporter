@@ -26,6 +26,10 @@ class Report:
         self.end_date = end_date
         self.theme = theme
 
+    @property
+    def timedelta(self):
+        return self.end_date - self.start_date
+
 
 class ReportFactory:
     def __init__(self, config):

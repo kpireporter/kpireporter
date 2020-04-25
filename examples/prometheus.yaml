@@ -15,8 +15,18 @@ views:
       datasource: prom
       query: |
         100 - (avg by(hostname) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100
-  alerts:
+  critical_alerts:
     plugin: prometheus.alert_summary
-    title: Alerts
+    title: Critical alerts
     args:
       datasource: prom
+      labels:
+        severity: critical
+  warning_alerts:
+    plugin: prometheus.alert_summary
+    title: Warnings
+    args:
+      datasource: prom
+      show_timeline: False
+      labels:
+        severity: warning

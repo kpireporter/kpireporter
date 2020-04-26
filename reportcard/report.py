@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from slugify import slugify
 
 from reportcard.datasource import DatasourceManager
 from reportcard.output import OutputDriverManager
@@ -25,6 +26,11 @@ class Report:
         self.start_date = start_date
         self.end_date = end_date
         self.theme = theme
+        self.id = "_".join([
+            self.start_date.strftime('%Y-%m-%d'),
+            self.end_date.strftime('%Y-%m-%d'),
+            slugify(self.title)
+        ])
 
     @property
     def timedelta(self):

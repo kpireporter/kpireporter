@@ -42,6 +42,16 @@ services:
     ports:
       - "127.0.0.1:8025:8025"
 
+  nginx:
+    image: nginx:stable
+    volumes:
+      - type: bind
+        source: ../_build
+        target: /usr/share/nginx
+        read_only: True
+    ports:
+      - "127.0.0.1:8080:80"
+
   reportcard:
     build:
       context: ..

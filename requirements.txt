@@ -1,9 +1,10 @@
 jinja2
+matplotlib
 pandas
 premailer
+python-slugify
 pyyaml
 stevedore
-matplotlib
 # [jenkins]
 python-jenkins
 # [mysql]

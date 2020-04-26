@@ -1,6 +1,6 @@
 from email.message import EmailMessage
 from email.headerregistry import Address
-from j2 import Markup
+from jinja2 import Markup
 import smtplib
 
 from reportcard.output import OutputDriver
@@ -37,8 +37,8 @@ class SMTPOutputDriver(OutputDriver):
                 raise ValueError(
                     f"No mime type specified for blob {blob['id']}")
             maintype, subtype = mime_type.split("/")
-            payload.add_related(blob["content"], maintype, subtype,
-                                cid=blob["id"])
+            payload.add_related(blob["content"].getvalue(),
+                                maintype, subtype, cid=blob["id"])
 
         # Send the message via local SMTP server.
         with smtplib.SMTP(self.smtp_host) as s:

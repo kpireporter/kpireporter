@@ -37,6 +37,14 @@ services:
         read_only: True
     command: -serverPort 9090
 
+  smtp:
+    image: juanluisbaptiste/postfix:latest
+    environment:
+      SMTP_SERVER: smtp
+      SMTP_USERNAME: reportcard
+      SMTP_PASSWORD: reportcard_pass
+      SERVER_HOSTNAME: reportcard.dev
+
   reportcard:
     build:
       context: ..
@@ -62,3 +70,4 @@ services:
       - jenkins
       - mysql
       - prometheus
+      - smtp

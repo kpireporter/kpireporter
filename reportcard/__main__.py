@@ -9,6 +9,7 @@ from reportcard.report import ReportFactory
 
 logging.basicConfig(level=logging.DEBUG)
 
+
 def simple_date(date_str):
     try:
         return datetime.strptime(date_str, "%Y-%m-%d")

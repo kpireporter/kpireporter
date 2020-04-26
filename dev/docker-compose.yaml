@@ -38,12 +38,9 @@ services:
     command: -serverPort 9090
 
   smtp:
-    image: juanluisbaptiste/postfix:latest
-    environment:
-      SMTP_SERVER: smtp
-      SMTP_USERNAME: reportcard
-      SMTP_PASSWORD: reportcard_pass
-      SERVER_HOSTNAME: reportcard.dev
+    image: mailhog/mailhog:latest
+    ports:
+      - "127.0.0.1:8025:8025"
 
   reportcard:
     build:

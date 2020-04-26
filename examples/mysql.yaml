@@ -1,6 +1,16 @@
 ---
 title: Top-of-funnel report
 
+outputs:
+  smtp:
+    plugin: smtp
+    args:
+      smtp_host: smtp
+      smtp_port: 1025
+      email_from: sender@reportcard.dev
+      email_to:
+        - recipient@reportcard.dev
+
 datasources:
   db:
     plugin: mysql

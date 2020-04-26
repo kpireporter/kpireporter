@@ -7,13 +7,15 @@ from reportcard.output import OutputDriver
 
 
 class SMTPOutputDriver(OutputDriver):
-    def init(self, email_from=None, email_to=[], smtp_host="localhost"):
+    def init(self, email_from=None, email_to=[], smtp_host="localhost",
+             smtp_port=25):
         if not (email_from and email_to):
             raise ValueError("Both 'from' and 'to' addresses are required")
 
         self.email_from = self._parse_address(email_from)
         self.email_to = [self._parse_address(to) for to in email_to]
         self.smtp_host = smtp_host
+        self.smtp_port = smtp_port
 
     def _parse_address(self, address):
         username, domain = address.split("@")
@@ -41,5 +43,5 @@ class SMTPOutputDriver(OutputDriver):
                                 maintype, subtype, cid=blob["id"])
 
         # Send the message via local SMTP server.
-        with smtplib.SMTP(self.smtp_host) as s:
+        with smtplib.SMTP(self.smtp_host, port=self.smtp_port) as s:
             s.send_message(msg)

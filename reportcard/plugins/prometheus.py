@@ -1,6 +1,6 @@
 from datetime import timedelta
 from itertools import chain
-from functools import reduce
+from functools import lru_cache, reduce
 import numpy as np
 from operator import itemgetter
 import pandas as pd
@@ -104,7 +104,7 @@ class PrometheusAlertSummary(View):
 
     def _total_time(self, windows):
         return reduce(lambda agg, x: agg + (x[1] - x[0]),
-            windows, timedelta(0))
+                      windows, timedelta(0))
 
     def _normalize_time_windows(self, windows):
         td = self.report.timedelta
@@ -114,7 +114,8 @@ class PrometheusAlertSummary(View):
             for w in windows
         ]
 
-    def render(self, j2):
+    @lru_cache
+    def template_vars(self):
         df = self.datasources.query(
             self.datasource, "ALERTS", step=self.resolution.total_seconds())
 
@@ -168,9 +169,16 @@ class PrometheusAlertSummary(View):
         timeline = self._normalize_time_windows(
             list(chain(*[a["windows"] for a in summary])))
 
-        template = j2.get_template("plugins/prometheus_alert_summary.html")
-        return template.render(
+        return dict(
             summary=time_ordered,
             timeline=timeline,
             show_timeline=self.show_timeline
         )
+
+    def render_html(self, env):
+        template = env.get_template("plugins/prometheus_alert_summary.html")
+        return template.render(**self.template_vars())
+
+    def render_md(self, env):
+        template = env.get_template("plugins/prometheus_alert_summary.md")
+        return template.render(**self.template_vars())

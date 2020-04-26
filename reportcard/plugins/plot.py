@@ -58,7 +58,7 @@ class Plot(View):
             "savefig.pad_inches": 0,
         }
 
-    def render(self, env):
+    def render_html(self, env):
         df = self.datasources.query(self.datasource, self.query,
                                     **self.query_args)
 
@@ -102,7 +102,7 @@ class Plot(View):
             figbytes = io.BytesIO()
             fig.savefig(figbytes)
             figname = "figure.png"
-            self.add_blob(figname, figbytes)
+            self.add_blob(figname, figbytes, mime_type="image/png")
 
             plt.close(fig)
 
@@ -124,7 +124,7 @@ class SingleStat(View):
             raise ValueError((
                 "Both a 'datasource' and 'query' parameter are required"))
 
-    def render(self, env):
+    def render_html(self, env):
         df = self.datasources.query(self.datasource, self.query)
         stat_value = df.index.array[0]
         stat_delta = None

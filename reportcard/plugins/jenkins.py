@@ -1,5 +1,5 @@
+from functools import lru_cache
 import jenkins
-import operator
 import pandas as pd
 import re
 
@@ -67,12 +67,14 @@ class JenkinsBuildFilter:
 
         return allow
 
+
 class JenkinsBuildSummary(View):
     def init(self, datasource="jenkins", filters={}):
         self.datasource = datasource
         self.filters = JenkinsBuildFilter(**filters)
 
-    def render(self, env):
+    @lru_cache
+    def template_vars(self):
         jobs = self.datasources.query(self.datasource, "get_all_jobs")
 
         summary = []
@@ -93,6 +95,12 @@ class JenkinsBuildSummary(View):
                 builds=build_list,
             ))
 
-        template = env.get_template("plugins/jenkins_build_summary.html")
+        return dict(summary=summary)
 
-        return template.render(summary=summary)
+    def render_html(self, j2):
+        template = j2.get_template("plugins/jenkins_build_summary.html")
+        return template.render(**self.template_vars())
+
+    def render_md(self, j2):
+        template = j2.get_template("plugins/jenkins_build_summary.md")
+        return template.render(**self.template_vars())

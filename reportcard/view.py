@@ -37,11 +37,16 @@ class View(ABC):
     def init(self, **kwargs):
         pass
 
-    @abstractmethod
-    def render(self, env: Environment) -> str:
-        pass
+    def supports(self, fmt) -> bool:
+        return callable(getattr(self, f"render_{fmt}", None))
 
-    def add_blob(self, id, blob, mime_type=None):
+    def render(self, env: Environment, fmt="html") -> str:
+        if not self.supports(fmt):
+            raise ValueError(f"No {fmt} renderer found")
+
+        return getattr(self, f"render_{fmt}")(env)
+
+    def add_blob(self, id, blob, mime_type):
         self._blobs[id] = dict(id=f"{self.id}/{id}", content=blob,
                                mime_type=mime_type)
 
@@ -87,7 +92,8 @@ class ViewManager(PluginManager):
 
         return render_blob
 
-    def render(self, env: Environment, output_driver: OutputDriver) -> list:
+    def render(self, env: Environment, fmt: str,
+               output_driver: OutputDriver) -> list:
         blocks = []
         for id, view in self.instances:
             block = dict(
@@ -109,7 +115,7 @@ class ViewManager(PluginManager):
                 view_env.extend(view_id=id)
                 view_env.filters["blob"] = self._blob_filter(output_driver)
 
-                output = view.render(view_env)
+                output = view.render(view_env, fmt=fmt)
                 if not isinstance(output, str):
                     raise ViewException((
                         "The view did not render a valid string"))

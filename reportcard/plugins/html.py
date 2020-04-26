@@ -12,6 +12,8 @@ class HTMLOutputDriver(OutputDriver):
         return Markup(f"""<img src="{blob["id"]}" />""")
 
     def render_output(self, content, blobs):
+        content = content.get("html")
+
         os.makedirs(self.output_dir, exist_ok=True)
         with open(os.path.join(self.output_dir, "index.html"), "w") as f:
             f.write(content)

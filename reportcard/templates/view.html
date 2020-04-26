@@ -1,15 +1,15 @@
 {% if cols.value % report.theme.num_columns == 0 %}<tr>{% endif %}
 <td colspan="{{ view.cols }}" class="content-block {{ view.tags | join(' ') }}">
-    {% if view.title %}<h4>{{ view.title }}</h4>{% endif %}
-    <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="">
-      <tbody>
-        <tr>
-          <td align="left">
-            {{ view.output | safe }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </td>
-  {% set cols.value = cols.value + view.cols %}
-  {% if cols.value % report.theme.num_columns == 0 %}</tr>{% endif %}
+  {% if view.title %}<h4>{{ view.title }}</h4>{% endif %}
+  <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="">
+    <tbody>
+      <tr>
+        <td align="left">
+          {{ view.output | safe }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</td>
+{% set cols.value = cols.value + view.cols %}
+{% if cols.value % report.theme.num_columns == 0 %}</tr>{% endif %}

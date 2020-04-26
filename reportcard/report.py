@@ -32,6 +32,8 @@ class Report:
 
 
 class ReportFactory:
+    supported_formats = ["html", "md"]
+
     def __init__(self, config):
         datasource_conf = config.get("datasources", {})
         view_conf = config.get("views", {})
@@ -56,7 +58,10 @@ class ReportFactory:
     def create(self):
         for id, output_driver in self.odm.instances:
             LOG.info(f"Sending report via output driver {id}")
-            views = self.vm.render(self.env, output_driver)
-            template = self.env.get_template("layout/default.html")
-            content = template.render(views=views, report=self.report)
+            content = {}
+            for fmt in self.supported_formats:
+                views = self.vm.render(self.env, fmt, output_driver)
+                template = self.env.get_template(f"layout/default.{fmt}")
+                content[fmt] = template.render(views=views,
+                                               report=self.report)
             output_driver.render_output(content, self.vm.blobs)

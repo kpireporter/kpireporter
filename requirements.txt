@@ -11,3 +11,5 @@ python-jenkins
 mysqlclient
 # [prometheus]
 requests
+# [sendgrid]
+sendgrid

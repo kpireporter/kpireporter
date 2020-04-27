@@ -58,6 +58,7 @@ services:
     entrypoint: /bin/bash
     stdin_open: True
     tty: True
+    env_file: .env
     volumes:
       - type: bind
         source: ../reportcard

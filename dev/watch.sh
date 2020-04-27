@@ -2,9 +2,15 @@
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 
+pushd "$DIR" >/dev/null
+
 _dockercompose() {
-  docker-compose -f "$DIR/docker-compose.yaml" -p reportcard "$@"
+  docker-compose -p reportcard "$@"
 }
+
+echo "Ensuring required dirs/files exist ..."
+mkdir -p "$DIR/../_build"
+touch "$DIR/.env"
 
 echo "Removing existing containers ..."
 _dockercompose down
@@ -17,7 +23,6 @@ echo "Regenerating fixture data ..."
 pushd "$DIR" >/dev/null; python -m "datasources"; popd >/dev/null
 
 echo "Starting docker-compose stack ..."
-mkdir -p "$DIR/../_build"
 _dockercompose up --quiet-pull --force-recreate -d
 
 for bin in ag entr; do

@@ -7,3 +7,5 @@ __pycache__/
 dist/
 # Report generation
 _build/
+# Env files
+.env

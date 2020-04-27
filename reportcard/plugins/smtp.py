@@ -35,7 +35,6 @@ class SMTPOutputDriver(OutputDriver):
             raise ValueError(
                 f"Unsupported image strategy '{self.image_strategy}'")
 
-
     def render_output(self, content, blobs):
         msg = EmailMessage()
         msg["Subject"] = self.report.title

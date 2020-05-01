@@ -4,6 +4,9 @@ import os
 
 from reportcard.output import OutputDriver
 
+import logging
+LOG = logging.getLogger(__name__)
+
 
 class HTMLOutputDriver(OutputDriver):
     def init(self, output_dir="_build/html"):
@@ -15,7 +18,9 @@ class HTMLOutputDriver(OutputDriver):
     def render_output(self, content, blobs):
         content = content.get("html")
         report_dir = os.path.join(self.output_dir, self.report.id)
-        latest_dir = os.path.join(self.output_dir, "latest")
+        latest_dir = os.path.join(
+            self.output_dir,
+            f"latest-{self.report.title_slug}")
 
         os.makedirs(report_dir, exist_ok=True)
         with open(os.path.join(report_dir, "index.html"), "w") as f:
@@ -28,7 +33,6 @@ class HTMLOutputDriver(OutputDriver):
                 f.write(blob["content"].getvalue())
 
         try:
-            shutil.copytree(report_dir, latest_dir)
-        except:
-            pass
-
+            shutil.copytree(report_dir, latest_dir, dirs_exist_ok=True)
+        except Exception:
+            LOG.exception("Error saving latest report")

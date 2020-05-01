@@ -1,6 +1,8 @@
+from base64 import b64encode
 from jinja2 import Markup
 import json
 import os
+from premailer import transform
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Attachment, Mail, MailSettings, SandBoxMode
 
@@ -49,7 +51,7 @@ class SendGridOutputDriver(OutputDriver):
             from_email=self.email_from,
             to_emails=self.email_to,
             subject=self.report.title,
-            html_content=content.get("html")
+            html_content=transform(content.get("html"))
         )
 
         if self._sandbox_mode:
@@ -59,21 +61,27 @@ class SendGridOutputDriver(OutputDriver):
             msg.mail_settings = MailSettings()
             msg.mail_settings.sandbox_mode = SandBoxMode(True)
 
-        msg.attachment = []
+        attachment = []
         for blob in blobs:
-            msg.attachment.append(
-                Attachment(file_content=blob["content"].getvalue(),
+            encoded_content = b64encode(blob["content"].getvalue()).decode()
+            attachment.append(
+                Attachment(file_content=encoded_content,
                            file_name=blob["id"],
                            file_type=blob.get("mime_type"),
                            content_id=blob["id"],
                            disposition="inline"))
+        msg.attachment = attachment
 
         try:
             sg = SendGridAPIClient(self.api_key)
             res = sg.send(msg)
-            print(res.status_code)
-            print(res.body)
-            print(res.headers)
+
+            LOG.debug(res.body)
+            LOG.debug(res.headers)
+
+            if res.status_code != 202:
+                raise ValueError(
+                    f"Unexpected HTTP response: {res.status_code}")
         except Exception as e:
             raise ValueError("Error sending mail",
                              self._parse_sendgrid_error(e))

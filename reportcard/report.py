@@ -12,26 +12,34 @@ LOG = logging.getLogger(__name__)
 
 
 class Theme:
+    """The theme
+    """
     def __init__(self, num_columns=6):
         self.num_columns = num_columns
 
 
 class Report:
+    """The report object.
+    """
     version = VERSION
 
     def __init__(self, title=None, interval_days=None,
-                 start_date=None, end_date=None, theme=Theme()):
+                 start_date=None, end_date=None, theme=None):
         self.title = title
         self.interval_days = interval_days
         self.start_date = start_date
         self.end_date = end_date
-        self.theme = theme
         self.title_slug = slugify(self.title)
         self.id = "_".join([
             self.start_date.strftime('%Y-%m-%d'),
             self.end_date.strftime('%Y-%m-%d'),
             self.title_slug
         ])
+
+        if theme:
+            self.theme = theme
+        else:
+            self.theme = Theme()
 
     @property
     def timedelta(self):

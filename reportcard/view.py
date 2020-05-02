@@ -13,7 +13,8 @@ class ViewException(Exception):
 
 
 class View(ABC):
-
+    """The view
+    """
     id: str = None
     title: str = None
 

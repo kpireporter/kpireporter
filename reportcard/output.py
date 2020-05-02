@@ -8,6 +8,8 @@ class OutputDriverError(Exception):
 
 
 class OutputDriver(ABC):
+    """The output driver
+    """
     id: str = None
 
     def __init__(self, report, **kwargs):

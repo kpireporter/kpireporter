@@ -19,7 +19,11 @@ class SMTPOutputDriver(OutputDriver):
         self.smtp_host = smtp_host
         self.smtp_port = smtp_port
         self.image_strategy = image_strategy
-        self.image_remote_base_url = image_remote_base_url
+        if image_remote_base_url:
+            self.image_remote_base_url = (
+                image_remote_base_url.format(**self.report.__dict__))
+        else:
+            self.image_remote_base_url = None
 
     def _parse_address(self, address):
         username, domain = address.split("@")

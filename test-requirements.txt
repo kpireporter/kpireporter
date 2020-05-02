@@ -1,3 +1,4 @@
 nose
 nose-watch
 pylama
+sphinx

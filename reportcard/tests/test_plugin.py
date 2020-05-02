@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import MagicMock
 
 from reportcard.plugin import PluginManager
-from reportcard.tests.utils import make_test_extension_manager
+from reportcard.tests.utils import BaseTestPlugin, make_test_extension_manager
 
 NAME = "my_name"
 PLUGIN = "my_plugin"
@@ -10,11 +10,6 @@ PLUGIN = "my_plugin"
 
 class TestException(Exception):
     pass
-
-
-class BaseTestPlugin:
-    def __init__(self, report):
-        pass
 
 
 class TestPluginManager(PluginManager):

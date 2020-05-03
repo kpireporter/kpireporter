@@ -1,3 +1,5 @@
+.. _api-report:
+
 =======
 Report
 =======

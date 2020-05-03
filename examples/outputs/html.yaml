@@ -1,0 +1,5 @@
+outputs:
+  html_for_docs:
+    plugin: html
+    args:
+      output_dir: _build/examples

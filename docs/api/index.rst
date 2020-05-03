@@ -10,8 +10,9 @@ Reportcard API
 Reportcard API Reference:
 
 .. toctree::
+   :glob:
 
-    report
-    datasource
-    view
-    output
+   report
+   datasource
+   view
+   output

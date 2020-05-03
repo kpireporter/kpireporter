@@ -6,6 +6,8 @@
 __pycache__/
 dist/
 # Report generation
-_build/
+examples/_build/
+# Docs generation
+docs/_build/
 # Env files
 .env

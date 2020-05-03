@@ -1,3 +1,5 @@
+.. _api-output-driver:
+
 ==============
 Output driver
 ==============

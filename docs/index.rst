@@ -10,8 +10,10 @@ Welcome to reportcard's documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   getting-started/index
    api/index
    plugins/index
+   development/index
 
 
 Indices and tables

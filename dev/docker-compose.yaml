@@ -46,7 +46,7 @@ services:
     image: nginx:stable
     volumes:
       - type: bind
-        source: ../_build
+        source: ../examples/_build
         target: /usr/share/nginx
         read_only: True
     ports:
@@ -72,7 +72,7 @@ services:
         target: /opt/reportcard/examples
         read_only: True
       - type: bind
-        source: ../_build
+        source: ../examples/_build
         target: /opt/reportcard/_build
     depends_on:
       - jenkins

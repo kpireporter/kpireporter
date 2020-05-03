@@ -1,0 +1,7 @@
+details {
+  margin-bottom: 24px;
+}
+
+details > summary {
+  cursor: pointer;
+}

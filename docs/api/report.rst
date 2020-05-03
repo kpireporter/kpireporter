@@ -5,5 +5,5 @@ Report
 Module: :mod:`reportcard.report`
 ================================
 
-.. automodule:: reportcard.reporst
+.. automodule:: reportcard.report
    :members:

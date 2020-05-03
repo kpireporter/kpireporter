@@ -1,6 +1,6 @@
-============
-Datasources
-============
+===========
+Datasource
+===========
 
 .. currentmodule:: reportcard.datasource
 

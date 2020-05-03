@@ -11,6 +11,7 @@ Welcome to reportcard's documentation!
    :caption: Contents:
 
    api/index
+   plugins/index
 
 
 Indices and tables

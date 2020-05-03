@@ -1,6 +1,6 @@
-=======
-Output
-=======
+==============
+Output driver
+==============
 
 Module: :mod:`reportcard.output`
 ================================

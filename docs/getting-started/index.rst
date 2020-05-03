@@ -10,6 +10,9 @@ Installation
 
 Reportcard is a Python module that is installable via ``pip``:
 
+.. image:: https://img.shields.io/pypi/pyversions/reportcard
+   :target: https://pypi.org/project/reportcard
+
 .. code-block:: shell
 
   pip install reportcard
@@ -18,14 +21,28 @@ Docker
 ------
 
 A Docker image is available on DockerHub with all dependencies required by
-:ref:`built-in plugins <plugins-built-in>`.
+:ref:`built-in plugins <plugins-built-in>`:
+
+.. image:: https://img.shields.io/docker/build/diurnalist/reportcard
+   :target: https://hub.docker.com
 
 Usage
 =====
 
+Invoking the installed bin script without any arguments will default to
+generating a report over a window ending at the current date and starting at
+one week ago. To specify different windows, use the ``--start-date`` and
+``--end-date`` options.
+
 .. code-block:: shell
 
-  reportcard --end-date $(date +%Y-%m-%d) --config-file reportcard.yaml
+  # Generate report over last 7 days
+  reportcard --config-file reportcard.yaml
+
+  # Generate report from last week
+  reportcard --config-file reportcard.yaml \
+    --start-date $(date +%Y-%m-%d -d'-2 week') \
+    --end-date $(date +%Y-%m-%d -d'-1 week')
 
 Configuration file
 ==================
@@ -85,7 +102,7 @@ show a high-level overview of the number of new signups over the last week
 .. raw:: html
 
    <details>
-     <summary><strong>Show/hide YAML</strong></summary>
+     <summary><strong>Show/hide configuration YAML</strong></summary>
 
 .. literalinclude:: ../../examples/mysql.yaml
     :language: yaml
@@ -105,7 +122,7 @@ show an overview of build jobs and their success/failure statuses.
 .. raw:: html
 
    <details>
-     <summary><strong>Show/hide YAML</strong></summary>
+     <summary><strong>Show/hide configuration YAML</strong></summary>
 
 .. literalinclude:: ../../examples/jenkins.yaml
     :language: yaml
@@ -127,7 +144,7 @@ window.
 .. raw:: html
 
    <details>
-     <summary><strong>Show/hide YAML</strong></summary>
+     <summary><strong>Show/hide configuration YAML</strong></summary>
 
 .. literalinclude:: ../../examples/prometheus.yaml
     :language: yaml

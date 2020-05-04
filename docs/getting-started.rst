@@ -47,10 +47,11 @@ Configuration file
 A report is declared entirely within a YAML file consisting of a few main
 sections: ``datasources``, ``views``, and ``outputs``. In each section, you
 can declare as many plugin instances as you wish (to e.g., declare multiple
-database Datasources or multiple Plot visualizations in your report). As
-dictated by the `YAML spec <https://yaml.org/spec/1.2/spec.html#id2759669>`_,
-duplicate keys (IDs) are not allowed; ensure that each plugin instance has its
-own ID unique to its section.
+database :ref:`Datasources <api-datasource>` or multiple :ref:`Plot
+<plugins-plot>` visualizations in your report). As dictated by the `YAML spec
+<https://yaml.org/spec/1.2/spec.html#id2759669>`_, duplicate keys (IDs) are
+not allowed; ensure that each plugin instance has its own ID unique to its
+section.
 
 .. note::
 
@@ -101,8 +102,8 @@ show a high-level overview of the number of new signups over the last week
    <details>
      <summary><strong>Show/hide configuration YAML</strong></summary>
 
-.. literalinclude:: ../../examples/mysql.yaml
-    :language: yaml
+.. literalinclude:: ../examples/mysql.yaml
+   :language: yaml
 
 .. raw:: html
 
@@ -121,8 +122,8 @@ show an overview of build jobs and their success/failure statuses.
    <details>
      <summary><strong>Show/hide configuration YAML</strong></summary>
 
-.. literalinclude:: ../../examples/jenkins.yaml
-    :language: yaml
+.. literalinclude:: ../examples/jenkins.yaml
+   :language: yaml
 
 .. raw:: html
 
@@ -143,7 +144,7 @@ window.
    <details>
      <summary><strong>Show/hide configuration YAML</strong></summary>
 
-.. literalinclude:: ../../examples/prometheus.yaml
+.. literalinclude:: ../examples/prometheus.yaml
     :language: yaml
 
 .. raw:: html

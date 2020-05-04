@@ -2,9 +2,6 @@
 Getting started
 ================
 
-What makes this different?
-==========================
-
 Installation
 ============
 

@@ -1,19 +1,30 @@
-.. reportcard documentation master file, created by
-   sphinx-quickstart on Sat May  2 14:45:58 2020.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+========================
+Reportcard documentation
+========================
 
-Welcome to reportcard's documentation!
-======================================
+Reportcard is a **developer-friendly**, **highly customizable** tool for
+sending periodic reports for the metrics that matter for your team or project.
+
+Support for a variety of reporting sources is built-in, including, e.g., MySQL
+databases, Prometheus metrics, and the Jenkins API. Reports can be sent via
+email (with plugins for SMTP and SendGrid), Slack, or simply rendered as HTML.
+
+.. note::
+
+   **Author note**: I created this tool after being surprised that there was a
+   distinct lack of simple developer-friendly reporting tools for
+   communicating business and/or operational KPIs. I hope you find it useful
+   as well. For more information, see :ref:`about-motivation`.
 
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-   getting-started/index
+   getting-started
    api/index
    plugins/index
-   development/index
+   development
+   about
 
 
 Indices and tables

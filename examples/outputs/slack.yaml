@@ -1,0 +1,7 @@
+---
+outputs:
+  slack:
+    plugin: slack
+    args:
+      channels:
+        - '#project'

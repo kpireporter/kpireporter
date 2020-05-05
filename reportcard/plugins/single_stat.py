@@ -14,7 +14,7 @@ class SingleStat(View):
             raise ValueError((
                 "Both a 'datasource' and 'query' parameter are required"))
 
-    def render_html(self, j2):
+    def template_args(self):
         df = self.datasources.query(self.datasource, self.query)
         stat_value = df.index.array[0]
         stat_delta = None
@@ -35,8 +35,18 @@ class SingleStat(View):
                     stat_delta = f"{(stat_delta / stat_cmp_value) * 100:.1f}%"
 
         label = self.label.format(stat=stat_value)
-        template = j2.get_template("plugins/single_stat.html")
 
-        return template.render(theme=self.report.theme, label=label,
-                               stat_delta=stat_delta,
-                               direction=stat_delta_direction)
+        return dict(label=label, stat_delta=stat_delta,
+                    direction=stat_delta_direction)
+
+    def render_html(self, j2):
+        template = j2.get_template("plugins/single_stat.html")
+        template_args = self.template_args()
+
+        return template.render(theme=self.report.theme, **template_args)
+
+    def render_md(self, j2):
+        template = j2.get_template("plugins/single_stat.md")
+        template_args = self.template_args()
+
+        return template.render(**template_args)

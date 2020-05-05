@@ -13,3 +13,5 @@ mysqlclient
 requests
 # [sendgrid]
 sendgrid
+# [slack]
+slackclient

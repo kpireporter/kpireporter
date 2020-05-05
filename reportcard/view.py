@@ -47,9 +47,10 @@ class View(ABC):
 
         return getattr(self, f"render_{fmt}")(env)
 
-    def add_blob(self, id, blob, mime_type):
+    def add_blob(self, id, blob, mime_type, title=None):
         self._blobs[id] = dict(id=f"{self.id}/{id}", content=blob,
-                               mime_type=mime_type)
+                               mime_type=mime_type,
+                               title=title or self.title)
 
     def get_blob(self, id):
         return self._blobs.get(id)
@@ -101,6 +102,7 @@ class ViewManager(PluginManager):
                 id=id,
                 title="",
                 cols=view.cols,
+                blobs=view.blobs,
                 tags=[]
             )
 

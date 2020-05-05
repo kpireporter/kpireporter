@@ -79,4 +79,7 @@ class ReportFactory:
                 template = self.env.get_template(f"layout/default.{fmt}")
                 content[fmt] = template.render(views=views,
                                                report=self.report)
+                # Also store a list of the raw views to allow the output
+                # driver to render its own output structure
+                content[f"{fmt}_views"] = views
             output_driver.render_output(content, self.vm.blobs)

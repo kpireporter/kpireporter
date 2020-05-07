@@ -54,7 +54,7 @@ class Plot(View):
             "savefig.pad_inches": 0,
         }
 
-    def render_html(self, env):
+    def render_figure(self):
         df = self.datasources.query(self.datasource, self.query,
                                     **self.query_args)
 
@@ -102,6 +102,12 @@ class Plot(View):
 
             plt.close(fig)
 
-        template = env.get_template("plugins/plot.html")
+            return figname
 
-        return template.render(figure=figname)
+    def render_html(self, env):
+        template = env.get_template("plugins/plot.html")
+        return template.render(figure=self.render_figure())
+
+    def render_md(self, env):
+        self.render_figure()
+        return "Plot"

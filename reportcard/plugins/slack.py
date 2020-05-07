@@ -1,3 +1,4 @@
+import json
 import os
 from slack import WebClient
 from slack.errors import SlackApiError
@@ -25,6 +26,9 @@ class SlackOutputDriver(OutputDriver):
                      "your Slack message, specify a base URL and "
                      "additionally publish your report to some remote URL "
                      "via, e.g., the 'html' plugin.")
+        else:
+            self.image_remote_base_url = (
+                image_remote_base_url.format(**self.report.__dict__))
 
         api_token = api_token or os.getenv("SLACK_API_TOKEN")
 
@@ -38,7 +42,12 @@ class SlackOutputDriver(OutputDriver):
 
     def _parse_slack_error(self, err):
         assert err.response["ok"] is False
-        return err.response.get("error", "Unknown error")
+        err_message = err.response.get("error", "Unknown error")
+        err_detailed_messages = (
+            err.response.get("response_metadata", {}).get("messages", []))
+        if err_detailed_messages:
+            err_message += f": {json.dumps(err_detailed_messages)}"
+        return err_message
 
     def render_output(self, content, blobs):
         views = content.get("md_views", [])
@@ -50,9 +59,10 @@ class SlackOutputDriver(OutputDriver):
             ))
 
             if self.image_remote_base_url:
-                for blob in view.blobs:
+                for blob in view.get("blobs"):
                     image_url = f"{self.image_remote_base_url}/{blob['id']}"
                     title = blob.get("title", blob["id"])
+                    print(image_url)
                     blks.append(blocks.ImageBlock(
                         title=title,
                         image_url=image_url,

@@ -10,5 +10,5 @@ outputs:
       email_from: sender@reportcard.dev
       email_to:
         - recipient@reportcard.dev
-  html:
-    plugin: html
+  static:
+    plugin: static

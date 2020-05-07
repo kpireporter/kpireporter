@@ -87,8 +87,8 @@ class ViewManager(PluginManager):
             blob = self.call_instance(view_id, "get_blob", blob_id)
             if not blob:
                 raise ViewException((
-                    f"Missing content for blob {blob_id}. Make sure the blob "
-                    "was added before rendering the View template"))
+                    f"Missing content for blob '{blob_id}'. Make sure the "
+                    "blob was added before rendering the View template"))
 
             return output_driver.render_blob_inline(blob)
 
@@ -126,7 +126,7 @@ class ViewManager(PluginManager):
                 block.update(title=view.title or "", output=output)
             except Exception as exc:
                 self.log.error((
-                    f"Error rendering {self.type_noun} {id}: {exc}"))
+                    f"Error rendering {self.type_noun} {id} ({fmt}): {exc}"))
                 block.update(output=f"Error rendering {id}", tags=["error"])
 
             blocks.append(block)

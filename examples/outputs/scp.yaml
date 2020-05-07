@@ -1,0 +1,7 @@
+outputs:
+  scp:
+    plugin: scp
+    args:
+      host: ${SCP_HOST}
+      user: ${SCP_USER}
+      key_filename: /root/.ssh/id_rsa

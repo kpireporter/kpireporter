@@ -40,8 +40,8 @@ def load(*files) -> dict:
     conf.setdefault("datasources", {})
     conf.setdefault("views", {})
     conf.setdefault("outputs", {
-        "html": {
-            "plugin": "html"
+        "static": {
+            "plugin": "static"
         }
     })
 

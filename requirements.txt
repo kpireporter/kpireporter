@@ -11,6 +11,8 @@ python-jenkins
 mysqlclient
 # [prometheus]
 requests
+# [scp]
+fabric
 # [sendgrid]
 sendgrid
 # [slack]

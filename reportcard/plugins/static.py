@@ -8,8 +8,8 @@ import logging
 LOG = logging.getLogger(__name__)
 
 
-class HTMLOutputDriver(OutputDriver):
-    def init(self, output_dir="_build/html"):
+class StaticOutputDriver(OutputDriver):
+    def init(self, output_dir="_build/static"):
         self.output_dir = output_dir
 
     def render_blob_inline(self, blob):

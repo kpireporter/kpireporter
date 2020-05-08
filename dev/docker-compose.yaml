@@ -74,6 +74,10 @@ services:
       - type: bind
         source: ../examples/_build
         target: /opt/reportcard/_build
+      - type: bind
+        source: ${SCP_IDENTITY_FILE}
+        target: /root/.ssh/id_rsa
+        read_only: True
     depends_on:
       - jenkins
       - mysql

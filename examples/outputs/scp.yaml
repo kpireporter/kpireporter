@@ -4,4 +4,9 @@ outputs:
     args:
       host: ${SCP_HOST}
       user: ${SCP_USER}
-      key_filename: /root/.ssh/id_rsa
+      sudo: True
+      sudo_password: ${SCP_SUDO_PASSWORD}
+      remote_path: ${SCP_REMOTE_PATH}
+      remote_path_owner: www-data
+      connect_kwargs:
+        key_filename: /root/.ssh/id_rsa

@@ -3,6 +3,6 @@ outputs:
   slack:
     plugin: slack
     args:
-      image_remote_base_url: http://localhost:8080/latest-{title_slug}
+      image_remote_base_url: ${SLACK_REMOTE_BASE_URL}/latest-{title_slug}
       channels:
         - '#project'

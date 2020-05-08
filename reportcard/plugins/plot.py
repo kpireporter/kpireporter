@@ -110,4 +110,4 @@ class Plot(View):
 
     def render_md(self, env):
         self.render_figure()
-        return "Plot"
+        return ""

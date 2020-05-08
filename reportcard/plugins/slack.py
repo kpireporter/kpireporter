@@ -54,9 +54,12 @@ class SlackOutputDriver(OutputDriver):
 
         blks = []
         for i, view in enumerate(views):
-            blks.append(blocks.SectionBlock(
-                text=objects.MarkdownTextObject(text=view.get("output"))
-            ))
+            output = view.get("output")
+
+            if output:
+                blks.append(blocks.SectionBlock(
+                    text=objects.MarkdownTextObject(text=output)
+                ))
 
             if self.image_remote_base_url:
                 for blob in view.get("blobs"):

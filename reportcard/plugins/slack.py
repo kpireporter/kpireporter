@@ -53,6 +53,12 @@ class SlackOutputDriver(OutputDriver):
         views = content.get("md_views", [])
 
         blks = []
+
+        # TODO: description, start_date, end_date
+        blks.append(blocks.SectionBlock(
+            text=f"*{self.report.title}*"
+        ))
+
         for i, view in enumerate(views):
             output_lines = [
                 f"*{view.get('title')}*" if view.get("title") else None,

@@ -17,6 +17,7 @@ class View(ABC):
     """
     id: str = None
     title: str = None
+    description: str = None
 
     def __init__(self, report, datasources: DatasourceManager, **kwargs):
         self.report = report
@@ -27,6 +28,8 @@ class View(ABC):
             self.id = kwargs.pop("id")
         if "title" in kwargs:
             self.title = kwargs.pop("title")
+        if "description" in kwargs:
+            self.description = kwargs.pop("description")
         if "cols" in kwargs:
             self.cols = kwargs.pop("cols")
         else:
@@ -72,7 +75,7 @@ class ViewManager(PluginManager):
         super(ViewManager, self).__init__(report, config, extension_manager)
 
     def plugin_factory(self, Plugin, plugin_kwargs, config):
-        for attr in ["title", "cols"]:
+        for attr in ["title", "description", "cols"]:
             value = config.get(attr)
             if value:
                 plugin_kwargs.setdefault(attr, value)
@@ -100,7 +103,8 @@ class ViewManager(PluginManager):
         for id, view in self.instances:
             block = dict(
                 id=id,
-                title="",
+                title=view.title or "",
+                description=view.description,
                 cols=view.cols,
                 blobs=view.blobs,
                 tags=[]
@@ -123,7 +127,7 @@ class ViewManager(PluginManager):
                     raise ViewException((
                         "The view did not render a valid string"))
 
-                block.update(title=view.title or "", output=output)
+                block.update(output=output)
             except Exception as exc:
                 self.log.error((
                     f"Error rendering {self.type_noun} {id} ({fmt}): {exc}"))

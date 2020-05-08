@@ -2,7 +2,7 @@ import json
 import os
 from slack import WebClient
 from slack.errors import SlackApiError
-from slack.web.classes import messages, blocks, objects
+from slack.web.classes import messages, blocks, elements, objects
 
 from reportcard.output import OutputDriver
 
@@ -54,7 +54,11 @@ class SlackOutputDriver(OutputDriver):
 
         blks = []
         for i, view in enumerate(views):
-            output = view.get("output")
+            output_lines = [
+                f"*{view.get('title')}*" if view.get("title") else None,
+                view.get("output")
+            ]
+            output = "\n\n".join(list(filter(None, output_lines)))
 
             if output:
                 blks.append(blocks.SectionBlock(
@@ -65,12 +69,19 @@ class SlackOutputDriver(OutputDriver):
                 for blob in view.get("blobs"):
                     image_url = f"{self.image_remote_base_url}/{blob['id']}"
                     title = blob.get("title", blob["id"])
-                    print(image_url)
                     blks.append(blocks.ImageBlock(
                         title=title,
                         image_url=image_url,
                         alt_text=title
                     ))
+
+            description = view.get("description")
+            if description:
+                blks.append(blocks.ContextBlock(
+                    elements=[blocks.MarkdownTextObject(
+                        text=description
+                    )]
+                ))
 
             if (i + 1) < len(views):
                 blks.append(blocks.DividerBlock())

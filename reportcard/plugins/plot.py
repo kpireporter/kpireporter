@@ -98,7 +98,8 @@ class Plot(View):
             figbytes = io.BytesIO()
             fig.savefig(figbytes)
             figname = "figure.png"
-            self.add_blob(figname, figbytes, mime_type="image/png")
+            self.add_blob(figname, figbytes, mime_type="image/png",
+                          title="Figure")
 
             plt.close(fig)
 

@@ -14,6 +14,8 @@ views:
   signups_over_time:
     plugin: plot
     title: Total sign-ups
+    description: |
+      The running total of user accounts.
     args:
       datasource: db
       query: |
@@ -26,6 +28,8 @@ views:
   new_signups:
     plugin: plot
     title: Daily new sign-ups
+    description: |
+      How many new users signed up on each day.
     cols: 4
     args:
       kind: bar

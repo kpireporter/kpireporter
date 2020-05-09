@@ -1,3 +1,4 @@
+from datetime import datetime
 import json
 import os
 from slack import WebClient
@@ -49,20 +50,47 @@ class SlackOutputDriver(OutputDriver):
             err_message += f": {json.dumps(err_detailed_messages)}"
         return err_message
 
+    def _format_slack_date(self, dateobj):
+        fallback = datetime.strftime(dateobj, '%Y-%m-%d')
+        date_format = "{date_short}"
+
+        link = objects.DateLink(
+            date=dateobj,
+            date_format=date_format,
+            fallback=fallback
+        )
+
+        if "!date" not in str(link):
+            # Bug in older versions of Slack client where dates were not
+            # properly rendered; hack in the !date^ part of the URL.
+            link = objects.DateLink(
+                date=f"!date^{int(dateobj.timestamp())}",
+                date_format=date_format,
+                fallback=fallback
+            )
+
+        return str(link)
+
     def render_output(self, content, blobs):
         views = content.get("md_views", [])
 
         blks = []
 
-        # TODO: description, start_date, end_date
+        start_date = self._format_slack_date(self.report.start_date)
+        end_date = self._format_slack_date(self.report.end_date)
+        title_lines = [
+            f"*{self.report.title}*",
+            f"Report for: {start_date} to {end_date}"
+        ]
         blks.append(blocks.SectionBlock(
-            text=f"*{self.report.title}*"
+            text=objects.MarkdownTextObject(text="\n\n".join(title_lines))
         ))
 
         for i, view in enumerate(views):
+            title = view.get('title')
             output_lines = [
-                f"*{view.get('title')}*" if view.get("title") else None,
-                view.get("output")
+                f"*{title}*" if title else None,
+                view.get("output") or None
             ]
             output = "\n\n".join(list(filter(None, output_lines)))
 
@@ -92,9 +120,7 @@ class SlackOutputDriver(OutputDriver):
             if (i + 1) < len(views):
                 blks.append(blocks.DividerBlock())
 
-        # TODO: put report date in here somehow
-        report_title = self.report.title
-        msg = messages.Message(text=report_title, blocks=blks)
+        msg = messages.Message(text="", blocks=blks)
 
         try:
             for channel in self.channels:

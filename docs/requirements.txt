@@ -1,3 +1,4 @@
+requests
 sphinx>2.0.0
 sphinx-autobuild
 sphinx-autodoc-typehints

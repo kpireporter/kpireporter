@@ -13,6 +13,12 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+from datetime import datetime
+from io import BytesIO
+import os
+import requests
+from zipfile import ZipFile
+
 from kpireport import VERSION
 
 
@@ -61,6 +67,33 @@ html_theme = 'sphinx_rtd_theme'
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
 
-html_extra_path = ['../examples/_build']
-
 html_css_files = ['css/custom.css']
+
+
+def artifact_sort(artifact):
+    return datetime.strptime(
+        artifact.get('created_at'), '%Y-%m-%dT%H:%M:%S%z')
+
+
+gh_repo = os.getenv('GITHUB_REPOSITORY')
+gh_token = os.getenv('GITHUB_TOKEN')
+
+try:
+    if not (gh_repo and gh_token):
+        raise ValueError('Missing GitHub environment variables')
+
+    gh_artifacts_url = f'https://api.github.com/repos/{gh_repo}/actions/artifacts'
+    res = requests.get(gh_artifacts_url)
+
+    res.raise_for_status()
+    artifacts = res.json().get('artifacts')
+    latest = next(iter(sorted(artifacts, key=artifact_sort, reverse=True)), None)
+    if latest:
+        zip_res = requests.get(
+            f"{gh_artifacts_url}/{latest.get('id')}/zip",
+            auth=('admin', gh_token))
+        zip_res.raise_for_status()
+        zipfile = ZipFile(BytesIO(zip_res.content))
+        zipfile.extractall('_static')
+except Exception as e:
+    html_extra_path = ['../examples/_build']

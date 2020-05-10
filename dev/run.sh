@@ -100,7 +100,7 @@ fi
 
 declare -a cmd=(
   docker-compose -f "$DIR/docker-compose.yaml" -p kpireport \
-    exec kpireport wait-for mysql:3306 -t 60 -- python -m kpireport
+    exec -T kpireport wait-for mysql:3306 -t 60 -- python -m kpireport
 )
 
 if [[ $WATCH -eq 1 ]]; then

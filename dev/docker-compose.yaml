@@ -46,7 +46,7 @@ services:
     image: nginx:stable
     volumes:
       - type: bind
-        source: ../examples/_build/static
+        source: ../examples/_build
         target: /usr/share/nginx/html
         read_only: True
     ports:

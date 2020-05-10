@@ -9,7 +9,7 @@ LOG = logging.getLogger(__name__)
 
 
 class StaticOutputDriver(OutputDriver):
-    def init(self, output_dir="_build/static"):
+    def init(self, output_dir="_build"):
         self.output_dir = output_dir
 
     def render_blob_inline(self, blob):

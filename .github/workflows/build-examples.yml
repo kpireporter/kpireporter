@@ -1,0 +1,24 @@
+name: Build examples
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Generate example output
+      run: |
+        ./dev/run.sh -c examples/mysql.yaml
+        ./dev/run.sh --no-rebuild -c examples/jenkins.yaml
+        ./dev/run.sh --no-rebuild -c examples/prometheus.yaml
+
+    - name: Archive examples
+      uses: actions/upload-artifact@v1
+      with:
+        name: examples
+        path: examples/_build

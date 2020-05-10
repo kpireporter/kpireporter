@@ -5,7 +5,7 @@ from slack import WebClient
 from slack.errors import SlackApiError
 from slack.web.classes import messages, blocks, elements, objects
 
-from reportcard.output import OutputDriver
+from kpireport.output import OutputDriver
 
 import logging
 LOG = logging.getLogger(__name__)

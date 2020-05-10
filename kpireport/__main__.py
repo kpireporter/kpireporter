@@ -5,8 +5,8 @@ import logging
 import sys
 from timeit import default_timer as timer
 
-from reportcard.config import load
-from reportcard.report import ReportFactory
+from kpireport.config import load
+from kpireport.report import ReportFactory
 
 logging.basicConfig(level=logging.DEBUG)
 # Suppress DEBUG output for matplot lib by default, as it
@@ -26,19 +26,19 @@ class ConfigFiles(argparse._AppendAction):
 
 
 parser = argparse.ArgumentParser(
-    prog="reportcard",
+    prog="kpireport",
     description="Something")
 parser.add_argument("-c", "--config-file", type=argparse.FileType("r"),
                     nargs="+", action="append", default=[])
 parser.add_argument("-s", "--start-date", type=simple_date)
 parser.add_argument("-e", "--end-date", type=simple_date)
-parser.add_argument("--theme-dir", default="/etc/reportcard/theme")
+parser.add_argument("--theme-dir", default="/etc/kpireport/theme")
 
 args = parser.parse_args(sys.argv[1:])
 
 config_files = list(chain(*args.config_file))
 if not config_files:
-    config_files.append(argparse.FileType("r")("reportcard.yml"))
+    config_files.append(argparse.FileType("r")("kpireport.yml"))
 conf = load(*config_files)
 
 if args.start_date:

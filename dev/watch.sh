@@ -5,7 +5,7 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 pushd "$DIR" >/dev/null
 
 _dockercompose() {
-  docker-compose -p reportcard "$@"
+  docker-compose -p kpireport "$@"
 }
 
 log() {
@@ -28,8 +28,8 @@ rebuild() {
   _dockercompose down
 
   log_step "Rebuilding application container ..."
-  _dockercompose build -q reportcard
-  _dockercompose rm -f --stop reportcard
+  _dockercompose build -q kpireport
+  _dockercompose rm -f --stop kpireport
 
   log_step "Regenerating fixture data ..."
   pushd "$DIR" >/dev/null; python -m "datasources"; popd >/dev/null
@@ -72,4 +72,4 @@ done
 
 log_step "Starting watcher ..."
 
-ag -l -G 'examples|reportcard' . "$DIR/.." | entr "$DIR/run.sh" "${POSARGS[@]}"
+ag -l -G 'examples|kpireport' . "$DIR/.." | entr "$DIR/run.sh" "${POSARGS[@]}"

@@ -2,7 +2,7 @@ from jinja2 import Markup
 import shutil
 import os
 
-from reportcard.output import OutputDriver
+from kpireport.output import OutputDriver
 
 import logging
 LOG = logging.getLogger(__name__)

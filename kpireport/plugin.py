@@ -13,7 +13,7 @@ class PluginManager:
         self.report = report
 
         if not self.namespace:
-            self.namespace = f"reportcard.{self.type_noun}"
+            self.namespace = f"kpireport.{self.type_noun}"
 
         # Allowing overriding the extension manager is useful for testing
         if extension_manager:
@@ -76,7 +76,7 @@ class PluginManager:
 
         plugin_kwargs.setdefault("id", id)
 
-        return self.plugin_factory(self._mgr[plugin].plugin, plugin_kwargs, 
+        return self.plugin_factory(self._mgr[plugin].plugin, plugin_kwargs,
                                    config)
 
     def plugin_factory(self, Plugin, plugin_kwargs, config):

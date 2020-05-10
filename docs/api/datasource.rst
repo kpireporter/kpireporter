@@ -4,7 +4,7 @@
 Datasource
 ===========
 
-.. currentmodule:: reportcard.datasource
+.. currentmodule:: kpireport.datasource
 
 A Datasource is responsible for taking a query input string and returning its
 result in the form of a :class:`pandas.DataFrame` instance. One instance
@@ -21,7 +21,7 @@ mechanism to execute a given query and return a :class:`pandas.DataFrame` with
 the results back to the caller.
 
 To create your own Datasource, it is simplest to extend the
-:class:`Datasource` class, though this is not required. It is required to
+:class:`Datasource` class, though this is not required. In is required to
 return a :class:`pandas.DataFrame` instance, as this is the API contract with
 the View layer; it allows Views to use a variety of Datasources as seamlessly
 as possible.
@@ -37,7 +37,7 @@ result is parsed into a :class:`pandas.DataFrame` via
 .. code-block:: python
 
     import pandas as pd
-    from reportcard.datasource import Datasource
+    from kpireport.datasource import Datasource
     import requests
 
     class HTTPDatasource(Datasource):
@@ -51,14 +51,14 @@ result is parsed into a :class:`pandas.DataFrame` via
             return pd.DataFrame.from_records(res.json())
 
 As with all plugins, your plugin should register itself as an `entry_point`_
-under the namespace ``reportcard.datasource``. We name it ``http`` in this
-example. When your plugin is installed alongside the reportcard package, it
+under the namespace ``kpireport.datasource``. We name it ``http`` in this
+example. When your plugin is installed alongside the kpireport package, it
 should be automatically loaded for use when the report runs.
 
 .. code-block::
 
   [options:entry_points]
-  reportcard.datasource =
+  kpireport.datasource =
       http = custom_module:HTTPDatasource
 
 You can configure your Datasource in a report by declaring it in the
@@ -92,7 +92,7 @@ example:
 
     from datetime import datetime, timedelta
     import pandas as pd
-    from reportcard.datasource import Datasource
+    from kpireport.datasource import Datasource
     import requests
 
     class RPCDatasource(Datasource):
@@ -159,7 +159,7 @@ given the Datasource the ID ``users`` here.)
         # Do something with active users
 
 Or, using an existing plugin, like
-:class:`reportcard.plugins.plot.SingleStat`, which can be configured with just
+:class:`kpireport.plugins.plot.SingleStat`, which can be configured with just
 the report configuration:
 
 .. code-block:: yaml
@@ -173,10 +173,10 @@ the report configuration:
           query: total_active_users
 
 
-Module: :mod:`reportcard.datasource`
+Module: :mod:`kpireport.datasource`
 ====================================
 
-.. automodule:: reportcard.datasource
+.. automodule:: kpireport.datasource
    :members:
 
 .. _entry_point: https://setuptools.readthedocs.io/en/latest/setuptools.html#dynamic-discovery-of-services-and-plugins

@@ -7,8 +7,8 @@ outputs:
       smtp_port: 1025
       image_strategy: remote
       image_remote_base_url: http://localhost:8080/latest-{title_slug}
-      email_from: sender@reportcard.dev
+      email_from: sender@kpireport.dev
       email_to:
-        - recipient@reportcard.dev
+        - recipient@kpireport.dev
   static:
     plugin: static

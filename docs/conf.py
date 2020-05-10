@@ -13,12 +13,12 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
-from reportcard import VERSION
+from kpireport import VERSION
 
 
 # -- Project information -----------------------------------------------------
 
-project = 'reportcard'
+project = 'kpireport'
 copyright = '2020, Jason Anderson'
 author = 'Jason Anderson'
 

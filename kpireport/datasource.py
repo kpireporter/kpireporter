@@ -1,12 +1,12 @@
 from abc import ABC, abstractmethod
 import pandas as pd
 
-from reportcard.plugin import PluginManager
+from kpireport.plugin import PluginManager
 
 import logging
 LOG = logging.getLogger(__name__)
 
-EXTENSION_NAMESPACE = 'reportcard.datasource'
+EXTENSION_NAMESPACE = 'kpireport.datasource'
 
 
 class DatasourceError(Exception):
@@ -19,7 +19,7 @@ class DatasourceError(Exception):
 class Datasource(ABC):
     """
     :param report: the Report object.
-    :type report: :class:`reportcard.report.Report`
+    :type report: :class:`kpireport.report.Report`
     :param id: the Datasource ID declared in the report configuration.
     :type id: str
     :param **kwargs: Additional datasource parameters, declared as ``args``
@@ -59,7 +59,7 @@ class Datasource(ABC):
 
 class DatasourceManager(PluginManager):
 
-    namespace = "reportcard.datasource"
+    namespace = "kpireport.datasource"
     type_noun = "datasource"
     exc_class = DatasourceError
 

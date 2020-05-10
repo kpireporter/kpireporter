@@ -6,7 +6,7 @@ from premailer import transform
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Attachment, Mail, MailSettings, SandBoxMode
 
-from reportcard.output import OutputDriver
+from kpireport.output import OutputDriver
 
 import logging
 LOG = logging.getLogger(__name__)

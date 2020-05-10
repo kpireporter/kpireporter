@@ -1,8 +1,8 @@
 ========================
-Reportcard documentation
+KPI Reporter documentation
 ========================
 
-Reportcard is a **developer-friendly**, **highly customizable** tool for
+KPI Reporter is a **developer-friendly**, **highly customizable** tool for
 sending periodic reports for the metrics that matter for your team or project.
 
 Support for a variety of reporting sources is built-in, including, e.g., MySQL

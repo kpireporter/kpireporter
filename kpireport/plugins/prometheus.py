@@ -7,8 +7,8 @@ import pandas as pd
 import re
 import requests
 
-from reportcard.datasource import Datasource
-from reportcard.view import View
+from kpireport.datasource import Datasource
+from kpireport.view import View
 
 
 class PrometheusDatasource(Datasource):

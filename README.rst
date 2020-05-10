@@ -1,4 +1,4 @@
-reportcard
+kpireport
 ==========
 
 TODO: more info

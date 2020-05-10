@@ -1,21 +1,21 @@
 <style>
-.reportcard__stat {
+.kpireport__stat {
     width: 100%;
     font-size: 36px;
 }
 
-.reportcard__stat .delta {
+.kpireport__stat .delta {
     font-size: 50%;
 }
-  .reportcard__stat .delta.up {
+  .kpireport__stat .delta.up {
       color: green;
   }
-  .reportcard__stat .delta.down {
+  .kpireport__stat .delta.down {
       color: red;
   }
 </style>
 
-<div class="reportcard__stat">
+<div class="kpireport__stat">
     {{ label }}
     {% if stat_delta is not none %}
     <span class="delta {{ direction }}">{% if direction == "up" %}▲{% else %}▼{% endif %}{{ stat_delta }}</span>

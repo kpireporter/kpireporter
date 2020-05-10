@@ -3,7 +3,7 @@ import shlex
 import tarfile
 import tempfile
 
-from reportcard.plugins.static import StaticOutputDriver
+from kpireport.plugins.static import StaticOutputDriver
 
 import logging
 LOG = logging.getLogger(__name__)
@@ -45,7 +45,7 @@ class SCPOutputDriver(StaticOutputDriver):
             with tarfile.open(tarball, "w:gz") as tar:
                 tar.add(tmp_dir, arcname="static")
             try:
-                remote_tarball = "/tmp/reportcard.tar.gz"
+                remote_tarball = "/tmp/kpireport.tar.gz"
                 c.put(tarball, remote=remote_tarball)
 
                 safe_path = shlex.quote(self.remote_path)

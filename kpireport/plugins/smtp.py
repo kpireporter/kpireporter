@@ -4,7 +4,7 @@ from jinja2 import Markup
 from premailer import transform
 import smtplib
 
-from reportcard.output import OutputDriver
+from kpireport.output import OutputDriver
 
 
 class SMTPOutputDriver(OutputDriver):

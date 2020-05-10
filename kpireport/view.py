@@ -2,10 +2,10 @@ from abc import ABC, abstractmethod
 from jinja2 import Environment, ChoiceLoader, PackageLoader
 from jinja2 import evalcontextfilter
 
-from reportcard.datasource import DatasourceManager
-from reportcard.output import OutputDriver
-from reportcard.plugin import PluginManager
-from reportcard.utils import module_root
+from kpireport.datasource import DatasourceManager
+from kpireport.output import OutputDriver
+from kpireport.plugin import PluginManager
+from kpireport.utils import module_root
 
 
 class ViewException(Exception):
@@ -65,7 +65,7 @@ class View(ABC):
 
 class ViewManager(PluginManager):
 
-    namespace = "reportcard.view"
+    namespace = "kpireport.view"
     type_noun = "view"
     exc_class = ViewException
 

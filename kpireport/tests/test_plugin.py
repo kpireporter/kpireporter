@@ -1,8 +1,8 @@
 import unittest
 from unittest.mock import MagicMock
 
-from reportcard.plugin import PluginManager
-from reportcard.tests.utils import BaseTestPlugin, make_test_extension_manager
+from kpireport.plugin import PluginManager
+from kpireport.tests.utils import BaseTestPlugin, make_test_extension_manager
 
 NAME = "my_name"
 PLUGIN = "my_plugin"

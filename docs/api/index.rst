@@ -1,13 +1,13 @@
 .. _api-index:
 
 ################
-Reportcard API
+KPI Reporter API
 ################
 
 :Release: |release|
 :Date: |today|
 
-Reportcard API Reference:
+KPI Reporter API Reference:
 
 .. toctree::
    :glob:

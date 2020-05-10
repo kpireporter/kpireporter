@@ -5,14 +5,14 @@ Getting started
 Installation
 ============
 
-Reportcard is a Python module that is installable via ``pip``:
+KPI Reporter is a Python module that is installable via ``pip``:
 
-.. image:: https://img.shields.io/pypi/pyversions/reportcard
-   :target: https://pypi.org/project/reportcard
+.. image:: https://img.shields.io/pypi/pyversions/kpireport
+   :target: https://pypi.org/project/kpireport
 
 .. code-block:: shell
 
-  pip install reportcard
+  pip install kpireport
 
 Docker
 ------
@@ -20,7 +20,7 @@ Docker
 A Docker image is available on DockerHub with all dependencies required by
 :ref:`built-in plugins <plugins-built-in>`:
 
-.. image:: https://img.shields.io/docker/build/diurnalist/reportcard
+.. image:: https://img.shields.io/docker/build/diurnalist/kpireport
    :target: https://hub.docker.com
 
 Usage
@@ -34,10 +34,10 @@ one week ago. To specify different windows, use the ``--start-date`` and
 .. code-block:: shell
 
   # Generate report over last 7 days
-  reportcard --config-file reportcard.yaml
+  kpireport --config-file kpireport.yaml
 
   # Generate report from last week
-  reportcard --config-file reportcard.yaml \
+  kpireport --config-file kpireport.yaml \
     --start-date $(date +%Y-%m-%d -d'-2 week') \
     --end-date $(date +%Y-%m-%d -d'-1 week')
 

@@ -2,9 +2,9 @@ import pandas as pd
 import unittest
 from unittest.mock import MagicMock
 
-from reportcard.datasource import DatasourceError
-from reportcard.datasource import DatasourceManager
-from reportcard.tests.utils import BaseTestPlugin, make_test_extension_manager
+from kpireport.datasource import DatasourceError
+from kpireport.datasource import DatasourceManager
+from kpireport.tests.utils import BaseTestPlugin, make_test_extension_manager
 
 NAME = "my_datasource"
 PLUGIN = "my_plugin"

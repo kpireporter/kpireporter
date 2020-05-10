@@ -2,7 +2,7 @@ import MySQLdb
 import pandas as pd
 import re
 
-from reportcard.datasource import Datasource
+from kpireport.datasource import Datasource
 
 
 class MySQLDatasource(Datasource):

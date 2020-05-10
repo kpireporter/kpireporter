@@ -4,8 +4,8 @@
 Output driver
 ==============
 
-Module: :mod:`reportcard.output`
+Module: :mod:`kpireport.output`
 ================================
 
-.. automodule:: reportcard.output
+.. automodule:: kpireport.output
    :members:

@@ -4,10 +4,10 @@
 Plugins
 ========
 
-Reportcard features a highly extensible and composable plugin architecture,
+KPI Reporter features a highly extensible and composable plugin architecture,
 allowing implementors to both re-use existing integration libraries and build
 custom helpers to suit their specific needs. In fact, all of the built-in
-capabilities included with Reportcard are implemented as plugins. There are
+capabilities included with KPI Reporter are implemented as plugins. There are
 three types of plugins available to you:
 
 **Datasource plugins**
@@ -26,7 +26,7 @@ Installing plugins
 
 Plugins are Python modules, and can be installed however you prefer, e.g.,
 with ``pip``. Plugins must be installed into the same Python path as
-Reportcard, as that is how they are automatically discovered at runtime.
+KPI Reporter, as that is how they are automatically discovered at runtime.
 
 .. _plugins-built-in:
 

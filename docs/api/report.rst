@@ -4,8 +4,8 @@
 Report
 =======
 
-Module: :mod:`reportcard.report`
+Module: :mod:`kpireport.report`
 ================================
 
-.. automodule:: reportcard.report
+.. automodule:: kpireport.report
    :members:

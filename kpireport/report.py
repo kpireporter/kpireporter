@@ -1,11 +1,11 @@
 from datetime import datetime, timedelta
 from slugify import slugify
 
-from reportcard.datasource import DatasourceManager
-from reportcard.output import OutputDriverManager
-from reportcard.view import ViewManager
-from reportcard.utils import create_jinja_environment
-from reportcard.version import VERSION
+from kpireport.datasource import DatasourceManager
+from kpireport.output import OutputDriverManager
+from kpireport.view import ViewManager
+from kpireport.utils import create_jinja_environment
+from kpireport.version import VERSION
 
 import logging
 LOG = logging.getLogger(__name__)

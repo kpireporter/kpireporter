@@ -6,8 +6,8 @@ datasources:
     plugin: mysql
     args:
       host: mysql
-      user: reportcard
-      passwd: reportcard_pass
+      user: kpireport
+      passwd: kpireport_pass
 
 views:
   # Show a time series of user signups over the report period.
@@ -21,9 +21,9 @@ views:
       query: |
         select created_at,
         count(*) over (order by created_at)
-          + (select count(*) from reportcard.signups where created_at < {from})
+          + (select count(*) from kpireport.signups where created_at < {from})
           as total_signups
-        from reportcard.signups
+        from kpireport.signups
         where created_at >= {from} and created_at < {to}
   new_signups:
     plugin: plot
@@ -36,7 +36,7 @@ views:
       datasource: db
       query: |
         select date_format(created_at, '%%Y-%%m-%%d') as day, count(*) as daily_total
-        from reportcard.signups
+        from kpireport.signups
         where created_at >= {from} and created_at < {to}
         group by day(created_at)
       query_args:
@@ -53,10 +53,10 @@ views:
     args:
       datasource: db
       query: |
-        select count(*) from reportcard.signups
+        select count(*) from kpireport.signups
         where created_at >= {from} and created_at < {to}
       comparison_query: |
-        select count(*) from reportcard.signups
+        select count(*) from kpireport.signups
         where created_at >= date_sub({from}, {interval})
           and created_at < {from}
       comparison_type: percent

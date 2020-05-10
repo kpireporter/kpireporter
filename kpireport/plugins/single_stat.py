@@ -1,4 +1,4 @@
-from reportcard.view import View
+from kpireport.view import View
 
 
 class SingleStat(View):

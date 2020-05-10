@@ -10,13 +10,13 @@ RUN apt-get update -y && apt-get install -y \
 ADD https://raw.githubusercontent.com/eficode/wait-for/master/wait-for /usr/local/bin/wait-for
 RUN chmod +x /usr/local/bin/wait-for
 
-RUN mkdir /opt/reportcard
-WORKDIR /opt/reportcard
+RUN mkdir /opt/kpireport
+WORKDIR /opt/kpireport
 
 COPY requirements.txt ./requirements.txt
 RUN pip install -r requirements.txt
 
-COPY reportcard ./reportcard
+COPY kpireport ./kpireport
 COPY setup.cfg ./setup.cfg
 COPY setup.py ./setup.py
 

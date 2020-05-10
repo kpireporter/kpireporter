@@ -16,9 +16,9 @@ services:
   mysql:
     image: mariadb:latest
     environment:
-      MYSQL_DATABASE: reportcard
-      MYSQL_USER: reportcard
-      MYSQL_PASSWORD: reportcard_pass
+      MYSQL_DATABASE: kpireport
+      MYSQL_USER: kpireport
+      MYSQL_PASSWORD: kpireport_pass
       MYSQL_ROOT_PASSWORD: root_pass
     volumes:
       - type: bind
@@ -52,7 +52,7 @@ services:
     ports:
       - "127.0.0.1:8080:80"
 
-  reportcard:
+  kpireport:
     build:
       context: ..
     entrypoint: /bin/bash
@@ -61,19 +61,19 @@ services:
     env_file: .env
     volumes:
       - type: bind
-        source: ../reportcard
-        target: /opt/reportcard/reportcard
+        source: ../kpireport
+        target: /opt/kpireport/kpireport
       - type: bind
         source: ../setup.cfg
-        target: /opt/reportcard/setup.cfg
+        target: /opt/kpireport/setup.cfg
         read_only: True
       - type: bind
         source: ../examples
-        target: /opt/reportcard/examples
+        target: /opt/kpireport/examples
         read_only: True
       - type: bind
         source: ../examples/_build
-        target: /opt/reportcard/_build
+        target: /opt/kpireport/_build
       - type: bind
         source: ${SCP_IDENTITY_FILE}
         target: /root/.ssh/id_rsa

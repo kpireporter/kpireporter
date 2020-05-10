@@ -4,8 +4,8 @@
 View
 =====
 
-Module: :mod:`reportcard.view`
+Module: :mod:`kpireport.view`
 ==============================
 
-.. automodule:: reportcard.view
+.. automodule:: kpireport.view
    :members:

@@ -3,8 +3,8 @@ import jenkins
 import pandas as pd
 import re
 
-from reportcard.datasource import Datasource
-from reportcard.view import View
+from kpireport.datasource import Datasource
+from kpireport.view import View
 
 
 class JenkinsDatasource(Datasource):

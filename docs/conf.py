@@ -75,25 +75,33 @@ def artifact_sort(artifact):
         artifact.get('created_at'), '%Y-%m-%dT%H:%M:%S%z')
 
 
+gh_api_base = 'https://api.github.com'
 gh_repo = os.getenv('GITHUB_REPOSITORY')
 gh_token = os.getenv('GITHUB_TOKEN')
 
 try:
-    if not (gh_repo and gh_token):
+    if not gh_repo:
         raise ValueError('Missing GitHub environment variables')
 
-    gh_artifacts_url = f'https://api.github.com/repos/{gh_repo}/actions/artifacts'
+    gh_artifacts_url = f'{gh_api_base}/repos/{gh_repo}/actions/artifacts'
+    if gh_token:
+        gh_auth = ('admin', gh_token)
+    else:
+        gh_auth = None
+
     res = requests.get(gh_artifacts_url)
 
     res.raise_for_status()
     artifacts = res.json().get('artifacts')
-    latest = next(iter(sorted(artifacts, key=artifact_sort, reverse=True)), None)
+    latest = next(iter(sorted(
+        artifacts, key=artifact_sort, reverse=True)), None)
     if latest:
         zip_res = requests.get(
             f"{gh_artifacts_url}/{latest.get('id')}/zip",
-            auth=('admin', gh_token))
+            auth=gh_auth)
         zip_res.raise_for_status()
         zipfile = ZipFile(BytesIO(zip_res.content))
-        zipfile.extractall('_static')
+        zipfile.extractall('_static/examples')
 except Exception as e:
+    print("Unable to fetch GHA artifacts: ", e)
     html_extra_path = ['../examples/_build']

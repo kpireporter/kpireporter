@@ -101,7 +101,8 @@ try:
             auth=gh_auth)
         zip_res.raise_for_status()
         zipfile = ZipFile(BytesIO(zip_res.content))
-        zipfile.extractall('_static/examples')
+        zipfile.extractall('_extra/examples')
+        html_extra_path = ['_extra']
 except Exception as e:
     print("Unable to fetch GHA artifacts: ", e)
     html_extra_path = ['../examples/_build']

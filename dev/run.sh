@@ -60,7 +60,7 @@ rebuild() {
   _dockercompose rm -f --stop kpireport
 
   log_step "Regenerating fixture data ..."
-  pushd "$DIR" >/dev/null; python -m "datasources"; popd >/dev/null
+  tox -e examples
   log "Done"
 
   log_step "Starting docker-compose stack ..."

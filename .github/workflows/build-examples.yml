@@ -16,6 +16,9 @@ jobs:
       with:
         python-version: "3.x"
 
+    - name: Install tox
+      run: pip install tox
+
     - name: Generate example output
       run: |
         touch $SCP_IDENTITY_FILE

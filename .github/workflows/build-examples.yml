@@ -5,19 +5,6 @@ on:
     branches: [ master ]
 
 jobs:
-  debug_token:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Print cURL command
-      run: |
-        api_base=https://readthedocs.org/api/v3
-        echo curl -Ssf -X POST -d'' \
-          -H "'Authorization: Token $READTHEDOCS_API_TOKEN'" \
-          "$api_base/projects/kpi-reporter/versions/latest/builds/"
-      env:
-        READTHEDOCS_API_TOKEN: ${{ secrets.READTHEDOCS_API_TOKEN }}
-
   build:
     runs-on: ubuntu-latest
 

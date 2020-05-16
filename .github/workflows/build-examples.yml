@@ -38,8 +38,8 @@ jobs:
     - name: Trigger ReadTheDocs build
       run: |
         api_base=https://readthedocs.org/api/v3
-        curl -Ssf -X POST \
+        curl -Ssf -X POST -d'' \
           -H "Authorization: Token $READTHEDOCS_API_TOKEN" \
-          "$api_base/projects/kpi-reporter/versions/latest/builds"
+          "$api_base/projects/kpi-reporter/versions/latest/builds/"
       env:
         READTHEDOCS_API_TOKEN: ${{ secrets.ReadTheDocsAPIToken }}

@@ -4,7 +4,7 @@
 Plugins
 ========
 
-KPI Reporter features a highly extensible and composable plugin architecture,
+KPI Reporter features an extensible and composable plugin architecture,
 allowing implementors to both re-use existing integration libraries and build
 custom helpers to suit their specific needs. In fact, all of the built-in
 capabilities included with KPI Reporter are implemented as plugins. There are
@@ -17,9 +17,15 @@ three types of plugins available to you:
   containing the results for interoperability with various Views.
   :ref:`Read more about Datasources <api-datasource>`.
 **View plugins**
-  these do something. See :ref:`api-view`.
+  allow you to implement visualizations of data, but can also be used to
+  render static information. Typically Views will fetch data from Datasources
+  and then somehow transform or summarize the data visually. Views are
+  expected to output text, but can generate binary "blobs" that can later
+  be linked to or rendered inline. :ref:`Read more about Views <api-view>`.
 **Output driver plugins**
-  finally. See :ref:`api-output-driver`.
+  allow you to change a report's destination. A report can be written to a
+  local disk, uploaded to a cloud storage system, or directly sent as mail.
+  :ref:`Read more about Output drivers <api-output-driver>`.
 
 Installing plugins
 ==================

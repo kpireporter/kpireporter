@@ -42,6 +42,16 @@ services:
     ports:
       - "127.0.0.1:8025:8025"
 
+  aws:
+    image: localstack/localstack
+    environment:
+      SERVICES: s3
+    volumes:
+      - type: bind
+        source: ./aws
+        target: /docker-entrypoint-initaws.d
+        read_only: True
+
   nginx:
     image: nginx:stable
     volumes:

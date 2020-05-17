@@ -1,0 +1,7 @@
+outputs:
+  s3:
+    plugin: s3
+    args:
+      bucket: kpireporter-public
+      # Override to point to localstack container
+      endpoint_url: http://aws:4566

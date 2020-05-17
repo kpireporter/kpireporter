@@ -21,4 +21,4 @@ COPY setup.cfg ./setup.cfg
 COPY setup.py ./setup.py
 
 # Install with all supported extras
-RUN pip install .[jenkins,mysql,prometheus,scp,slack]
+RUN pip install .[jenkins,mysql,prometheus,s3,scp,slack]

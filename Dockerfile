@@ -1,4 +1,4 @@
-from python:3
+FROM python:3
 
 RUN apt-get update -y && apt-get install -y \
         build-essential \
@@ -20,4 +20,5 @@ COPY kpireport ./kpireport
 COPY setup.cfg ./setup.cfg
 COPY setup.py ./setup.py
 
-RUN python setup.py install
+# Install with all supported extras
+RUN pip install .[jenkins,mysql,prometheus,scp,slack]

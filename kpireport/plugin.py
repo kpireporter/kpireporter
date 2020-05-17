@@ -20,13 +20,21 @@ class PluginManager:
             self._mgr = extension_manager
         else:
             def on_load_failure(manager, entrypoint, exception):
-                self.log.error(f"Failed to load {entrypoint}: {exception}")
+                msg = exception
+                if entrypoint.extras:
+                    msg = (f"Ensure the [{','.join(entrypoint.extras)}] "
+                           "extras are installed if using this plugin.")
+                self.log.warn(
+                    f"Could not load plugin '{entrypoint.name}': {msg}")
 
             self._mgr = stevedore.ExtensionManager(
                 namespace=self.namespace,
                 invoke_on_load=False,
                 on_load_failure_callback=on_load_failure,
+                verify_requirements=True
             )
+            loaded_names = [e.name for e in self._mgr.extensions]
+            self.log.info(f"Loaded {self.type_noun} plugins: {loaded_names}")
 
         self._instances = {}
         for id, conf in config.items():

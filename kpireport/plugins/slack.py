@@ -3,7 +3,7 @@ import json
 import os
 from slack import WebClient
 from slack.errors import SlackApiError
-from slack.web.classes import messages, blocks, elements, objects
+from slack.web.classes import messages, blocks, objects
 
 from kpireport.output import OutputDriver
 

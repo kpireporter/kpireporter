@@ -84,4 +84,3 @@ class SendGridOutputDriver(OutputDriver):
         except Exception as e:
             raise ValueError("Error sending mail",
                              self._parse_sendgrid_error(e))
-

@@ -66,6 +66,7 @@ class SlackOutputDriver(OutputDriver):
         if "!date" not in str(link):
             # Bug in older versions of Slack client where dates were not
             # properly rendered; hack in the !date^ part of the URL.
+            # TODO [2020-05-16]: remove this hack in ~6 months
             link = objects.DateLink(
                 date=f"!date^{int(dateobj.timestamp())}",
                 date_format=date_format,

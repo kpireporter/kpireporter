@@ -1,7 +1,6 @@
 from datetime import timedelta
 from itertools import chain
 from functools import lru_cache, reduce
-import numpy as np
 from operator import itemgetter
 import pandas as pd
 import re
@@ -127,7 +126,7 @@ class PrometheusAlertSummary(View):
                 df = df[df[key] == value]
 
         ignore_labels = ["__name__", "alertstate"] + self.ignore_labels
-        df = df.drop(labels=ignore_labels, axis="columns")
+        df = df.drop(labels=ignore_labels, axis="columns", errors="ignore")
 
         summary = []
         for alertname in df["alertname"].unique():

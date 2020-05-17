@@ -12,6 +12,9 @@ LOG = logging.getLogger(__name__)
 
 
 class SlackOutputDriver(OutputDriver):
+    # Only Markdown is suppored in Slack (no HTML)
+    supported_formats = ["md"]
+
     def init(self, api_token=None, channels=[], image_remote_base_url=None):
         if not channels:
             raise ValueError("'channels' is required")

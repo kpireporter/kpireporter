@@ -99,6 +99,9 @@ class ViewManager(PluginManager):
 
     def render(self, env: Environment, fmt: str,
                output_driver: OutputDriver) -> list:
+        if not output_driver.can_render(fmt):
+            return []
+
         blocks = []
         for id, view in self.instances:
             block = dict(

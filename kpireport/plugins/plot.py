@@ -13,12 +13,13 @@ DATE_FORMAT = "%b %-d\n(%a)"
 
 class Plot(View):
     def init(self, datasource=None, query=None, query_args={},
-             time_column="time", kind="line"):
+             time_column="time", kind="line", plot_rc={}):
         self.datasource = datasource
         self.query = query
         self.query_args = query_args
         self.time_column = time_column
         self.kind = kind
+        self.plot_rc = plot_rc
 
         if not (self.datasource and self.query):
             raise ValueError((
@@ -29,7 +30,8 @@ class Plot(View):
         text_color = "#222222"
         axis_color = "#cccccc"
 
-        return {
+        rc_params = self.plot_rc.copy()
+        rc_defaults = {
             "lines.linewidth": 3,
             "text.color": text_color,
             "axes.edgecolor": axis_color,
@@ -53,6 +55,9 @@ class Plot(View):
             "savefig.bbox": "tight",
             "savefig.pad_inches": 0,
         }
+        for k, v in rc_defaults.items():
+            rc_params.setdefault(k, v)
+        return rc_params
 
     def render_figure(self):
         df = self.datasources.query(self.datasource, self.query,

@@ -40,7 +40,6 @@ class SendGridOutputDriver(OutputDriver):
     @property
     def _sandbox_mode(self):
         flag = os.getenv("SENDGRID_SANDBOX_ENABLED", "").lower()
-        print(flag)
         return flag in ["1", "y", "yes", "true"]
 
     def render_blob_inline(self, blob):

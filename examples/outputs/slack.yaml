@@ -1,5 +1,19 @@
 ---
 outputs:
+  # Slack will need to resolve images remotely over some accessible location,
+  # so we additionally use the 'scp' plugin to copy them to a remote server.
+  scp:
+    plugin: scp
+    args:
+      host: ${SCP_HOST}
+      user: ${SCP_USER}
+      sudo: True
+      sudo_password: ${SCP_SUDO_PASSWORD}
+      remote_path: ${SCP_REMOTE_PATH}
+      remote_path_owner: www-data
+      connect_kwargs:
+        key_filename: /root/.ssh/id_rsa
+
   slack:
     plugin: slack
     args:

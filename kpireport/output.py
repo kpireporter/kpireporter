@@ -17,6 +17,7 @@ class OutputDriver(ABC):
                      in the report configuration.
     """
     id: str = None
+    supported_formats: list = ["md", "html"]
 
     def __init__(self, report, **kwargs):
         self.report = report
@@ -35,7 +36,11 @@ class OutputDriver(ABC):
         pass
 
     def render_blob_inline(self, blob):
-        raise NotImplementedError("This driver does not support inline blobs")
+        raise NotImplementedError(
+            f"'{self.id}' driver does not support inline blobs")
+
+    def can_render(self, fmt):
+        return fmt in self.supported_formats
 
     @abstractmethod
     def render_output(self, content, blobs):

@@ -22,7 +22,6 @@ EnvAwareLoader.add_constructor("!path", path_constructor)
 
 def load(*files) -> dict:
     def merge(src, dst):
-        print(src)
         """Deep merge two dictionaries. Doesn't handle merging lists."""
         for k, v in src.items():
             if isinstance(v, dict):

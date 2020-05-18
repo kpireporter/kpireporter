@@ -16,6 +16,7 @@
 from datetime import datetime
 from io import BytesIO
 import os
+from pkg_resources import get_distribution
 import requests
 from zipfile import ZipFile
 
@@ -24,6 +25,7 @@ from kpireport import VERSION
 
 # -- Project information -----------------------------------------------------
 
+module_name = 'kpireport'
 project = 'kpireport'
 copyright = '2020, Jason Anderson'
 author = 'Jason Anderson'
@@ -106,3 +108,10 @@ try:
 except Exception as e:
     print("Unable to fetch GHA artifacts: ", e)
     html_extra_path = ['../examples/_build']
+
+
+# Mock all the extra_requires modules. Without this, Sphinx cannot
+# generate documentation via autodoc unless the relevant dependencies
+# are explicitly installed, which we don't want to require. It is fine
+# to mock the extra dependencies here.
+autodoc_mock_imports = get_distribution(module_name).extras

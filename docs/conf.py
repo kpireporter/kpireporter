@@ -114,4 +114,4 @@ except Exception as e:
 # generate documentation via autodoc unless the relevant dependencies
 # are explicitly installed, which we don't want to require. It is fine
 # to mock the extra dependencies here.
-autodoc_mock_imports = get_distribution(module_name).extras
+autodoc_mock_imports = ['jenkins', 'MySQLdb']

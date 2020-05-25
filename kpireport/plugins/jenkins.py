@@ -8,14 +8,16 @@ from kpireport.view import View
 
 
 class JenkinsDatasource(Datasource):
-    """
-    Provides accessors for listing all jobs registered on a Jenkins server,
+    """Provides accessors for listing all jobs and builds from a Jenkins host.
+
+    The Jenkins Datasource exposes an RPC-like interface to fetch all jobs,
     as well as job details for each job. The plugin will call the Jenkins API
     at the host specified using a username and API token provided as
     plugin arguments.
     """
     def init(self, host=None, user=None, api_token=None):
-        """
+        """Initialize the Jenkins Datasource.
+
         :type host: str
         :param host: the Jenkins host, e.g. https://jenkins.example.com
         :type user: str
@@ -31,8 +33,9 @@ class JenkinsDatasource(Datasource):
         self.client = jenkins.Jenkins(host, username=user, password=api_token)
 
     def query(self, fn_name, *args, **kwargs):
-        """
-        Call a supported accessor function by name and passthrough any
+        """Query the Datsource for job or build data.
+
+        Calls a supported accessor function by name and passthrough any
         positional and keyword arguments.
 
         Examples::
@@ -41,6 +44,10 @@ class JenkinsDatasource(Datasource):
             datasources.query("jenkins", "get_all_jobs")
             # Get detailed information about 'some-job'
             datasources.query("jenkins", "get_job_info", "some-job")
+
+        :type fn_name: str
+        :param fn_name: the RPC operation to invoke
+        :raise ValueError: if an invalid RPC operation is requested
         """
         fn = getattr(self, fn_name, None)
         if not (fn and callable(fn)):
@@ -49,15 +56,14 @@ class JenkinsDatasource(Datasource):
         return fn(*args, **kwargs)
 
     def get_all_jobs(self):
-        """
-        List all jobs on the Jenkins server
+        """List all jobs on the Jenkins server
 
         :returns: a table with columns:
 
           :fullname: the full job name (will include folder path components)
           :url: a URL that resolves to the job on the Jenkins server
 
-        :return type: :class:`pandas.DataFrame`
+        :rtype: pandas.DataFrame
         """
         jobs = pd.DataFrame.from_records(self.client.get_all_jobs())
         # Filter by jobs that don't have child jobs
@@ -74,7 +80,7 @@ class JenkinsDatasource(Datasource):
 
             :status: the build status, e.g. "SUCCESS" or "FAILURE"
 
-        :return type: :class:`pandas.DataFrame`
+        :rtype: pandas.DataFrame
         """
         job_info = self.client.get_job_info(job_name, depth=1)
         df = pd.json_normalize(job_info, "builds")
@@ -85,6 +91,19 @@ class JenkinsDatasource(Datasource):
 
 
 class JenkinsBuildFilter:
+    """Filters a list of Jenkins jobs/builds by a general criteria
+
+    Currently only filtering by name is supported, but this class can be
+    extended in the future to filter on other attributes, such as build status
+    or health.
+
+    :type name: Union[str, List[str]]
+    :param name: the list of name filter patterns. These will be compiled
+                    as regular expressions. In the case of a single filter,
+                    a string can be provided instead of a list.
+    :type invert: bool
+    :param invert: whether to invert the filter result
+    """
     name_filter = None
 
     def __init__(self, name=None, invert=False):
@@ -102,6 +121,13 @@ class JenkinsBuildFilter:
         return [re.compile(f) for f in filters]
 
     def filter_job(self, job):
+        """Checks a job against the current filters
+
+        :type job: dict
+        :param job: the Jenkins job
+        :rtype: bool
+        :returns: whether the job passes the filters
+        """
         allow = True
 
         if self.name_filter:
@@ -115,16 +141,18 @@ class JenkinsBuildFilter:
 
 
 class JenkinsBuildSummary(View):
-    """
-    Display a list of jobs
+    """Display a list of jobs with their latest build statuses, and health.
+
+    :formats: html, md
+
+    :type datasource: str
+    :param datasource: the Datasource ID to query for Jenkins data
+    :type filters: dict
+    :param filters: optional filters to limit which jobs are rendered in
+                    the view. These filters are directly passed to
+                    :class:`JenkinsBuildFilter`.
     """
     def init(self, datasource="jenkins", filters={}):
-        """
-        Initialize the build summary View.
-
-        :type datasource: str
-        :param datasource: the Datasource ID to query for Jenkins data
-        """
         self.datasource = datasource
         self.filters = JenkinsBuildFilter(**filters)
 
@@ -153,15 +181,9 @@ class JenkinsBuildSummary(View):
         return dict(summary=summary)
 
     def render_html(self, j2):
-        """
-        Render the HTML report
-        """
         template = j2.get_template("plugins/jenkins_build_summary.html")
         return template.render(**self._template_vars())
 
     def render_md(self, j2):
-        """
-        Render the Markdown report
-        """
         template = j2.get_template("plugins/jenkins_build_summary.md")
         return template.render(**self._template_vars())

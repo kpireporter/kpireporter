@@ -46,6 +46,31 @@ class PrometheusDatasource(Datasource):
 
 
 class PrometheusAlertSummary(View):
+    """Display a list of alerts that fired recently.
+
+    :type datasource: str
+    :param datasource: the ID of the Prometheus Datasource to query
+    :type resolution: str
+    :param resolution: the size of the time window used to group alerts--the
+                       window is used to define buckets. A higher resolution
+                       is a lower time window (e.g., "5m" versus "1h"--"5m"
+                       is the higher resolution). Higher resolutions mean the
+                       timeline and time estimates for outage length will be
+                       more accurate, but may decrease performance when the
+                       report interval is large, as it requires pulling more
+                       data from Prometheus. (default=15m)
+    :type ignore_labels: List[str]
+    :param ignore_labels: a set of labels to hide from the output display.
+                          Alerts containing these labels will still be listed,
+                          but the label values will not be printed.
+                          (default=["instance", "job"])
+    :type labels: Dict[str,str]
+    :param labels: a set of labels that the alert must contain in order to
+                   be displayed (default=None)
+    :type show_timeline: bool
+    :param show_timeline: whether to show a visual timeline of when alerts
+                          were firing (default=True)
+    """
     RESOLUTION_REGEX = r"([0-9]+)([smhdwy])"
 
     def init(self, datasource="prometheus", resolution="15m",

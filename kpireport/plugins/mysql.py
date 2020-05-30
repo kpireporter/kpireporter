@@ -11,7 +11,7 @@ class MySQLDatasource(Datasource):
     def init(self, **kwargs):
         """Initialize the Datasource and MySQL connector.
 
-        :param **kwargs: keywoard arguments passed to :meth:`MySQLdb.connect`
+        :param **kwargs: keywoard arguments passed to :meth:`MySQLdb.Connect`
         """
         self.db = MySQLdb.connect(**kwargs)
 

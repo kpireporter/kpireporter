@@ -55,6 +55,8 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 intersphinx_mapping = {
     'pandas': ('http://pandas.pydata.org/pandas-docs/stable/',
                'http://pandas.pydata.org/pandas-docs/stable/objects.inv'),
+    'MySQLdb': ('https://mysqlclient.readthedocs.io/',
+                'https://mysqlclient.readthedocs.io/objects.inv'),
 }
 
 # -- Options for HTML output -------------------------------------------------

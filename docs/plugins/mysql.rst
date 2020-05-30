@@ -14,6 +14,7 @@ Configuration
 -------------
 
 .. literalinclude:: ../../examples/mysql.yaml
+   :language: yaml
 
 Datasource
 ==========

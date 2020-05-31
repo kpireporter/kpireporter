@@ -11,7 +11,12 @@ from kpireport.view import View
 
 
 class PrometheusDatasource(Datasource):
+    """Datasource that executes PromQL queries against a Prometheus server.
 
+    :type host: str
+    :param host: the hostname of the Prometheus server (may include port),
+                 e.g., :samp:`https://prometheus.example.com:9090`
+    """
     def init(self, host=None):
         if not host:
             raise ValueError("Missing required parameter: 'host'")
@@ -20,6 +25,24 @@ class PrometheusDatasource(Datasource):
         self.host = host
 
     def query(self, query: str, step="1h") -> pd.DataFrame:
+        """Execute a PromQL query against the Prometheus server.
+
+        :type query: str
+        :param query: the PromQL query
+        :type step: str
+        :param step: the step size for the range query. The Datasource will
+                     execute a `range query <https://prometheus.io/docs/prometheus/latest/querying/api/#range-queries>`_
+                     over the report window and capture all time series data
+                     within the report boundaries. The step size indicates the
+                     query resolution. A lower value provides more granularity
+                     but at the cost of a more expensive query and more data
+                     points to analyze. If your report window is significantly
+                     short, it may make sense to reduce this.
+        :rtype: pandas.DataFrame
+        :returns: a table of time series results. The timeseries value will
+                  be in a ``time`` column; any labels associated with the
+                  metric will be added as additional columns.
+        """
         res = requests.get(f"{self.host}/api/v1/query_range", params=dict(
             start=self.report.start_date.timestamp(),
             end=self.report.end_date.timestamp(),
@@ -47,6 +70,8 @@ class PrometheusDatasource(Datasource):
 
 class PrometheusAlertSummary(View):
     """Display a list of alerts that fired recently.
+
+    Supported output formats: ``html``, ``md``, ``slack``
 
     :type datasource: str
     :param datasource: the ID of the Prometheus Datasource to query
@@ -131,6 +156,7 @@ class PrometheusAlertSummary(View):
                       windows, timedelta(0))
 
     def _normalize_time_windows(self, windows):
+        """Normalize time windows to a single [0,100] scale."""
         td = self.report.timedelta
         return [
             (max(0, (round(100 * (w[0] - self.report.start_date) / td, 2))),
@@ -139,7 +165,7 @@ class PrometheusAlertSummary(View):
         ]
 
     @lru_cache
-    def template_vars(self):
+    def _template_vars(self):
         df = self.datasources.query(
             self.datasource, "ALERTS", step=self.resolution.total_seconds())
 
@@ -199,10 +225,15 @@ class PrometheusAlertSummary(View):
             show_timeline=self.show_timeline
         )
 
-    def render_html(self, env):
-        template = env.get_template("plugins/prometheus_alert_summary.html")
-        return template.render(**self.template_vars())
+    def _render(self, j2, fmt):
+        template = j2.get_template(f"plugins/prometheus_alert_summary.{fmt}")
+        return template.render(**self._template_vars())
 
-    def render_md(self, env):
-        template = env.get_template("plugins/prometheus_alert_summary.md")
-        return template.render(**self.template_vars())
+    def render_html(self, j2):
+        return self._render(j2, "html")
+
+    def render_md(self, j2):
+        return self._render(j2, "md")
+
+    def render_slack(self, j2):
+        return self._render(j2, "slack")

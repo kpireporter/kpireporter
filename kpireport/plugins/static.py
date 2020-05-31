@@ -12,8 +12,11 @@ class StaticOutputDriver(OutputDriver):
     def init(self, output_dir="_build"):
         self.output_dir = output_dir
 
-    def render_blob_inline(self, blob):
-        return Markup(f"""<img src="{blob["id"]}" />""")
+    def render_blob_inline(self, blob, fmt=None):
+        if fmt == "md":
+            return f"""![{blob["title"]}]({blob["id"]})"""
+        else:
+            return Markup(f"""<img src="{blob["id"]}" />""")
 
     def render_output(self, content, blobs):
         content = content.get("html")

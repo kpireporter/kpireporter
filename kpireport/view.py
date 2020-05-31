@@ -86,6 +86,7 @@ class ViewManager(PluginManager):
         @evalcontextfilter
         def render_blob(eval_ctx, blob_id):
             view_id = eval_ctx.environment.view_id
+            fmt = eval_ctx.environment.fmt
 
             blob = self.call_instance(view_id, "get_blob", blob_id)
             if not blob:
@@ -93,7 +94,7 @@ class ViewManager(PluginManager):
                     f"Missing content for blob '{blob_id}'. Make sure the "
                     "blob was added before rendering the View template"))
 
-            return output_driver.render_blob_inline(blob)
+            return output_driver.render_blob_inline(blob, fmt)
 
         return render_blob
 
@@ -122,7 +123,7 @@ class ViewManager(PluginManager):
                         PackageLoader(module_root(View.__module__))
                     ])
                 )
-                view_env.extend(view_id=id)
+                view_env.extend(view_id=id, fmt=fmt)
                 view_env.filters["blob"] = self._blob_filter(output_driver)
 
                 output = view.render(view_env, fmt=fmt)

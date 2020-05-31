@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from jinja2 import TemplateNotFound
 from slugify import slugify
 
 from kpireport.datasource import DatasourceManager
@@ -47,7 +48,7 @@ class Report:
 
 
 class ReportFactory:
-    supported_formats = ["html", "md"]
+    supported_formats = ["html", "md", "slack"]
 
     def __init__(self, config):
         datasource_conf = config.get("datasources", {})
@@ -76,9 +77,17 @@ class ReportFactory:
             content = {}
             for fmt in self.supported_formats:
                 views = self.vm.render(self.env, fmt, output_driver)
-                template = self.env.get_template(f"layout/default.{fmt}")
-                content[fmt] = template.render(views=views,
-                                               report=self.report)
+                try:
+                    template = self.env.get_template(f"layout/default.{fmt}")
+                except TemplateNotFound:
+                    LOG.warning((
+                        f"No parent template found for format {fmt}, so no "
+                        "final output text can be written. Views will still "
+                        "be rendered individually."))
+                    content[fmt] = None
+                else:
+                    content[fmt] = template.render(views=views,
+                                                   report=self.report)
                 # Also store a list of the raw views to allow the output
                 # driver to render its own output structure
                 content[f"{fmt}_views"] = views

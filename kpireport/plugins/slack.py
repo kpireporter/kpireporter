@@ -12,8 +12,8 @@ LOG = logging.getLogger(__name__)
 
 
 class SlackOutputDriver(OutputDriver):
-    # Only Markdown is suppored in Slack (no HTML)
-    supported_formats = ["md"]
+    # Slack has its own Markdown language
+    supported_formats = ["slack"]
 
     def init(self, api_token=None, channels=[], image_remote_base_url=None):
         if not channels:
@@ -76,7 +76,7 @@ class SlackOutputDriver(OutputDriver):
         return str(link)
 
     def render_output(self, content, blobs):
-        views = content.get("md_views", [])
+        views = content.get("slack_views", [])
 
         blks = []
 

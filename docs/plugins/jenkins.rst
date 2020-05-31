@@ -27,6 +27,7 @@ Datasource
 .. autoclass:: JenkinsDatasource
    :members:
    :show-inheritance:
+   :exclude-members: init
 
 Views
 =====

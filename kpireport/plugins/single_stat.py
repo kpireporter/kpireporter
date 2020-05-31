@@ -1,3 +1,5 @@
+from functools import lru_cache
+
 from kpireport.view import View
 
 
@@ -14,6 +16,7 @@ class SingleStat(View):
             raise ValueError((
                 "Both a 'datasource' and 'query' parameter are required"))
 
+    @lru_cache
     def template_args(self):
         df = self.datasources.query(self.datasource, self.query)
         stat_value = df.index.array[0]
@@ -41,12 +44,13 @@ class SingleStat(View):
 
     def render_html(self, j2):
         template = j2.get_template("plugins/single_stat.html")
-        template_args = self.template_args()
-
-        return template.render(theme=self.report.theme, **template_args)
+        return template.render(theme=self.report.theme,
+                               **self.template_args())
 
     def render_md(self, j2):
         template = j2.get_template("plugins/single_stat.md")
-        template_args = self.template_args()
+        return template.render(**self.template_args())
 
-        return template.render(**template_args)
+    def render_slack(self, j2):
+        template = j2.get_template("plugins/single_stat.slack")
+        return template.render(**self.template_args())

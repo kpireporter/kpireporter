@@ -180,10 +180,15 @@ class JenkinsBuildSummary(View):
 
         return dict(summary=summary)
 
-    def render_html(self, j2):
-        template = j2.get_template("plugins/jenkins_build_summary.html")
+    def _render(self, j2, fmt):
+        template = j2.get_template(f"plugins/jenkins_build_summary.{fmt}")
         return template.render(**self._template_vars())
 
+    def render_html(self, j2):
+        return self._render(j2, "html")
+
     def render_md(self, j2):
-        template = j2.get_template("plugins/jenkins_build_summary.md")
-        return template.render(**self._template_vars())
+        return self._render(j2, "md")
+
+    def render_slack(self, j2):
+        return self._render(j2, "slack")

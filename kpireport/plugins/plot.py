@@ -110,10 +110,17 @@ class Plot(View):
 
             return figname
 
-    def render_html(self, env):
-        template = env.get_template("plugins/plot.html")
+    def render_html(self, j2):
+        template = j2.get_template("plugins/plot.html")
         return template.render(figure=self.render_figure())
 
-    def render_md(self, env):
+    def render_md(self, j2):
+        template = j2.get_template("plugins/plot.md")
+        return template.render(figure=self.render_figure())
+
+    def render_slack(self, j2):
         self.render_figure()
+        # Slack does not support rendering images inline from text--they
+        # must be explicitly included as a Block element. This is a
+        # "blob-only" View output.
         return ""

@@ -42,7 +42,7 @@ class SendGridOutputDriver(OutputDriver):
         flag = os.getenv("SENDGRID_SANDBOX_ENABLED", "").lower()
         return flag in ["1", "y", "yes", "true"]
 
-    def render_blob_inline(self, blob):
+    def render_blob_inline(self, blob, fmt=None):
         return Markup(f"""<img src="cid:{blob["id"]}" />""")
 
     def render_output(self, content, blobs):

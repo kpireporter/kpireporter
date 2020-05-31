@@ -35,7 +35,7 @@ class OutputDriver(ABC):
         """
         pass
 
-    def render_blob_inline(self, blob):
+    def render_blob_inline(self, blob, fmt=None):
         raise NotImplementedError(
             f"'{self.id}' driver does not support inline blobs")
 

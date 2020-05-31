@@ -29,7 +29,7 @@ class SMTPOutputDriver(OutputDriver):
         username, domain = address.split("@")
         return Address(username=username, domain=domain)
 
-    def render_blob_inline(self, blob):
+    def render_blob_inline(self, blob, fmt=None):
         if self.image_strategy == "embed":
             return Markup(f"""<img src="cid:{blob["id"]}" />""")
         elif self.image_strategy == "remote":

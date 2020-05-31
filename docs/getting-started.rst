@@ -48,7 +48,7 @@ A report is declared entirely within a YAML file consisting of a few main
 sections: ``datasources``, ``views``, and ``outputs``. In each section, you
 can declare as many plugin instances as you wish (to e.g., declare multiple
 database :ref:`Datasources <api-datasource>` or multiple :ref:`Plot
-<plugins-plot>` visualizations in your report). As dictated by the `YAML spec
+<plot-plugin>` visualizations in your report). As dictated by the `YAML spec
 <https://yaml.org/spec/1.2/spec.html#id2759669>`_, duplicate keys (IDs) are
 not allowed; ensure that each plugin instance has its own ID unique to its
 section.

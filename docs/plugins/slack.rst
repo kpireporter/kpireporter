@@ -1,3 +1,5 @@
+.. _slack-plugin:
+
 ======
 Slack
 ======

@@ -1,4 +1,4 @@
-.. _plugins-plot:
+.. _plot-plugin:
 
 =====
 Plot

@@ -1,3 +1,4 @@
+.. _prometheus-plugin:
 .. currentmodule:: kpireport.plugins.prometheus
 
 ===========

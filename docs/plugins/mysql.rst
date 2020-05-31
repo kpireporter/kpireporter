@@ -1,3 +1,4 @@
+.. _mysql-plugin:
 .. currentmodule:: kpireport.plugins.mysql
 
 ======

@@ -1,3 +1,5 @@
+.. _smtp-plugin:
+
 =====
 SMTP
 =====

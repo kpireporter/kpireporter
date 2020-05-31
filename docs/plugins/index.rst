@@ -4,11 +4,9 @@
 Plugins
 ========
 
-KPI Reporter features an extensible and composable plugin architecture,
-allowing implementors to both re-use existing integration libraries and build
-custom helpers to suit their specific needs. In fact, all of the built-in
-capabilities included with KPI Reporter are implemented as plugins. There are
-three types of plugins available to you:
+KPI Reporter features an extensible and composable plugin architecture that
+allows you to customize the tool to suit your specific needs. There are three
+types of plugins:
 
 **Datasource plugins**
   allow you to interface with specific backend databases and services. A
@@ -23,8 +21,8 @@ three types of plugins available to you:
   expected to output text, but can generate binary "blobs" that can later
   be linked to or rendered inline. :ref:`Read more about Views <api-view>`.
 **Output driver plugins**
-  allow you to change a report's destination. A report can be written to a
-  local disk, uploaded to a cloud storage system, or directly sent as mail.
+  allow you to change how a report is published, e.g., written to a local
+  disk, uploaded to a cloud storage system, or directly sent as mail.
   :ref:`Read more about Output drivers <api-output-driver>`.
 
 Installing plugins
@@ -39,10 +37,48 @@ KPI Reporter, as that is how they are automatically discovered at runtime.
 Built-in plugins
 ================
 
-.. toctree::
-   :glob:
+The following plugins are provided with KPI reporter:
 
-   *
+.. toctree::
+   :maxdepth: 1
+
+   plot
+   slack
+   static
+   smtp
+
+Optional plugins
+================
+
+The built-in plugins provide the basic infrastructure for sending a variety
+of reports, but most likely you'll want to install some additional plugins
+to provide built-in visualizations or interface with common backends. Optional
+plugins are not bundled together with KPI Reporter and must be installed
+separately.
+
+.. note::
+
+    It is possible to install all optional plugins:
+
+      .. code-block:: shell
+
+          pip install kpireporter[plugins]
+
++--------------------------+-------------------------------+
+| Plugin                   | Package                       |
++==========================+===============================+
+| :ref:`jenkins-plugin`    | ``kpireporter-jenkins``       |
++--------------------------+-------------------------------+
+| :ref:`mysql-plugin`      | ``kpireporter-mysql``         |
++--------------------------+-------------------------------+
+| :ref:`prometheus-plugin` | ``kpireporter-prometheus``    |
++--------------------------+-------------------------------+
+| :ref:`s3-plugin`         | ``kpireporter-s3``            |
++--------------------------+-------------------------------+
+| :ref:`scp-plugin`        | ``kpireporter-scp``           |
++--------------------------+-------------------------------+
+| :ref:`sendgrid-plugin`   | ``kpireporter-sendgrid``      |
++--------------------------+-------------------------------+
 
 Developing plugins
 ==================

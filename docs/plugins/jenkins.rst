@@ -1,3 +1,4 @@
+.. _jenkins-plugin:
 .. currentmodule:: kpireport.plugins.jenkins
 
 ========

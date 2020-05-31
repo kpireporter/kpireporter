@@ -22,5 +22,6 @@ COPY setup.cfg ./setup.cfg
 COPY setup.py ./setup.py
 
 # Install with all supported extras
-RUN pip install -e .
-RUN pip install -e plugins/jenkins
+ARG pip_flags=
+RUN pip install ${pip_flags} .
+RUN pip install ${pip_flags} plugins/jenkins

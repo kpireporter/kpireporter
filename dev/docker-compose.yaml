@@ -65,6 +65,8 @@ services:
   kpireport:
     build:
       context: ..
+      args:
+        pip_flags: -e
     entrypoint: /bin/bash
     stdin_open: True
     tty: True

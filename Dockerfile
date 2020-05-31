@@ -17,8 +17,10 @@ COPY requirements.txt ./requirements.txt
 RUN pip install -r requirements.txt
 
 COPY kpireport ./kpireport
+COPY plugins ./plugins
 COPY setup.cfg ./setup.cfg
 COPY setup.py ./setup.py
 
 # Install with all supported extras
-RUN pip install .[jenkins,mysql,prometheus,s3,scp,slack]
+RUN pip install -e .
+RUN pip install -e plugins/jenkins

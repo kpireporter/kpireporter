@@ -1,5 +1,5 @@
 .. _jenkins-plugin:
-.. currentmodule:: kpireport.plugins.jenkins
+.. currentmodule:: kpireport_jenkins
 
 ========
 Jenkins

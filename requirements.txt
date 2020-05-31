@@ -5,8 +5,6 @@ premailer
 python-slugify
 pyyaml
 stevedore
-# [jenkins]
-python-jenkins
 # [mysql]
 mysqlclient
 # [prometheus]

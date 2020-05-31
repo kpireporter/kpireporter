@@ -181,7 +181,7 @@ class JenkinsBuildSummary(View):
         return dict(summary=summary)
 
     def _render(self, j2, fmt):
-        template = j2.get_template(f"plugins/jenkins_build_summary.{fmt}")
+        template = j2.get_template(f"jenkins_build_summary.{fmt}")
         return template.render(**self._template_vars())
 
     def render_html(self, j2):

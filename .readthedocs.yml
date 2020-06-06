@@ -17,3 +17,5 @@ python:
       path: plugins/jenkins
     - method: pip
       path: plugins/mysql
+    - method: pip
+      path: plugins/prometheus

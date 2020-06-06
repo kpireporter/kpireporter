@@ -166,7 +166,7 @@ class PrometheusAlertSummary(View):
         )
 
     def _render(self, j2, fmt):
-        template = j2.get_template(f"plugins/prometheus_alert_summary.{fmt}")
+        template = j2.get_template(f"prometheus_alert_summary.{fmt}")
         return template.render(**self._template_vars())
 
     def render_html(self, j2):

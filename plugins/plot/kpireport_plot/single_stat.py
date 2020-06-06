@@ -43,14 +43,14 @@ class SingleStat(View):
                     direction=stat_delta_direction)
 
     def render_html(self, j2):
-        template = j2.get_template("plugins/single_stat.html")
+        template = j2.get_template("single_stat.html")
         return template.render(theme=self.report.theme,
                                **self.template_args())
 
     def render_md(self, j2):
-        template = j2.get_template("plugins/single_stat.md")
+        template = j2.get_template("single_stat.md")
         return template.render(**self.template_args())
 
     def render_slack(self, j2):
-        template = j2.get_template("plugins/single_stat.slack")
+        template = j2.get_template("single_stat.slack")
         return template.render(**self.template_args())

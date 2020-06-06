@@ -9,5 +9,6 @@ pylama
 -e .
 -e ./plugins/jenkins
 -e ./plugins/mysql
+-e ./plugins/plot
 -e ./plugins/prometheus
 -e ./plugins/s3

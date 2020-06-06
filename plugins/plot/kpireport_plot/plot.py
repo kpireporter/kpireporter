@@ -111,11 +111,11 @@ class Plot(View):
             return figname
 
     def render_html(self, j2):
-        template = j2.get_template("plugins/plot.html")
+        template = j2.get_template("plot.html")
         return template.render(figure=self.render_figure())
 
     def render_md(self, j2):
-        template = j2.get_template("plugins/plot.md")
+        template = j2.get_template("plot.md")
         return template.render(figure=self.render_figure())
 
     def render_slack(self, j2):

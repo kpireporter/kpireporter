@@ -11,6 +11,7 @@ setup(
         "kpireport",
         "requests"
     ],
+    package_data={"templates": ["*"]},
     entry_points={
         "kpireport.datasource": [
             "prometheus = kpireport_prometheus.datasource:PrometheusDatasource"

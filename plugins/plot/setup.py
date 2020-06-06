@@ -1,15 +1,15 @@
 from setuptools import setup
 
 setup(
-    name="kpireport-prometheus",
+    name="kpireport-plot",
     version="0.0.1",
     author="Jason Anderson",
     author_email="diurnalist@gmail.com",
     license="Prosperity Public License",
-    packages=["kpireport_prometheus"],
+    packages=["kpireport_plot"],
     install_requires=[
         "kpireport",
-        "requests"
+        "matplotlib"
     ],
     package_data={"templates": ["*"]},
     entry_points={

@@ -11,5 +11,9 @@ python:
   version: 3.7
   install:
     - requirements: docs/requirements.txt
-    - method: setuptools
+    - method: pip
       path: .
+    - method: pip
+      path: plugins/jenkins
+    - method: pip
+      path: plugins/mysql

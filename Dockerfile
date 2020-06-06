@@ -47,4 +47,5 @@ COPY setup.* .
 RUN pip install . \
       plugins/jenkins \
       plugins/mysql \
-      plugins/prometheus
+      plugins/prometheus \
+      plugins/s3

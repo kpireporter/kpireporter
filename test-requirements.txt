@@ -10,3 +10,4 @@ pylama
 -e ./plugins/jenkins
 -e ./plugins/mysql
 -e ./plugins/prometheus
+-e ./plugins/s3

@@ -19,3 +19,5 @@ python:
       path: plugins/mysql
     - method: pip
       path: plugins/prometheus
+    - method: pip
+      path: plugins/s3

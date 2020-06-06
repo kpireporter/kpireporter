@@ -164,7 +164,7 @@ class PrometheusAlertSummary(View):
             for w in windows
         ]
 
-    @lru_cache
+    @lru_cache(maxsize=1)
     def _template_vars(self):
         df = self.datasources.query(
             self.datasource, "ALERTS", step=self.resolution.total_seconds())

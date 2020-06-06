@@ -70,7 +70,7 @@ class JenkinsBuildSummary(View):
         self.datasource = datasource
         self.filters = JenkinsBuildFilter(**filters)
 
-    @lru_cache
+    @lru_cache(maxsize=1)
     def _template_vars(self):
         jobs = self.datasources.query(self.datasource, "get_all_jobs")
 

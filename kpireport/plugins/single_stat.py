@@ -16,7 +16,7 @@ class SingleStat(View):
             raise ValueError((
                 "Both a 'datasource' and 'query' parameter are required"))
 
-    @lru_cache
+    @lru_cache(maxsize=1)
     def template_args(self):
         df = self.datasources.query(self.datasource, self.query)
         stat_value = df.index.array[0]

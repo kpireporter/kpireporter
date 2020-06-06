@@ -109,7 +109,7 @@ try:
         html_extra_path = ['_extra']
 except Exception as e:
     print("Unable to fetch GHA artifacts: ", e)
-    html_extra_path = ['../examples/_build']
+    html_extra_path = ['../_build']
 
 
 # Mock all the extra_requires modules. Without this, Sphinx cannot

@@ -50,7 +50,7 @@ log_step() {
 }
 
 rebuild() {
-  mkdir -p "$PROJ/examples/_build"
+  mkdir -p "$PROJ/_build"
   touch "$DIR/.env"
 
   log_step "Removing existing containers ..."

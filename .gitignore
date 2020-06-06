@@ -8,7 +8,7 @@ dist/
 # Dynamically-generated plugin deps
 plugin-requirements.txt
 # Report generation
-examples/_build/
+/_build/
 # Docs generation
 docs/_build/
 # Env files

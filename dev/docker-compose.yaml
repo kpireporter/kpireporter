@@ -56,7 +56,7 @@ services:
     image: nginx:stable
     volumes:
       - type: bind
-        source: ../examples/_build
+        source: ../_build
         target: /usr/share/nginx/html
         read_only: True
     ports:
@@ -66,9 +66,6 @@ services:
     build:
       context: ..
       target: dev
-      args:
-        pip_flags: -e
-    entrypoint: /bin/bash
     stdin_open: True
     tty: True
     env_file: .env

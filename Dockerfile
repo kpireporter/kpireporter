@@ -45,8 +45,4 @@ COPY plugins .
 COPY setup.* .
 
 RUN pip install . \
-      plugins/jenkins \
-      plugins/mysql \
-      plugins/plot \
-      plugins/prometheus \
-      plugins/s3
+  $(find plugins -mindepth 1 -maxdepth 1 -type d)

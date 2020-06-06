@@ -1,18 +1,12 @@
 from setuptools import setup
 
-plugin_name = "kpireport_jenkins"
-
 setup(
-    # Common
-    author="yourname",
-    author_email="yourname@email.com",
-    description="...",
-    license="MIT",
-    classifiers=[],
-    # Package
-    name=plugin_name,
+    name="kpireport-jenkins",
     version="0.0.1",
-    packages=[plugin_name],
+    author="Jason Anderson",
+    author_email="diurnalist@gmail.com",
+    license="Prosperity Public License",
+    packages=["kpireport_jenkins"],
     install_requires=[
         "kpireport",
         "python-jenkins"
@@ -20,10 +14,10 @@ setup(
     package_data={"templates": ["*"]},
     entry_points={
         "kpireport.datasource": [
-            "jenkins = kpireport_jenkins:JenkinsDatasource"
+            "jenkins = kpireport_jenkins.datasource:JenkinsDatasource"
         ],
         "kpireport.view": [
-            "jenkins.build_summary = kpireport_jenkins:JenkinsBuildSummary"
+            "jenkins.build_summary = kpireport_jenkins.build_summary:JenkinsBuildSummary"
         ]
     }
 )

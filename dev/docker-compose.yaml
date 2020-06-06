@@ -65,6 +65,7 @@ services:
   kpireport:
     build:
       context: ..
+      target: dev
       args:
         pip_flags: -e
     entrypoint: /bin/bash
@@ -73,19 +74,8 @@ services:
     env_file: .env
     volumes:
       - type: bind
-        source: ../kpireport
-        target: /opt/kpireport/kpireport
-      - type: bind
-        source: ../setup.cfg
-        target: /opt/kpireport/setup.cfg
-        read_only: True
-      - type: bind
-        source: ../examples
-        target: /opt/kpireport/examples
-        read_only: True
-      - type: bind
-        source: ../examples/_build
-        target: /opt/kpireport/_build
+        source: ..
+        target: /opt/kpireport
       - type: bind
         source: ${SCP_IDENTITY_FILE}
         target: /root/.ssh/id_rsa

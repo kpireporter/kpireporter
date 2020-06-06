@@ -1,0 +1,8 @@
+{
+  "name": "KPI Report development",
+  "dockerComposeFile": "../dev/docker-compose.yaml",
+  "service": "kpireport",
+  "workspaceFolder": "/opt/kpireport",
+  "shutdownAction": "stopCompose",
+  "initializeCommand": "./.devcontainer/init.sh"
+}

@@ -2,6 +2,7 @@
 set -e -u -o pipefail
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
+PROJ="$DIR/.."
 
 pushd "$DIR" >/dev/null
 
@@ -25,7 +26,7 @@ Options:
   -w|--watch: Automatically re-run on changes
 
 Examples:
-  ./run.sh -s examples/mysql.yaml
+  ./run.sh -c examples/mysql.yaml
 
   ./run.sh -w -c examples/mysql.yaml -c examples/outputs/smtp.yaml
 USAGE
@@ -49,13 +50,14 @@ log_step() {
 }
 
 rebuild() {
-  mkdir -p "$DIR/../examples/_build"
+  mkdir -p "$PROJ/examples/_build"
   touch "$DIR/.env"
 
   log_step "Removing existing containers ..."
   _dockercompose down
 
   log_step "Rebuilding application container ..."
+  cat "$PROJ/plugins/"*/requirements.txt >"$PROJ/plugin-requirements.txt"
   _dockercompose build -q kpireport
   _dockercompose rm -f --stop kpireport
 
@@ -113,7 +115,7 @@ if [[ $WATCH -eq 1 ]]; then
   done
 
   log_step "Starting watcher ..."
-  ag -l -G 'examples|kpireport' . "$DIR/.." | entr "${cmd[@]}" "${POSARGS[@]}"
+  ag -l -G 'examples|kpireport' . "$PROJ" | entr "${cmd[@]}" "${POSARGS[@]}"
 else
   log_step "Running command kpireporter ${POSARGS[@]} ..."
   "${cmd[@]}" "${POSARGS[@]}"

@@ -1,5 +1,4 @@
 .. _jenkins-plugin:
-.. currentmodule:: kpireport_jenkins
 
 ========
 Jenkins
@@ -25,6 +24,7 @@ Configuration
 Datasource
 ==========
 
+.. currentmodule:: kpireport_jenkins.datasource
 .. autoclass:: JenkinsDatasource
    :members:
    :show-inheritance:
@@ -36,6 +36,7 @@ Views
 Build summary
 -------------
 
+.. currentmodule:: kpireport_jenkins.build_summary
 .. autoclass:: JenkinsBuildSummary
    :members:
    :show-inheritance:

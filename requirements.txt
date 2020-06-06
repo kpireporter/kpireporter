@@ -5,15 +5,13 @@ premailer
 python-slugify
 pyyaml
 stevedore
-# [mysql]
-mysqlclient
-# [prometheus]
+# prometheus
 requests
-# [s3]
+# s3
 boto3
-# [scp]
+# scp
 fabric
-# [sendgrid]
+# sendgrid
 sendgrid
-# [slack]
+# slack
 slackclient

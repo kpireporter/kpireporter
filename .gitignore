@@ -5,6 +5,8 @@
 *.pyc
 __pycache__/
 dist/
+# Dynamically-generated plugin deps
+plugin-requirements.txt
 # Report generation
 examples/_build/
 # Docs generation

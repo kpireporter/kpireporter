@@ -1,5 +1,4 @@
 .. _mysql-plugin:
-.. currentmodule:: kpireport.plugins.mysql
 
 ======
 MySQL
@@ -20,6 +19,7 @@ Configuration
 Datasource
 ==========
 
+.. currentmodule:: kpireport_mysql.datasource
 .. autoclass:: MySQLDatasource
    :members:
    :show-inheritance:

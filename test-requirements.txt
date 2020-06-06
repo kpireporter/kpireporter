@@ -1,3 +1,7 @@
 nose
 nose-watch
+pep8
 pylama
+-e .
+-e ./plugins/jenkins
+-e ./plugins/mysql

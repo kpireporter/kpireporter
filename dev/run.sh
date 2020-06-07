@@ -58,7 +58,7 @@ rebuild() {
 
   log_step "Rebuilding application container ..."
   cat "$PROJ/plugins/"*/requirements.txt >"$PROJ/plugin-requirements.txt"
-  _dockercompose build -q kpireport
+  _dockercompose build kpireport
   _dockercompose rm -f --stop kpireport
 
   log_step "Regenerating fixture data ..."

@@ -25,6 +25,21 @@ types of plugins:
   disk, uploaded to a cloud storage system, or directly sent as mail.
   :ref:`Read more about Output drivers <api-output-driver>`.
 
+.. _plugins-available:
+
+Available plugins
+=================
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   *
+
+KPI Reporter only comes with a the :ref:`plot-plugin` and :ref:`static-plugin`
+plugins by default. For additional functionality, you should install the
+plugins relevant for your report.
+
 Installing plugins
 ==================
 
@@ -32,53 +47,26 @@ Plugins are Python modules, and can be installed however you prefer, e.g.,
 with ``pip``. Plugins must be installed into the same Python path as
 KPI Reporter, as that is how they are automatically discovered at runtime.
 
-.. _plugins-built-in:
+Plugins provided as part of KPI reporter are prefixed ``kpireport-``, and so
+are installed like the following:
 
-Built-in plugins
-================
+.. code-block:: shell
 
-The following plugins are provided with KPI reporter:
-
-.. toctree::
-   :maxdepth: 1
-
-   plot
-   slack
-   static
-   smtp
-
-Optional plugins
-================
-
-The built-in plugins provide the basic infrastructure for sending a variety
-of reports, but most likely you'll want to install some additional plugins
-to provide built-in visualizations or interface with common backends. Optional
-plugins are not bundled together with KPI Reporter and must be installed
-separately.
+    # Install KPI reporter with MySQL, Prometheus and SendGrid plugins
+    pip install \
+      kpireport \
+      kpireport-mysql \
+      kpireport-prometheus \
+      kpireport-sendgrid
 
 .. note::
 
-    It is possible to install all optional plugins:
+    It is possible to install all available plugins via the ``all`` extra:
 
       .. code-block:: shell
 
-          pip install kpireporter[plugins]
+          pip install kpireport[all]
 
-+--------------------------+-------------------------------+
-| Plugin                   | Package                       |
-+==========================+===============================+
-| :ref:`jenkins-plugin`    | ``kpireporter-jenkins``       |
-+--------------------------+-------------------------------+
-| :ref:`mysql-plugin`      | ``kpireporter-mysql``         |
-+--------------------------+-------------------------------+
-| :ref:`prometheus-plugin` | ``kpireporter-prometheus``    |
-+--------------------------+-------------------------------+
-| :ref:`s3-plugin`         | ``kpireporter-s3``            |
-+--------------------------+-------------------------------+
-| :ref:`scp-plugin`        | ``kpireporter-scp``           |
-+--------------------------+-------------------------------+
-| :ref:`sendgrid-plugin`   | ``kpireporter-sendgrid``      |
-+--------------------------+-------------------------------+
 
 Developing plugins
 ==================

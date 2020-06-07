@@ -4,6 +4,27 @@ from kpireport.view import View
 
 
 class SingleStat(View):
+    """Display a single stat and optionally a delta.
+
+    :type datasource: str
+    :param datasource: the ID of the Datasource to query
+    :type query: str
+    :param query: the query to execute agains the Datasource
+    :type label: str
+    :param label: a templated label that can be used to change how the stat
+                  is rendered. A ``{stat}`` template variable will be filled
+                  in with the stat value. (Default="{stat}")
+    :type comparison_query: str
+    :param comparison_query: an optional query to use as a comparison value.
+                             If defined, the current stat will be displayed,
+                             and the delta between the stat obtained via
+                             the comparison query will be shown next to it.
+    :type comparison_type: str
+    :param comparison_type: how to show the delta; possible values are "raw",
+                            meaning the raw difference between the two values
+                            is displayed, or "percent", meaning the percentage
+                            increase/decrease is displayed.
+    """
     def init(self, datasource=None, query=None, label="{stat}",
              comparison_query=None, comparison_type="raw"):
         self.datasource = datasource

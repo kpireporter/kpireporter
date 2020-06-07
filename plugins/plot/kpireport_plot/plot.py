@@ -12,6 +12,68 @@ DATE_FORMAT = "%b %-d\n(%a)"
 
 
 class Plot(View):
+    """Render a line or bar graph as a PNG file inline.
+
+    The :mod:`matplotlib` module handles rendering the plot. The Plot view
+    sets a few default styles that make sense for plotting timeseries data,
+    such as hiding the x-axis label and setting up date formatting for the
+    x major labels.
+
+    **Expected data formats**
+
+    The Plot plugin can work for many different types of queries and
+    Datasources, as long as a few properties hold for the response:
+
+     * The returned table should ideally only have two columns: one for the
+       time, and one for the value of the metric at that time.
+     * The table can have three columns, in which case the data will be
+       grouped by the last column. This can be useful if you want to display
+       multiple series in one plot.
+
+    Example of valid two-column result table:
+
+    +------------+----------+
+    | time       | value    |
+    +============+==========+
+    | 2020-01-01 | 1.0      |
+    +------------+----------+
+    | 2020-01-02 | 1.2      |
+    +------------+----------+
+    | 2020-01-03 | 2.1      |
+    +------------+----------+
+
+    Example of valid three-column result table:
+
+    +------------+----------+---------+
+    | time       | value    | country |
+    +============+==========+=========+
+    | 2020-01-01 | 1.0      | USA     |
+    +------------+----------+---------+
+    | 2020-01-01 | 3.2      | Germany |
+    +------------+----------+---------+
+    | 2020-01-02 | 1.2      | USA     |
+    +------------+----------+---------+
+    | 2020-01-02 | 2.7      | Germany |
+    +------------+----------+---------+
+
+
+    :type datasource: str
+    :param datasource: ID of Datasource to fetch from
+    :type query: str
+    :param query: the query to execute against the Datasource
+    :type query_args: dict
+    :param query_args: additional arguments to pass to the query function.
+                       Some Datasources may support additional parameters.
+    :type time_column: str
+    :param time_column: the name of the column in the query result table that
+                        contains timeseries data. (Default="time")
+    :type kind: str
+    :param kind: the kind of plot to draw. Currently only "line" and "bar" are
+                 officially supported, though other types supported by
+                 matplotlib may be possible. (Default="line")
+    :type plot_rc: dict
+    :param plot_rc: properties to set as :class:`matplotlib.RcParams`
+    """
     def init(self, datasource=None, query=None, query_args={},
              time_column="time", kind="line", plot_rc={}):
         self.datasource = datasource

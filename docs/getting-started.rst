@@ -18,7 +18,7 @@ Docker
 ------
 
 A Docker image is available on DockerHub with all dependencies required by
-:ref:`built-in plugins <plugins-built-in>`:
+:ref:`all available plugins <plugins-available>`:
 
 .. image:: https://img.shields.io/docker/build/diurnalist/kpireport
    :target: https://hub.docker.com
@@ -57,7 +57,11 @@ section.
 
   It is possible to specify multiple configuration files when generating a
   report. In this case, the configurations are merged together, with the last
-  file taking priority.
+  file taking priority:
+
+  .. code-block:: shell
+
+      kpireport -c base-config.yaml -c extra-config.yaml
 
 Schema
 ------
@@ -86,10 +90,10 @@ Schema
 
 
 Examples
---------
+========
 
 Top-of-funnel report
-^^^^^^^^^^^^^^^^^^^^
+--------------------
 
 `View HTML <./examples/latest-top-of-funnel-report>`_
 
@@ -110,7 +114,7 @@ show a high-level overview of the number of new signups over the last week
    </details>
 
 CI report
-^^^^^^^^^
+---------
 
 `View HTML <./examples/latest-ci-report>`_
 
@@ -130,7 +134,7 @@ show an overview of build jobs and their success/failure statuses.
    </details>
 
 Ops report
-^^^^^^^^^^
+----------
 
 `View HTML <./examples/latest-ops-report>`_
 

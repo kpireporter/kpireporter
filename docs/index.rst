@@ -5,9 +5,12 @@ KPI Reporter documentation
 KPI Reporter is a **developer-friendly**, **highly customizable** tool for
 sending periodic reports for the metrics that matter for your team or project.
 
-Support for a variety of reporting sources is built-in, including, e.g., MySQL
-databases, Prometheus metrics, and the Jenkins API. Reports can be sent via
-email (with plugins for SMTP and SendGrid), Slack, or simply rendered as HTML.
+Support for a variety of reporting sources is built-in, including, e.g.,
+:ref:`MySQL databases <mysql-plugin>`, :ref:`Prometheus metrics
+<prometheus-plugin>`, and the :ref:`Jenkins API <jenkins-plugin>`. Reports can
+be sent via email (with plugins for :ref:`SMTP <smtp-plugin>` and
+:ref:`SendGrid <sendgrid-plugin>`), :ref:`Slack <slack-plugin>`, or simply
+rendered as :ref:`HTML <static-plugin>`.
 
 .. note::
 
@@ -21,8 +24,8 @@ email (with plugins for SMTP and SendGrid), Slack, or simply rendered as HTML.
    :caption: Contents:
 
    getting-started
-   api/index
    plugins/index
+   api/index
    development
    about
 

@@ -4,5 +4,9 @@
   "service": "kpireport",
   "workspaceFolder": "/opt/kpireport",
   "shutdownAction": "stopCompose",
-  "initializeCommand": "./.devcontainer/init.sh"
+  "initializeCommand": "./.devcontainer/init.sh",
+  "extensions": [
+	  "lextudio.restructuredtext",
+	  "stkb.rewrap"
+  ]
 }

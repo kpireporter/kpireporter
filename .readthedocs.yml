@@ -31,3 +31,5 @@ python:
       path: plugins/sendgrid
     - method: pip
       path: plugins/slack
+    - method: pip
+      path: plugins/smtp

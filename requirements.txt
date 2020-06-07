@@ -4,5 +4,3 @@ premailer
 python-slugify
 pyyaml
 stevedore
-# slack
-slackclient

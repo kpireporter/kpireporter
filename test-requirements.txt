@@ -15,4 +15,5 @@ pylama
 -e ./plugins/scp
 -e ./plugins/sendgrid
 -e ./plugins/slack
+-e ./plugins/smtp
 -e ./plugins/static

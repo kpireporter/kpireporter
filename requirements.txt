@@ -1,17 +1,8 @@
 jinja2
-matplotlib
 pandas
 premailer
 python-slugify
 pyyaml
 stevedore
-# prometheus
-requests
-# s3
-boto3
-# scp
-fabric
-# sendgrid
-sendgrid
 # slack
 slackclient

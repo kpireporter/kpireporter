@@ -27,3 +27,5 @@ python:
       path: plugins/s3
     - method: pip
       path: plugins/scp
+    - method: pip
+      path: plugins/sendgrid

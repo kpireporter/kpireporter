@@ -13,4 +13,5 @@ pylama
 -e ./plugins/prometheus
 -e ./plugins/s3
 -e ./plugins/scp
+-e ./plugins/sendgrid
 -e ./plugins/static

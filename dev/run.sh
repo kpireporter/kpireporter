@@ -98,6 +98,12 @@ fi
 
 if [[ $REBUILD -eq 1 ]]; then
   rebuild
+  # This is a total hack; it's possible to `exec` inside a container before
+  # the entrypoint has finished execution on the initial command. The
+  # entrypoint is responsible for doing local installs of all the plugins,
+  # so if an exec comes in too quickly, it can fail due.
+  log_step "Waiting for container to install all local dependencies ..."
+  sleep 10
 fi
 
 declare -a cmd=(

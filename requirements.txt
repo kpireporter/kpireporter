@@ -1,6 +1,5 @@
 jinja2
 pandas
-premailer
 python-slugify
 pyyaml
 stevedore

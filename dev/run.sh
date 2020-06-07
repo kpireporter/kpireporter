@@ -97,13 +97,24 @@ if [[ ${#POSARGS[@]} -eq 0 ]]; then
 fi
 
 if [[ $REBUILD -eq 1 ]]; then
+  echo 0 >"$DIR/.kpireport_ready_signal"
   rebuild
-  # This is a total hack; it's possible to `exec` inside a container before
+  # This is a bit of a hack; it's possible to `exec` inside a container before
   # the entrypoint has finished execution on the initial command. The
   # entrypoint is responsible for doing local installs of all the plugins,
-  # so if an exec comes in too quickly, it can fail due.
+  # so if an exec comes in too quickly, it can fail due to missing deps.
   log_step "Waiting for container to install all local dependencies ..."
-  sleep 10
+  timeout=120
+  attempts=0
+  while [[ $(cat "$DIR/.kpireport_ready_signal") -eq 0 ]]; do
+    sleep 1
+    attempts=$((attempts + 1))
+    [[ $attempts -gt $timeout ]] && {
+      echo "Failed to get ready signal after ${timeout}s"
+      exit 1
+    }
+  done
+  echo "Waited ${attempts}s"
 fi
 
 declare -a cmd=(

@@ -11,5 +11,7 @@ plugin-requirements.txt
 /_build/
 # Docs generation
 docs/_build/
+# Dev environment ready signal
+dev/.kpireport_ready_signal
 # Env files
 .env

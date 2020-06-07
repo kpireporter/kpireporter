@@ -77,6 +77,9 @@ services:
         source: ${SCP_IDENTITY_FILE}
         target: /root/.ssh/id_rsa
         read_only: True
+      - type: bind
+        source: .kpireport_ready_signal
+        target: /root/kpireport_ready_signal
     depends_on:
       - jenkins
       - mysql

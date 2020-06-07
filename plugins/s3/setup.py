@@ -13,7 +13,7 @@ setup(
     ],
     entry_points={
         "kpireport.output": [
-            "s3 = kpireport_s3.output:S3OutputDriver"
+            "s3 = kpireport_s3:S3OutputDriver"
         ],
     }
 )

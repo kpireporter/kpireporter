@@ -14,6 +14,8 @@ python:
     - method: pip
       path: .
     - method: pip
+      path: plugins/static  # Install first, as some plugins extend this
+    - method: pip
       path: plugins/jenkins
     - method: pip
       path: plugins/mysql
@@ -23,3 +25,5 @@ python:
       path: plugins/prometheus
     - method: pip
       path: plugins/s3
+    - method: pip
+      path: plugins/scp

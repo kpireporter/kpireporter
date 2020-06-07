@@ -14,10 +14,10 @@ setup(
     package_data={"templates": ["*"]},
     entry_points={
         "kpireport.datasource": [
-            "jenkins = kpireport_jenkins.datasource:JenkinsDatasource"
+            "jenkins = kpireport_jenkins:JenkinsDatasource"
         ],
         "kpireport.view": [
-            "jenkins.build_summary = kpireport_jenkins.build_summary:JenkinsBuildSummary"
+            "jenkins.build_summary = kpireport_jenkins:JenkinsBuildSummary"
         ]
     }
 )

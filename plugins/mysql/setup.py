@@ -13,7 +13,7 @@ setup(
     ],
     entry_points={
         "kpireport.datasource": [
-            "mysql = kpireport_mysql.datasource:MySQLDatasource"
+            "mysql = kpireport_mysql:MySQLDatasource"
         ],
     }
 )

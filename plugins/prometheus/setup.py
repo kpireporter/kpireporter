@@ -14,10 +14,10 @@ setup(
     package_data={"templates": ["*"]},
     entry_points={
         "kpireport.datasource": [
-            "prometheus = kpireport_prometheus.datasource:PrometheusDatasource"
+            "prometheus = kpireport_prometheus:PrometheusDatasource"
         ],
         "kpireport.view": [
-            "prometheus.alert_summary = kpireport_prometheus.alert_summary:PrometheusAlertSummary"
+            "prometheus.alert_summary = kpireport_prometheus:PrometheusAlertSummary"
         ],
     }
 )

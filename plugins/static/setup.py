@@ -1,21 +1,18 @@
 from setuptools import setup
 
 setup(
-    name="kpireport-plot",
+    name="kpireport-static",
     version="0.0.1",
     author="Jason Anderson",
     author_email="diurnalist@gmail.com",
     license="Prosperity Public License",
-    packages=["kpireport_plot"],
+    packages=["kpireport_static"],
     install_requires=[
         "kpireport",
-        "matplotlib"
     ],
-    package_data={"templates": ["*"]},
     entry_points={
-        "kpireport.view": [
-            "plot = kpireport_plot:Plot",
-            "single_stat = kpireport_plot:SingleStat"
+        "kpireport.output": [
+            "static = kpireport_static:StaticOutputDriver"
         ],
     }
 )

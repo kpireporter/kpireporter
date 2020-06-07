@@ -1,5 +1,5 @@
 from setuptools import setup
 
 setup(
-    python_requires='~=3.2',
+    python_requires='~=3.3',
 )

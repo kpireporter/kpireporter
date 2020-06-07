@@ -12,3 +12,5 @@ pylama
 -e ./plugins/plot
 -e ./plugins/prometheus
 -e ./plugins/s3
+-e ./plugins/scp
+-e ./plugins/static

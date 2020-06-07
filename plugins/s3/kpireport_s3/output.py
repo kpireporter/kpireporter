@@ -2,7 +2,7 @@ import boto3
 import tempfile
 import os
 
-from kpireport.plugins.static import StaticOutputDriver
+from kpireport_static import StaticOutputDriver
 
 import logging
 LOG = logging.getLogger(__name__)

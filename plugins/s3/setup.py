@@ -10,7 +10,7 @@ setup(
     install_requires=[
         "kpireport",
         "kpireport-static",
-        "boto"
+        "boto3"
     ],
     entry_points={
         "kpireport.output": [

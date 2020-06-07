@@ -9,7 +9,7 @@ setup(
     packages=["kpireport_scp"],
     install_requires=[
         "kpireport",
-        "kpireport_static",
+        "kpireport-static",
         "fabric"
     ],
     entry_points={

@@ -9,6 +9,7 @@ setup(
     packages=["kpireport_s3"],
     install_requires=[
         "kpireport",
+        "kpireport-static",
         "boto"
     ],
     entry_points={

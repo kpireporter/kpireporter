@@ -7,6 +7,10 @@ pylama
 # processing this list, and the plugins require
 # kpireport on installation.
 -e .
+# The order of the plugins matters, because some plugins
+# extend from others (currently the 'static' plugin is the
+# only one used as a base representation)
+-e ./plugins/static
 -e ./plugins/jenkins
 -e ./plugins/mysql
 -e ./plugins/plot
@@ -16,4 +20,3 @@ pylama
 -e ./plugins/sendgrid
 -e ./plugins/slack
 -e ./plugins/smtp
--e ./plugins/static

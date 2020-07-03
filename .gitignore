@@ -1,3 +1,5 @@
+# Editor configs
+.vscode/
 # tox build
 .tox/
 # Python builds

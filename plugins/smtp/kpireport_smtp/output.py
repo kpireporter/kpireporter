@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from email.message import EmailMessage
 from email.headerregistry import Address
 from jinja2 import Markup
@@ -24,6 +26,7 @@ class SMTPOutputDriver(OutputDriver):
                 image_remote_base_url.format(**self.report.__dict__))
         else:
             self.image_remote_base_url = None
+        self.cache_buster = f'?_={datetime.now()}'
 
     def _parse_address(self, address):
         username, domain = address.split("@")
@@ -34,7 +37,7 @@ class SMTPOutputDriver(OutputDriver):
             return Markup(f"""<img src="cid:{blob["id"]}" />""")
         elif self.image_strategy == "remote":
             path = "/".join([self.image_remote_base_url, blob["id"]])
-            return Markup(f"""<img src="{path}" />""")
+            return Markup(f"""<img src="{path}{self.cache_buster}" />""")
         else:
             raise ValueError(
                 f"Unsupported image strategy '{self.image_strategy}'")

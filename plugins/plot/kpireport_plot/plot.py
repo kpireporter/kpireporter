@@ -140,6 +140,11 @@ class Plot(View):
                 "column and an optional grouping column."
             ))
 
+        # Ensure data is sorted along index; if it is not, matplotlib can
+        # fail to properly graph it.
+        df = df.sort_index()
+        LOG.info(df)
+
         with plt.rc_context(self.matplotlib_rc):
             fig, ax = plt.subplots(figsize=[self.cols, 2])
 

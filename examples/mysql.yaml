@@ -43,7 +43,9 @@ views:
         # Because we're roughly grouping by day, and not a full date time,
         # automatic parsing of dates doesn't quite work, so we need to give
         # a bit of help to say which columns should be treated as dates.
-        parse_dates: ['day']
+        parse_dates:
+          day: '%Y-%m-%d'
+      time_column: day
   # Additionally, show a stat indicating how much the total signups have
   # increased (or decreased) in comparison to the previous report period.
   signups_change:

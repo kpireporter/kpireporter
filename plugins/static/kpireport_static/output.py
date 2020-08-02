@@ -19,7 +19,7 @@ class StaticOutputDriver(OutputDriver):
             return Markup(f"""<img src="{blob["id"]}" />""")
 
     def render_output(self, content, blobs):
-        content = content.get("html")
+        content = content.get_format("html")
         report_dir = os.path.join(self.output_dir, self.report.id)
         latest_dir = os.path.join(
             self.output_dir,

@@ -23,6 +23,11 @@ class S3OutputDriver(StaticOutputDriver):
         super(S3OutputDriver, self).init(output_dir=self.tmp_dir.name)
 
     def render_output(self, content, blobs):
+        """Write the static output to the specified S3 bucket.
+
+        Args:
+            content (dict): something
+        """
         super(S3OutputDriver, self).render_output(content, blobs)
 
         with self.tmp_dir as tmp_dir:

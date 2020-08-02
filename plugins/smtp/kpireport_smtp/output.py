@@ -45,8 +45,8 @@ class SMTPOutputDriver(OutputDriver):
         msg["From"] = self.email_from
         msg["To"] = self.email_to
 
-        msg.set_content(content.get("md"))
-        html = transform(content.get("html"))
+        msg.set_content(content.get_format("md"))
+        html = transform(content.get_format("html"))
         msg.add_alternative(html, subtype="html")
 
         if self.image_strategy == "embed":

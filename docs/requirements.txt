@@ -3,3 +3,4 @@ sphinx>2.0.0
 sphinx-autobuild
 sphinx-autodoc-typehints
 sphinx-rtd-theme
+sphinxcontrib-napoleon

@@ -1,5 +1,14 @@
 .. _s3-plugin:
+.. currentmodule:: kpireport_s3
 
 ===
 S3
 ===
+
+Output driver
+=============
+
+.. autoclass:: S3OutputDriver
+   :members:
+   :show-inheritance:
+   :exclude-members: init

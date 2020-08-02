@@ -42,6 +42,7 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinx_rtd_theme',
+    'sphinxcontrib.napoleon',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -116,4 +117,4 @@ except Exception as e:
 # generate documentation via autodoc unless the relevant dependencies
 # are explicitly installed, which we don't want to require. It is fine
 # to mock the extra dependencies here.
-autodoc_mock_imports = ['jenkins', 'MySQLdb']
+autodoc_mock_imports = ['boto3', 'jenkins', 'MySQLdb']

@@ -16,7 +16,7 @@ RUN pip install \
   -r requirements.txt \
   -r plugin-requirements.txt
 
-FROM python:3 as base
+FROM python:slim as base
 
 RUN mkdir /opt/kpireport
 WORKDIR /opt/kpireport

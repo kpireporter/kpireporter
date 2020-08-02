@@ -76,7 +76,7 @@ class SlackOutputDriver(OutputDriver):
         return str(link)
 
     def render_output(self, content, blobs):
-        views = content.get("slack_views", [])
+        views = content.get_views("slack", [])
 
         blks = []
 

@@ -7,14 +7,17 @@ MySQL
 The MySQL plugin provides a Datasource that enables execution of SQL queries
 against an existing MySQL database.
 
-Example
-=======
+.. raw:: html
 
-Configuration
--------------
+   <details>
+     <summary><strong>Show/hide example configuration YAML</strong></summary>
 
 .. literalinclude:: ../../examples/mysql.yaml
    :language: yaml
+
+.. raw:: html
+
+   </details>
 
 Datasource
 ==========

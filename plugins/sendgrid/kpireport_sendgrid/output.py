@@ -50,7 +50,7 @@ class SendGridOutputDriver(OutputDriver):
             from_email=self.email_from,
             to_emails=self.email_to,
             subject=self.report.title,
-            html_content=transform(content.get("html"))
+            html_content=transform(content.get_format("html"))
         )
 
         if self._sandbox_mode:

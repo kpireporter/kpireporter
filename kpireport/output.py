@@ -9,17 +9,16 @@ class OutputDriverError(Exception):
 
 class OutputDriver(ABC):
     """
-    :param report: the Report object.
-    :type report: :class:`kpireport.report.Report`
-    :param id: the Output driver ID declared in the report configuration.
-    :type id: str
-    :param **kwargs: Additional output driver parameters, declared as ``args``
-                     in the report configuration.
+    Attributes:
+        report (:class:`~kpireport.report.Report`): the current report.
+        id (str): the Output driver ID declared in the report configuration.
+        supported_formats (List[str]): a list of output formats supported by this
+            driver. Defaults to ``["md", "html"]``.
     """
     id: str = None
-    supported_formats: list = ["md", "html"]
+    supported_formats: 'List[str]' = ["md", "html"]
 
-    def __init__(self, report, **kwargs):
+    def __init__(self, report: 'kpireport.report.Report', **kwargs):
         self.report = report
         if "id" in kwargs:
             self.id = kwargs.pop("id")
@@ -27,11 +26,11 @@ class OutputDriver(ABC):
 
     @abstractmethod
     def init(self, **kwargs):
-        """
-        Initialize the output driver from the report configuration.
+        """Initialize the output driver from the report configuration.
 
-        :param **kwargs: Arbitrary keyword arguments, declared as ``args``
-                         in the report configuration.
+        Args:
+            **kwargs: Arbitrary keyword arguments, declared as ``args``
+                in the report configuration.
         """
         pass
 
@@ -39,24 +38,24 @@ class OutputDriver(ABC):
         raise NotImplementedError(
             f"'{self.id}' driver does not support inline blobs")
 
-    def can_render(self, fmt):
+    def can_render(self, fmt: str) -> bool:
+        """Determine if this driver supports a given output format.
+
+        Args:
+            fmt (str): the desired output format.
+
+        Returns:
+            bool: whether the output format can be rendered.
+        """
         return fmt in self.supported_formats
 
     @abstractmethod
-    def render_output(self, content, blobs):
-        """
-        Render the report content for the target delivery mechanism.
+    def render_output(self, content: 'kpireport.report.Content', blobs):
+        """Render the report content for the target delivery mechanism.
 
-        :param content: The report contents, rendered in a variety of formats:
-
-          :html: (str) The HTML content
-          :md: (str) The Markdown content
-          :views_html: (list) The individual Views HTML output
-          :views_md: (list) The individual Views MD output
-
-        :type content: dict
-        :param blobs: The list of Blobs rendered by all Views in the report.
-        :type blobs: list
+        Args:
+            content (:class:`~kpireport.report.Content`): the report contents.
+            blobs (List[Blob]): the blobs generated as part of the report.
         """
         pass
 

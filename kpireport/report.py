@@ -47,6 +47,57 @@ class Report:
         return self.end_date - self.start_date
 
 
+class Content:
+    """Contents
+    """
+    def __init__(self, j2: 'Environment', report: 'Report'):
+        self.j2 = j2
+        self.report = report
+        self._formats = {}
+
+    def add_format(self, fmt: str, views: 'list[View]'):
+        try:
+            template = self.j2.get_template(f"layout/default.{fmt}")
+        except TemplateNotFound:
+            LOG.warning((
+                f"No parent template found for format {fmt}, so no "
+                "final output text can be written. Views will still "
+                "be rendered individually."))
+            content = None
+        else:
+            content = template.render(views=views, report=self.report)
+
+        # Also store a list of the raw views to allow the output
+        # driver to render its own output structure
+        self._formats[fmt] = dict(content=content, views=views)
+
+    @property
+    def formats(self):
+        return self._formats.keys()
+
+    def get_format(self, fmt: str) -> 'Optional[str]':
+        """Get the rendered string for the given format.
+
+        Args:
+            fmt (str): the desired output format.
+
+        Returns:
+            Optional[str]: the rendered content for the given format, if any.
+        """
+        return self._formats.get(fmt, {}).get('content')
+
+    def get_views(self, fmt: str) -> 'list[kpireport.view.View]':
+        """Get the rendered views for the given format.
+
+        Args:
+            fmt (str): the desired output format.
+
+        Returns:
+            List[View]: the list of Views rendered under that format.
+        """
+        return self._formats.get(fmt, {}).get('views', [])
+
+
 class ReportFactory:
     supported_formats = ["html", "md", "slack"]
 
@@ -74,21 +125,8 @@ class ReportFactory:
     def create(self):
         for id, output_driver in self.odm.instances:
             LOG.info(f"Sending report via output driver {id}")
-            content = {}
+            content = Content(self.env, self.report)
             for fmt in self.supported_formats:
                 views = self.vm.render(self.env, fmt, output_driver)
-                try:
-                    template = self.env.get_template(f"layout/default.{fmt}")
-                except TemplateNotFound:
-                    LOG.warning((
-                        f"No parent template found for format {fmt}, so no "
-                        "final output text can be written. Views will still "
-                        "be rendered individually."))
-                    content[fmt] = None
-                else:
-                    content[fmt] = template.render(views=views,
-                                                   report=self.report)
-                # Also store a list of the raw views to allow the output
-                # driver to render its own output structure
-                content[f"{fmt}_views"] = views
+                content.add_format(fmt, views)
             output_driver.render_output(content, self.vm.blobs)

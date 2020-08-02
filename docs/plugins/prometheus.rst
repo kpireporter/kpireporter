@@ -35,9 +35,14 @@ Views
 Alert summary
 -------------
 
-.. image:: ../../examples/rendered/html/prometheus.alert_summary.png
+.. figure:: ../../examples/rendered/html/prometheus.alert_summary.png
    :target: ../../examples/latest-ops-report/index.html
    :alt: prometheus.alert_summary
+
+   An example rendered alert summary. The timeline at the top displays the
+   points in time when any alert was firing over the report window.
+   Individual alert labels are not shown; the view's purpose is to highlight
+   trends or patterns that can be looked at in more detail at the source.
 
 .. autoclass:: PrometheusAlertSummary
    :members:

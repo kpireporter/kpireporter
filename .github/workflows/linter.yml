@@ -1,0 +1,22 @@
+---
+  name: Lint codebase
+
+  on:
+    push:
+      branches: [master]
+    pull_request:
+      branches: [master]
+
+  jobs:
+    build:
+      name: Lint codebase
+      runs-on: ubuntu-latest
+
+      steps:
+        - uses: actions/checkout@v2
+
+        - name: Lint codebase
+          uses: docker://github/super-linter:v3
+          env:
+            VALIDATE_ALL_CODEBASE: true
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

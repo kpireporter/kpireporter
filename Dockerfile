@@ -18,6 +18,10 @@ RUN pip install \
 
 FROM python:slim as base
 
+RUN apt-get update -y && apt-get install -y \
+    default-mysql-client \
+  && rm -rf /var/lib/apt/lists/*
+
 RUN mkdir /opt/kpireport
 WORKDIR /opt/kpireport
 

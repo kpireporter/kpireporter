@@ -20,8 +20,8 @@ Docker
 A Docker image is available on DockerHub with all dependencies required by
 :ref:`all available plugins <plugins-available>`:
 
-.. image:: https://img.shields.io/docker/build/diurnalist/kpireport
-   :target: https://hub.docker.com
+.. image:: https://images.microbadger.com/badges/version/diurnalist/kpireporter.svg
+   :target: https://hub.docker.com/repository/docker/diurnalist/kpireporter
 
 Usage
 =====

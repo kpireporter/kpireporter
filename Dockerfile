@@ -25,6 +25,10 @@ RUN apt-get update -y && apt-get install -y \
 RUN mkdir /opt/kpireport
 WORKDIR /opt/kpireport
 
+# Declare a volume for any additional plugins to
+# be mounted in at container runtime.
+VOLUME /plugins
+
 COPY --from=builder /opt/venv /opt/venv
 ENV PATH="/opt/venv/bin:$PATH"
 
@@ -44,9 +48,14 @@ ENTRYPOINT [ "/docker-entrypoint.sh" ]
 
 FROM base as release
 
-COPY kpireport .
-COPY plugins .
-COPY setup.* .
+COPY kpireport ./kpireport
+COPY plugins ./plugins
+COPY setup.* ./
 
-RUN pip install . \
-  $(find plugins -mindepth 1 -maxdepth 1 -type d)
+# Due to pip not having a dependency resolver[1], we need
+# to ensure that any "base" plugins that are used by other
+# plugins are installed first; the "static" plugin is the
+# first example.
+# [1]: https://github.com/pypa/pip/issues/988
+RUN pip install . plugins/static \
+  && pip install $(find plugins -mindepth 1 -maxdepth 1 -type d)

@@ -75,12 +75,15 @@ class Plot(View):
     :param plot_rc: properties to set as :class:`matplotlib.RcParams`
     """
     def init(self, datasource=None, query=None, query_args={},
-             time_column="time", kind="line", plot_rc={}):
+             time_column="time", kind="line", stacked=False, legend=None,
+             plot_rc={}):
         self.datasource = datasource
         self.query = query
         self.query_args = query_args
         self.time_column = time_column
         self.kind = kind
+        self.stacked = stacked
+        self.legend = legend
         self.plot_rc = plot_rc
 
         if not (self.datasource and self.query):
@@ -157,12 +160,21 @@ class Plot(View):
                 ax.xaxis.set_major_formatter(
                     mdates.DateFormatter(DATE_FORMAT))
                 plt.xticks(rotation=30)
-                plt.bar(pd.to_datetime(df.index), df[df.columns[0]])
+                plt.bar(
+                    pd.to_datetime(df.index), df[df.columns[0]],
+                    stacked=self.stacked)
             else:
-                df.plot(ax=ax, kind=self.kind, legend=None, title=None)
+                df.plot(
+                    ax=ax, kind=self.kind, legend=None, title=None,
+                    stacked=self.stacked)
 
-            if getattr(df, "groups", None):
+            if self.legend is None and getattr(df, "groups", None):
+                # Automatically generate legend by default if we're plotting
+                # grouped data.
                 ax.legend(df.groups, bbox_to_anchor=(1, 1))
+            elif self.legend:
+                l_kwargs = self.legend if isinstance(self.legend, dict) else {}
+                ax.legend(**l_kwargs)
 
             ax.set_xlabel("")
 

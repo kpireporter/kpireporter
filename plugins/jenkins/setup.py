@@ -11,7 +11,7 @@ setup(
         "kpireport",
         "python-jenkins"
     ],
-    package_data={"templates": ["*"]},
+    package_data={"kpireport_jenkins": ["templates/*"]},
     entry_points={
         "kpireport.datasource": [
             "jenkins = kpireport_jenkins:JenkinsDatasource"

@@ -11,7 +11,7 @@ setup(
         "kpireport",
         "matplotlib"
     ],
-    package_data={"templates": ["*"]},
+    package_data={"kpireport_plot": ["templates/*"]},
     entry_points={
         "kpireport.view": [
             "plot = kpireport_plot:Plot",

@@ -33,6 +33,12 @@ class MySQLDatasource(Datasource):
                ; Also include previous interval
                WHERE time > DATE_SUB({from}, {interval})
 
+        .. NOTE::
+
+           By default, automatic date parsing will occur over the first column
+           returned by the query. This can be disabled by passing in an empty
+           list or dict to the ``parse_dates`` kwarg.
+
 
         :type sql: str
         :param sql: the SQL query to execute
@@ -43,7 +49,14 @@ class MySQLDatasource(Datasource):
         """
         sql, params = self.format_sql(sql)
         kwargs.setdefault("params", params)
+        parse_dates = kwargs.setdefault("parse_dates", None)
         df = pd.read_sql(sql, self.db, **kwargs)
+
+        if parse_dates is None:
+            # Default to trying to parse the first column as some date format.
+            df[df.columns[0]] = pd.to_datetime(df[df.columns[0]],
+                errors="ignore", infer_datetime_format=True)
+
         df = df.set_index(df.columns[0])
         return df
 

@@ -110,7 +110,7 @@ class Plot(View):
             "ytick.labelsize": 8,
             "ytick.color": text_color,
             "ytick.direction": "in",
-            "legend.loc": "upper left",
+            "legend.loc": "best",
             "legend.frameon": False,
             "legend.fancybox": False,
             "legend.borderpad": 0,
@@ -127,26 +127,27 @@ class Plot(View):
     def render_figure(self):
         df = self.datasources.query(self.datasource, self.query,
                                     **self.query_args)
-
         if self.time_column in df:
             df = df.set_index(self.time_column)
 
-        if df.columns.size == 2:
-            LOG.debug((
-                "Automatically grouping data by "
-                f"column='{df.columns[1]}'"))
-            df = df.groupby(df.columns[1])
-        elif df.columns.size > 2:
-            LOG.warn((
-                f"Dataframe has multiple columns: {list(df.columns)}. "
-                "Two-dimensional plots will work best with only a value "
-                "column and an optional grouping column."
-            ))
+        if not self.stacked:
+            # The auto-grouping behavior only makes sense if we're not told
+            # to create a stacked graph.
+            if df.columns.size == 2:
+                LOG.debug((
+                    "Automatically grouping data by "
+                    f"column='{df.columns[1]}'"))
+                df = df.groupby(df.columns[1])
+            elif df.columns.size > 2:
+                LOG.warn((
+                    f"Dataframe has multiple columns: {list(df.columns)}. "
+                    "Two-dimensional plots will work best with only a value "
+                    "column and an optional grouping column."
+                ))
 
         # Ensure data is sorted along index; if it is not, matplotlib can
         # fail to properly graph it.
         df = df.sort_index()
-        LOG.info(df)
 
         with plt.rc_context(self.matplotlib_rc):
             fig, ax = plt.subplots(figsize=[self.cols, 2])
@@ -159,13 +160,14 @@ class Plot(View):
             if self.kind == "bar" and isinstance(df.index, pd.DatetimeIndex):
                 ax.xaxis.set_major_formatter(
                     mdates.DateFormatter(DATE_FORMAT))
-                plt.xticks(rotation=30)
-                plt.bar(
-                    pd.to_datetime(df.index), df[df.columns[0]],
-                    stacked=self.stacked)
+                ax.bar(df.index, df[df.columns[0]])
+                if self.stacked:
+                    bottom = df[df.columns[0]]
+                    for col in df.columns[1:]:
+                        ax.bar(df.index, df[col], bottom=bottom)
+                        bottom += df[col]
             else:
-                df.plot(
-                    ax=ax, kind=self.kind, legend=None, title=None,
+                df.plot(ax=ax, kind=self.kind, legend=None, title=None,
                     stacked=self.stacked)
 
             if self.legend is None and getattr(df, "groups", None):
@@ -174,7 +176,7 @@ class Plot(View):
                 ax.legend(df.groups, bbox_to_anchor=(1, 1))
             elif self.legend:
                 l_kwargs = self.legend if isinstance(self.legend, dict) else {}
-                ax.legend(**l_kwargs)
+                ax.legend(df.columns, **l_kwargs)
 
             ax.set_xlabel("")
 

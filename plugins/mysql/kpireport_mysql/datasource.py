@@ -4,6 +4,9 @@ import re
 
 from kpireport.datasource import Datasource
 
+import logging
+LOG = logging.getLogger(__name__)
+
 
 class MySQLDatasource(Datasource):
     """Provides an interface for running queries agains a MySQL database.
@@ -58,6 +61,7 @@ class MySQLDatasource(Datasource):
                 errors="ignore", infer_datetime_format=True)
 
         df = df.set_index(df.columns[0])
+        LOG.debug(f'Query result: {df}')
         return df
 
     def format_sql(self, sql: str) -> (str, list):

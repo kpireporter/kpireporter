@@ -36,6 +36,27 @@ class StaticOutputDriver(OutputDriver):
                 f.write(blob["content"].getvalue())
 
         try:
-            shutil.copytree(report_dir, latest_dir, dirs_exist_ok=True)
+            os.makedirs(latest_dir, exist_ok=True)
+            try:
+                shutil.copytree(report_dir, latest_dir, dirs_exist_ok=True)
+            except TypeError:
+                # On Python < 3.8, where dirs_exist_ok parameter doesn't exist.
+                _copytree(report_dir, latest_dir)
         except Exception:
             LOG.exception("Error saving latest report")
+
+
+def _copytree(src, dst, symlinks=False, ignore=None):
+    """Shimmed shutils.copytree that handles directories already existing.
+
+    Credit: https://stackoverflow.com/a/12514470/493110
+
+    NOTE(jason): Remove when support for Python <3.8 is dropped.
+    """
+    for item in os.listdir(src):
+        s = os.path.join(src, item)
+        d = os.path.join(dst, item)
+        if os.path.isdir(s):
+            _copytree(s, d, symlinks, ignore)
+        else:
+            shutil.copy2(s, d)

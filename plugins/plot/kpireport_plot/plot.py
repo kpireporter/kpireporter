@@ -116,9 +116,9 @@ class Plot(View):
             "legend.borderpad": 0,
             "legend.fontsize": "small",
             "date.autoformatter.day": DATE_FORMAT,
-            "figure.dpi": 300,
+            "figure.dpi": 144,  # Retina display (ish)
             "savefig.bbox": "tight",
-            "savefig.pad_inches": 0,
+            "savefig.pad_inches": 0.083,
         }
         for k, v in rc_defaults.items():
             rc_params.setdefault(k, v)
@@ -150,7 +150,7 @@ class Plot(View):
         df = df.sort_index()
 
         with plt.rc_context(self.matplotlib_rc):
-            fig, ax = plt.subplots(figsize=[self.cols, 2])
+            fig, ax = plt.subplots(figsize=[self.cols, 2], constrained_layout=True)
 
             """
             Pandas is not great at handling custom date formats in a bar

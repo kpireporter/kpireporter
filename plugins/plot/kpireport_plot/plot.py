@@ -1,3 +1,4 @@
+from cycler import cycler
 import io
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
@@ -71,20 +72,39 @@ class Plot(View):
     :param kind: the kind of plot to draw. Currently only "line" and "bar" are
                  officially supported, though other types supported by
                  matplotlib may be possible. (Default="line")
+    :type stacked: bool
+    :param stacked: whether to display the line/bar graph types as a stacked
+                    plot, where each series is stacked atop the last.
+    :type bar_labels: bool
+    :param bar_labels: whether to label each bar with its value (only relevant
+                       when kind is "bar".)
+    :type xtick_rotation: Union[int, str]
+    :param xtick_rotation: how much to rotate the X labels by when displaying.
     :type plot_rc: dict
     :param plot_rc: properties to set as :class:`matplotlib.RcParams`
     """
     def init(self, datasource=None, query=None, query_args={},
              time_column="time", kind="line", stacked=False, legend=None,
-             plot_rc={}):
+             bar_labels=False, xtick_rotation=0, plot_rc={}):
         self.datasource = datasource
         self.query = query
         self.query_args = query_args
         self.time_column = time_column
         self.kind = kind
         self.stacked = stacked
+        self.bar_labels = bar_labels
+        self.xtick_rotation = xtick_rotation
         self.legend = legend
         self.plot_rc = plot_rc
+
+        # TODO: make these configurable via the Theme
+        self.text_color = "#222222"
+        self.axis_color = "#cccccc"
+        self.plot_colors = [
+            "#0F5F0F", "#2D882D", "#94D794",
+            "#DEA271", "#764013",
+            "#B25B8C", "#5F0F3C",
+        ]
 
         if not (self.datasource and self.query):
             raise ValueError((
@@ -92,25 +112,23 @@ class Plot(View):
 
     @property
     def matplotlib_rc(self):
-        text_color = "#222222"
-        axis_color = "#cccccc"
-
         rc_params = self.plot_rc.copy()
         rc_defaults = {
             "lines.linewidth": 3,
-            "text.color": text_color,
-            "axes.edgecolor": axis_color,
-            "axes.titlecolor": text_color,
-            "axes.labelcolor": text_color,
+            "text.color": self.text_color,
+            "axes.edgecolor": self.axis_color,
+            "axes.titlecolor": self.text_color,
+            "axes.labelcolor": self.text_color,
+            "axes.prop_cycle": cycler(color=self.plot_colors),
             "axes.spines.top": False,
             "axes.spines.right": False,
             "xtick.labelsize": 8,
-            "xtick.color": text_color,
+            "xtick.color": self.text_color,
             "xtick.direction": "in",
             "ytick.labelsize": 8,
-            "ytick.color": text_color,
+            "ytick.color": self.text_color,
             "ytick.direction": "in",
-            "legend.loc": "best",
+            "legend.loc": "lower left",
             "legend.frameon": False,
             "legend.fancybox": False,
             "legend.borderpad": 0,
@@ -124,6 +142,41 @@ class Plot(View):
             rc_params.setdefault(k, v)
         return rc_params
 
+    def _plot_bar(self, df: 'pandas.DataFrame', ax):
+        """Render a bar chart with the current DataFrame.
+        """
+        def label_bars(rects):
+            if not self.bar_labels:
+                return
+            for rect in rects:
+                height = rect.get_height()
+                ax.text(rect.get_x() + rect.get_width()/2., 1.05*height,
+                        '%d' % int(height),
+                        ha="center", va="bottom",
+                        color=rect.get_facecolor(),
+                        fontsize="small", fontweight="bold")
+
+        if isinstance(df.index, pd.DatetimeIndex):
+            ax.xaxis.set_major_formatter(
+                mdates.DateFormatter(DATE_FORMAT))
+
+        plot_fn = getattr(ax, self.kind, None)
+        if not (plot_fn and callable(plot_fn)):
+            raise ValueError(f'Plot function {self.kind} does not exist')
+
+        rects = plot_fn(df.index, df[df.columns[0]])
+        label_bars(rects)
+        if self.stacked:
+            bottom = df[df.columns[0]]
+            for col in df.columns[1:]:
+                rects = plot_fn(df.index, df[col], bottom=bottom)
+                label_bars(rects)
+                bottom += df[col]
+
+    def _plot_default(self, df: 'pandas.DataFrame', ax):
+        df.plot(ax=ax, kind=self.kind, legend=None, title=None,
+                stacked=self.stacked)
+
     def render_figure(self):
         df = self.datasources.query(self.datasource, self.query,
                                     **self.query_args)
@@ -135,8 +188,7 @@ class Plot(View):
             # to create a stacked graph.
             if df.columns.size == 2:
                 LOG.debug((
-                    "Automatically grouping data by "
-                    f"column='{df.columns[1]}'"))
+                    f"Automatically grouping data by column='{df.columns[1]}'"))
                 df = df.groupby(df.columns[1])
             elif df.columns.size > 2:
                 LOG.warn((
@@ -152,33 +204,22 @@ class Plot(View):
         with plt.rc_context(self.matplotlib_rc):
             fig, ax = plt.subplots(figsize=[self.cols, 2], constrained_layout=True)
 
-            """
-            Pandas is not great at handling custom date formats in a bar
-            chart context; switch to using raw matplotlib for this type,
-            if the index looks like it contains date/time data.
-            """
-            if self.kind == "bar" and isinstance(df.index, pd.DatetimeIndex):
-                ax.xaxis.set_major_formatter(
-                    mdates.DateFormatter(DATE_FORMAT))
-                ax.bar(df.index, df[df.columns[0]])
-                if self.stacked:
-                    bottom = df[df.columns[0]]
-                    for col in df.columns[1:]:
-                        ax.bar(df.index, df[col], bottom=bottom)
-                        bottom += df[col]
+            if self.kind == "bar":
+                self._plot_bar(df, ax)
             else:
-                df.plot(ax=ax, kind=self.kind, legend=None, title=None,
-                    stacked=self.stacked)
+                self._plot_default(df, ax)
 
             if self.legend is None and getattr(df, "groups", None):
                 # Automatically generate legend by default if we're plotting
                 # grouped data.
-                ax.legend(df.groups, bbox_to_anchor=(1, 1))
+                ax.legend(df.groups, bbox_to_anchor=(0, -0.5))
             elif self.legend:
                 l_kwargs = self.legend if isinstance(self.legend, dict) else {}
                 ax.legend(df.columns, **l_kwargs)
 
             ax.set_xlabel("")
+            plt.xticks(rotation=self.xtick_rotation)
+            plt.tick_params(length=0)
 
             fig = ax.get_figure()
             figbytes = io.BytesIO()

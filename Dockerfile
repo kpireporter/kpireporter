@@ -57,5 +57,5 @@ COPY setup.* ./
 # plugins are installed first; the "static" plugin is the
 # first example.
 # [1]: https://github.com/pypa/pip/issues/988
-RUN pip install . plugins/static \
-  && pip install "$(find plugins -mindepth 1 -maxdepth 1 -type d)"
+RUN pip install --no-cache-dir . plugins/static \
+  && pip install --no-cache-dir "$(find plugins -mindepth 1 -maxdepth 1 -type d)"

@@ -48,9 +48,9 @@
           { "id": "2", "url": "https://jenkins.example.com/job/security-scan/2", "result": "SUCCESS" },
           { "id": "1", "url": "https://jenkins.example.com/job/security-scan/1", "result": "SUCCESS" }
         ],
-        "healthReport": {
+        "healthReport": [{
           "score": 100
-        }
+        }]
       }
     }
   },
@@ -75,9 +75,9 @@
           { "id": "49", "url": "https://jenkins.example.com/job/v2-app/job/master/49", "result": "SUCCESS" },
           { "id": "48", "url": "https://jenkins.example.com/job/v2-app/job/master/48", "result": "SUCCESS" }
         ],
-        "healthReport": {
+        "healthReport": [{
           "score": 100
-        }
+        }]
       }
     }
   },
@@ -102,9 +102,9 @@
           { "id": "7", "url": "https://jenkins.example.com/job/v2-app/job/devel/7", "result": "SUCCESS" },
           { "id": "6", "url": "https://jenkins.example.com/job/v2-app/job/devel/6", "result": "SUCCESS" }
         ],
-        "healthReport": {
+        "healthReport": [{
           "score": 80
-        }
+        }]
       }
     }
   },
@@ -129,9 +129,9 @@
           { "id": "12", "url": "https://jenkins.example.com/job/legacy-app/job/master/12", "result": "SUCCESS" },
           { "id": "11", "url": "https://jenkins.example.com/job/legacy-app/job/master/11", "result": "SUCCESS" }
         ],
-        "healthReport": {
+        "healthReport": [{
           "score": 60
-        }
+        }]
       }
     }
   },
@@ -156,9 +156,9 @@
           { "id": "17", "url": "https://jenkins.example.com/job/legacy-app/job/devel/17", "result": "FAILURE" },
           { "id": "16", "url": "https://jenkins.example.com/job/legacy-app/job/devel/16", "result": "FAILURE" }
         ],
-        "healthReport": {
+        "healthReport": [{
           "score": 0
-        }
+        }]
       }
     }
   }

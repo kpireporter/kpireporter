@@ -3,6 +3,9 @@ import pandas as pd
 
 from kpireport.datasource import Datasource
 
+import logging
+LOG = logging.getLogger(__name__)
+
 
 class JenkinsDatasource(Datasource):
     """Provides accessors for listing all jobs and builds from a Jenkins host.
@@ -11,17 +14,13 @@ class JenkinsDatasource(Datasource):
     as well as job details for each job. The plugin will call the Jenkins API
     at the host specified using a username and API token provided as
     plugin arguments.
+
+    Attributes:
+        host (str): Jenkins host, e.g. https://jenkins.example.com.
+        user (str): Jenkins user to authenticate as.
+        api_token (str): Jenkins user API token to authenticate with.
     """
     def init(self, host=None, user=None, api_token=None):
-        """Initialize the Jenkins Datasource.
-
-        :type host: str
-        :param host: the Jenkins host, e.g. https://jenkins.example.com
-        :type user: str
-        :param user: the Jenkins user to authenticate as
-        :type api_token: str
-        :param api_token: the Jenkins user API token to authenticate with
-        """
         if not host:
             raise ValueError("Missing required paramter: 'host'")
         if not host.startswith("http"):
@@ -42,9 +41,11 @@ class JenkinsDatasource(Datasource):
             # Get detailed information about 'some-job'
             datasources.query("jenkins", "get_job_info", "some-job")
 
-        :type fn_name: str
-        :param fn_name: the RPC operation to invoke
-        :raise ValueError: if an invalid RPC operation is requested
+        Args:
+            fn_name (str): the RPC operation to invoke.
+
+        Raises:
+            ValueError: if an invalid RPC operation is requested.
         """
         fn = getattr(self, fn_name, None)
         if not (fn and callable(fn)):
@@ -53,14 +54,13 @@ class JenkinsDatasource(Datasource):
         return fn(*args, **kwargs)
 
     def get_all_jobs(self):
-        """List all jobs on the Jenkins server
+        """List all jobs on the Jenkins server.
 
-        :returns: a table with columns:
+        Returns:
+            pandas.DataFrame: a DataFrame with columns:
 
-          :fullname: the full job name (will include folder path components)
-          :url: a URL that resolves to the job on the Jenkins server
-
-        :rtype: pandas.DataFrame
+            :fullname: the full job name (will include folder path components)
+            :url: a URL that resolves to the job on the Jenkins server
         """
         jobs = pd.DataFrame.from_records(self.client.get_all_jobs())
         # Filter by jobs that don't have child jobs
@@ -68,20 +68,21 @@ class JenkinsDatasource(Datasource):
         return leaf_jobs
 
     def get_job_info(self, job_name):
-        """
-        Get a list of builds for a given job, including their statuses.
+        """Get a list of builds for a given job, including their statuses.
 
-        :type job_name: str
-        :param job_name: the full name of the job
-        :returns: a table with the following columns:
+        Args:
+            job_name (str): Full name of the job.
+
+        Returns:
+            pandas.DataFrame: a DataFrame with columns:
 
             :status: the build status, e.g. "SUCCESS" or "FAILURE"
-
-        :rtype: pandas.DataFrame
         """
         job_info = self.client.get_job_info(job_name, depth=1)
-        df = pd.json_normalize(job_info, "builds")
+        builds = job_info.get("builds", [])[:10]
+        df = pd.json_normalize(builds)
         # Transpose the health report information into our result table--
-        # this is a bit of a hack but it avoids having to make two calls
-        # to our datasource (DataFrames don't handle mixed dict/list data)
-        return df.assign(**job_info["healthReport"])
+        # this is a bit of a hack, but DataFrames need to have columnar data,
+        # and this avoids having to create another RPC method just for this.
+        health_report = next(iter(job_info.get("healthReport", [])), {})
+        return df.assign(**health_report)

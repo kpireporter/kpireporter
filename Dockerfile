@@ -1,6 +1,6 @@
 FROM python:3 as builder
 
-RUN apt-get update -y && apt-get install -y \
+RUN apt-get update -y && apt-get install -y --no-install-recommends \
         build-essential \
         default-libmysqlclient-dev \
         python3-dev \
@@ -18,7 +18,7 @@ RUN pip install \
 
 FROM python:slim as base
 
-RUN apt-get update -y && apt-get install -y \
+RUN apt-get update -y && apt-get install -y --no-install-recommends \
     default-mysql-client \
   && rm -rf /var/lib/apt/lists/*
 
@@ -34,7 +34,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 FROM base as dev
 
-RUN apt-get update -y && apt-get install -y \
+RUN apt-get update -y && apt-get install -y --no-install-recommends \
         netcat \
     && rm -rf /var/lib/apt/lists/*
 
@@ -58,4 +58,4 @@ COPY setup.* ./
 # first example.
 # [1]: https://github.com/pypa/pip/issues/988
 RUN pip install . plugins/static \
-  && pip install $(find plugins -mindepth 1 -maxdepth 1 -type d)
+  && pip install "$(find plugins -mindepth 1 -maxdepth 1 -type d)"

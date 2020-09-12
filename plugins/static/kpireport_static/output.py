@@ -59,4 +59,5 @@ def _copytree(src, dst, symlinks=False, ignore=None):
         if os.path.isdir(s):
             _copytree(s, d, symlinks, ignore)
         else:
+            os.makedirs(dst, exist_ok=True)
             shutil.copy2(s, d)

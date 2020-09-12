@@ -42,10 +42,10 @@ log() {
 }
 
 log_step() {
-  for i in {1..80}; do printf "*" >&2; done
+  for _ in {1..80}; do printf "*" >&2; done
   log
   log "$@"
-  for i in {1..80}; do printf "*" >&2; done
+  for _ in {1..80}; do printf "*" >&2; done
   log
 }
 
@@ -134,6 +134,6 @@ if [[ $WATCH -eq 1 ]]; then
   log_step "Starting watcher ..."
   ag -l -G 'examples|kpireport' . "$PROJ" | entr "${cmd[@]}" "${POSARGS[@]}"
 else
-  log_step "Running command kpireporter ${POSARGS[@]} ..."
+  log_step "Running command kpireporter " "${POSARGS[@]}" " ..."
   "${cmd[@]}" "${POSARGS[@]}"
 fi

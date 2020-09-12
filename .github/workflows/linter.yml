@@ -23,4 +23,8 @@
             # OK the type annotations in use; possibly the type annotations
             # are bad.
             VALIDATE_PYTHON_FLAKE8: false
+            # Disable linting of templates; the linter does not understand
+            # the template syntax nor the fact that some are used as partials.
+            VALIDATE_MD: false
+            VALIDATE_HTML: false
             GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

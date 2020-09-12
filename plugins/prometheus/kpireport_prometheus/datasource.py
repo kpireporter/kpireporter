@@ -43,6 +43,7 @@ class PrometheusDatasource(Datasource):
             step=step,
             query=query.strip()
         ))
+        res.raise_for_status()
         json = res.json()
 
         if json.get("status") != "success":

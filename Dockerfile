@@ -58,4 +58,5 @@ COPY setup.* ./
 # first example.
 # [1]: https://github.com/pypa/pip/issues/988
 RUN pip install --no-cache-dir . plugins/static \
-  && pip install --no-cache-dir "$(find plugins -mindepth 1 -maxdepth 1 -type d)"
+  && find plugins -mindepth 1 -maxdepth 1 -type d \
+    -exec pip install --no-cache-dir {} \;

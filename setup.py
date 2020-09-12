@@ -1,5 +1,3 @@
 from setuptools import setup
 
-setup(
-    python_requires='~=3.3',
-)
+setup(python_requires='~=3.3')

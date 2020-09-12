@@ -11,9 +11,9 @@ PLUGIN = "my_plugin"
 
 
 class DatasourceManagerTestCase(unittest.TestCase):
-
-    def _make_datasource_manager(self, conf={NAME: {"plugin": PLUGIN}},
-                                 plugins=[(PLUGIN, MagicMock())]):
+    def _make_datasource_manager(
+        self, conf={NAME: {"plugin": PLUGIN}}, plugins=[(PLUGIN, MagicMock())]
+    ):
         mgr = make_test_extension_manager(plugins)
         return DatasourceManager(MagicMock(), conf, extension_manager=mgr)
 
@@ -50,7 +50,8 @@ class DatasourceManagerTestCase(unittest.TestCase):
                 NAME: {"plugin": PLUGIN},
                 "second": {"plugin": PLUGIN},
             },
-            plugins=[(PLUGIN, TestPlugin)])
+            plugins=[(PLUGIN, TestPlugin)],
+        )
 
         pd.testing.assert_frame_equal(df, mgr.query("second", "some input"))
 
@@ -65,9 +66,8 @@ class DatasourceManagerTestCase(unittest.TestCase):
             def query(self, input):
                 return df
 
-        mgr = self._make_datasource_manager(plugins=[
-            ("first", FirstTestPlugin),
-            (PLUGIN, SecondTestPlugin)
-        ])
+        mgr = self._make_datasource_manager(
+            plugins=[("first", FirstTestPlugin), (PLUGIN, SecondTestPlugin)]
+        )
 
         pd.testing.assert_frame_equal(df, mgr.query(NAME, "some input"))

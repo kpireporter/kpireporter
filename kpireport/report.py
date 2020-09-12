@@ -9,33 +9,37 @@ from kpireport.utils import create_jinja_environment
 from kpireport.version import VERSION
 
 import logging
+
 LOG = logging.getLogger(__name__)
 
 
 class Theme:
-    """The theme
-    """
+    """The theme"""
+
     def __init__(self, num_columns=6):
         self.num_columns = num_columns
 
 
 class Report:
-    """The report object.
-    """
+    """The report object."""
+
     version = VERSION
 
-    def __init__(self, title=None, interval_days=None,
-                 start_date=None, end_date=None, theme=None):
+    def __init__(
+        self, title=None, interval_days=None, start_date=None, end_date=None, theme=None
+    ):
         self.title = title
         self.interval_days = interval_days
         self.start_date = start_date
         self.end_date = end_date
         self.title_slug = slugify(self.title)
-        self.id = "_".join([
-            self.start_date.strftime('%Y-%m-%d'),
-            self.end_date.strftime('%Y-%m-%d'),
-            self.title_slug
-        ])
+        self.id = "_".join(
+            [
+                self.start_date.strftime("%Y-%m-%d"),
+                self.end_date.strftime("%Y-%m-%d"),
+                self.title_slug,
+            ]
+        )
 
         if theme:
             self.theme = theme
@@ -48,21 +52,24 @@ class Report:
 
 
 class Content:
-    """Contents
-    """
-    def __init__(self, j2: 'Environment', report: 'Report'):
+    """Contents"""
+
+    def __init__(self, j2: "Environment", report: "Report"):
         self.j2 = j2
         self.report = report
         self._formats = {}
 
-    def add_format(self, fmt: str, views: 'list[View]'):
+    def add_format(self, fmt: str, views: "list[View]"):
         try:
             template = self.j2.get_template(f"layout/default.{fmt}")
         except TemplateNotFound:
-            LOG.warning((
-                f"No parent template found for format {fmt}, so no "
-                "final output text can be written. Views will still "
-                "be rendered individually."))
+            LOG.warning(
+                (
+                    f"No parent template found for format {fmt}, so no "
+                    "final output text can be written. Views will still "
+                    "be rendered individually."
+                )
+            )
             content = None
         else:
             content = template.render(views=views, report=self.report)
@@ -75,7 +82,7 @@ class Content:
     def formats(self):
         return self._formats.keys()
 
-    def get_format(self, fmt: str) -> 'Optional[str]':
+    def get_format(self, fmt: str) -> "Optional[str]":
         """Get the rendered string for the given format.
 
         Args:
@@ -84,9 +91,9 @@ class Content:
         Returns:
             Optional[str]: the rendered content for the given format, if any.
         """
-        return self._formats.get(fmt, {}).get('content')
+        return self._formats.get(fmt, {}).get("content")
 
-    def get_views(self, fmt: str) -> 'list[kpireport.view.View]':
+    def get_views(self, fmt: str) -> "list[kpireport.view.View]":
         """Get the rendered views for the given format.
 
         Args:
@@ -95,7 +102,7 @@ class Content:
         Returns:
             List[View]: the list of Views rendered under that format.
         """
-        return self._formats.get(fmt, {}).get('views', [])
+        return self._formats.get(fmt, {}).get("views", [])
 
 
 class ReportFactory:
@@ -108,15 +115,18 @@ class ReportFactory:
 
         interval_days = config.get("interval_days", 7)
         end_date = config.get("end_date", datetime.now())
-        start_date = config.get("start_date",
-                                end_date - timedelta(days=interval_days))
+        start_date = config.get("start_date", end_date - timedelta(days=interval_days))
 
         theme = Theme()
         title = config.get("title", "Status report")
 
-        self.report = Report(title=title, interval_days=interval_days,
-                             start_date=start_date, end_date=end_date,
-                             theme=theme)
+        self.report = Report(
+            title=title,
+            interval_days=interval_days,
+            start_date=start_date,
+            end_date=end_date,
+            theme=theme,
+        )
         self.dm = DatasourceManager(self.report, datasource_conf)
         self.vm = ViewManager(self.dm, self.report, view_conf)
         self.odm = OutputDriverManager(self.report, output_conf)

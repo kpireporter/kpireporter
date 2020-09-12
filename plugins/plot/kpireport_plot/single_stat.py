@@ -25,8 +25,15 @@ class SingleStat(View):
                             is displayed, or "percent", meaning the percentage
                             increase/decrease is displayed.
     """
-    def init(self, datasource=None, query=None, label="{stat}",
-             comparison_query=None, comparison_type="raw"):
+
+    def init(
+        self,
+        datasource=None,
+        query=None,
+        label="{stat}",
+        comparison_query=None,
+        comparison_type="raw",
+    ):
         self.datasource = datasource
         self.query = query
         self.label = label
@@ -34,8 +41,7 @@ class SingleStat(View):
         self.comparison_type = comparison_type
 
         if not (self.datasource and self.query):
-            raise ValueError((
-                "Both a 'datasource' and 'query' parameter are required"))
+            raise ValueError(("Both a 'datasource' and 'query' parameter are required"))
 
     @lru_cache(maxsize=1)
     def template_args(self):
@@ -45,8 +51,7 @@ class SingleStat(View):
         stat_delta_direction = None
 
         if self.comparison_query:
-            df_cmp = self.datasources.query(self.datasource,
-                                            self.comparison_query)
+            df_cmp = self.datasources.query(self.datasource, self.comparison_query)
             stat_cmp_value = df_cmp.index.array[0]
             stat_delta = stat_value - stat_cmp_value
             stat_delta_direction = "up" if stat_delta >= 0 else "down"
@@ -60,13 +65,11 @@ class SingleStat(View):
 
         label = self.label.format(stat=stat_value)
 
-        return dict(label=label, stat_delta=stat_delta,
-                    direction=stat_delta_direction)
+        return dict(label=label, stat_delta=stat_delta, direction=stat_delta_direction)
 
     def render_html(self, j2):
         template = j2.get_template("single_stat.html")
-        return template.render(theme=self.report.theme,
-                               **self.template_args())
+        return template.render(theme=self.report.theme, **self.template_args())
 
     def render_md(self, j2):
         template = j2.get_template("single_stat.md")

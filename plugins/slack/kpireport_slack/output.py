@@ -8,6 +8,7 @@ from slack.web.classes import messages, blocks, objects
 from kpireport.output import OutputDriver
 
 import logging
+
 LOG = logging.getLogger(__name__)
 
 
@@ -23,44 +24,49 @@ class SlackOutputDriver(OutputDriver):
         self.image_remote_base_url = image_remote_base_url
 
         if not self.image_remote_base_url:
-            LOG.warn("'image_remote_base_url' is not defined. Slack does not "
-                     "support attaching multiple files as blobs on a single "
-                     "post; any blobs attached to report Views will be "
-                     "ignored. If you would like image blobs rendered in "
-                     "your Slack message, specify a base URL and "
-                     "additionally publish your report to some remote URL "
-                     "via, e.g., the 'html' plugin.")
+            LOG.warn(
+                "'image_remote_base_url' is not defined. Slack does not "
+                "support attaching multiple files as blobs on a single "
+                "post; any blobs attached to report Views will be "
+                "ignored. If you would like image blobs rendered in "
+                "your Slack message, specify a base URL and "
+                "additionally publish your report to some remote URL "
+                "via, e.g., the 'html' plugin."
+            )
         else:
-            self.image_remote_base_url = (
-                image_remote_base_url.format(**self.report.__dict__))
+            self.image_remote_base_url = image_remote_base_url.format(
+                **self.report.__dict__
+            )
 
         api_token = api_token or os.getenv("SLACK_API_TOKEN")
 
         if not api_token:
-            raise ValueError((
-                "Could not find Slack API token. Either provide it as the "
-                "'api_token' argument, or set the SLACK_API_TOKEN "
-                "environment variable."))
+            raise ValueError(
+                (
+                    "Could not find Slack API token. Either provide it as the "
+                    "'api_token' argument, or set the SLACK_API_TOKEN "
+                    "environment variable."
+                )
+            )
 
         self.slack = WebClient(token=api_token)
 
     def _parse_slack_error(self, err):
         assert err.response["ok"] is False
         err_message = err.response.get("error", "Unknown error")
-        err_detailed_messages = (
-            err.response.get("response_metadata", {}).get("messages", []))
+        err_detailed_messages = err.response.get("response_metadata", {}).get(
+            "messages", []
+        )
         if err_detailed_messages:
             err_message += f": {json.dumps(err_detailed_messages)}"
         return err_message
 
     def _format_slack_date(self, dateobj):
-        fallback = datetime.strftime(dateobj, '%Y-%m-%d')
+        fallback = datetime.strftime(dateobj, "%Y-%m-%d")
         date_format = "{date_short}"
 
         link = objects.DateLink(
-            date=dateobj,
-            date_format=date_format,
-            fallback=fallback
+            date=dateobj, date_format=date_format, fallback=fallback
         )
 
         if "!date" not in str(link):
@@ -70,7 +76,7 @@ class SlackOutputDriver(OutputDriver):
             link = objects.DateLink(
                 date=f"!date^{int(dateobj.timestamp())}",
                 date_format=date_format,
-                fallback=fallback
+                fallback=fallback,
             )
 
         return str(link)
@@ -84,42 +90,41 @@ class SlackOutputDriver(OutputDriver):
         end_date = self._format_slack_date(self.report.end_date)
         title_lines = [
             f"*{self.report.title}*",
-            f"Report for: {start_date} to {end_date}"
+            f"Report for: {start_date} to {end_date}",
         ]
-        blks.append(blocks.SectionBlock(
-            text=objects.MarkdownTextObject(text="\n\n".join(title_lines))
-        ))
+        blks.append(
+            blocks.SectionBlock(
+                text=objects.MarkdownTextObject(text="\n\n".join(title_lines))
+            )
+        )
 
         for i, view in enumerate(views):
-            title = view.get('title')
-            output_lines = [
-                f"*{title}*" if title else None,
-                view.get("output") or None
-            ]
+            title = view.get("title")
+            output_lines = [f"*{title}*" if title else None, view.get("output") or None]
             output = "\n\n".join(list(filter(None, output_lines)))
 
             if output:
-                blks.append(blocks.SectionBlock(
-                    text=objects.MarkdownTextObject(text=output)
-                ))
+                blks.append(
+                    blocks.SectionBlock(text=objects.MarkdownTextObject(text=output))
+                )
 
             if self.image_remote_base_url:
                 for blob in view.get("blobs"):
                     image_url = f"{self.image_remote_base_url}/{blob['id']}"
                     title = blob.get("title", blob["id"])
-                    blks.append(blocks.ImageBlock(
-                        title=title,
-                        image_url=image_url,
-                        alt_text=title
-                    ))
+                    blks.append(
+                        blocks.ImageBlock(
+                            title=title, image_url=image_url, alt_text=title
+                        )
+                    )
 
             description = view.get("description")
             if description:
-                blks.append(blocks.ContextBlock(
-                    elements=[blocks.MarkdownTextObject(
-                        text=description
-                    )]
-                ))
+                blks.append(
+                    blocks.ContextBlock(
+                        elements=[blocks.MarkdownTextObject(text=description)]
+                    )
+                )
 
             if (i + 1) < len(views):
                 blks.append(blocks.DividerBlock())

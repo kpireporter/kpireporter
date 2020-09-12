@@ -1,4 +1,3 @@
 class Theme:
     primary = ""
     secondary = ""
-    

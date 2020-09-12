@@ -7,14 +7,8 @@ setup(
     author_email="diurnalist@gmail.com",
     license="Prosperity Public License",
     packages=["kpireport_scp"],
-    install_requires=[
-        "kpireport",
-        "kpireport-static",
-        "fabric"
-    ],
+    install_requires=["kpireport", "kpireport-static", "fabric"],
     entry_points={
-        "kpireport.output": [
-            "scp = kpireport_scp:SCPOutputDriver"
-        ],
-    }
+        "kpireport.output": ["scp = kpireport_scp:SCPOutputDriver"],
+    },
 )

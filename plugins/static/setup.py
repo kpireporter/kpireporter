@@ -11,8 +11,6 @@ setup(
         "kpireport",
     ],
     entry_points={
-        "kpireport.output": [
-            "static = kpireport_static:StaticOutputDriver"
-        ],
-    }
+        "kpireport.output": ["static = kpireport_static:StaticOutputDriver"],
+    },
 )

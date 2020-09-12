@@ -1,3 +1,3 @@
 from .output import SCPOutputDriver
 
-__all__ = ['SCPOutputDriver']
+__all__ = ["SCPOutputDriver"]

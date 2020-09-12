@@ -6,6 +6,7 @@ import tempfile
 from kpireport_static import StaticOutputDriver
 
 import logging
+
 LOG = logging.getLogger(__name__)
 
 
@@ -21,9 +22,10 @@ class SCPOutputDriver(StaticOutputDriver):
             raise ValueError("'remote_path' is required")
 
         if self.sudo is True:
-            kwargs.setdefault("config", fabric.Config(overrides=dict(
-                sudo=dict(password=self.sudo_password)
-            )))
+            kwargs.setdefault(
+                "config",
+                fabric.Config(overrides=dict(sudo=dict(password=self.sudo_password))),
+            )
 
         self.connection = fabric.Connection(**kwargs)
         self.tmp_dir = tempfile.TemporaryDirectory()
@@ -50,8 +52,9 @@ class SCPOutputDriver(StaticOutputDriver):
 
                 safe_path = shlex.quote(self.remote_path)
 
-                run((f"tar -xf {remote_tarball} -C {safe_path} "
-                     "--strip-components=1"))
+                run(
+                    (f"tar -xf {remote_tarball} -C {safe_path} " "--strip-components=1")
+                )
                 run(f"rm -rf {remote_tarball}")
 
                 if self.remote_path_owner:

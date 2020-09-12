@@ -3,7 +3,7 @@ import re
 import yaml
 
 
-path_matcher = re.compile(r'.*\$\{([^}^{]+)\}.*')
+path_matcher = re.compile(r".*\$\{([^}^{]+)\}.*")
 
 
 def path_constructor(loader, node):
@@ -38,10 +38,6 @@ def load(*files) -> dict:
     conf.setdefault("title", "Status report {from}-{to}")
     conf.setdefault("datasources", {})
     conf.setdefault("views", {})
-    conf.setdefault("outputs", {
-        "static": {
-            "plugin": "static"
-        }
-    })
+    conf.setdefault("outputs", {"static": {"plugin": "static"}})
 
     return conf

@@ -5,6 +5,7 @@ import os
 from kpireport_static import StaticOutputDriver
 
 import logging
+
 LOG = logging.getLogger(__name__)
 
 

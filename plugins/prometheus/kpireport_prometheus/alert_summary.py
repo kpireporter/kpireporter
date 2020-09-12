@@ -36,11 +36,17 @@ class PrometheusAlertSummary(View):
     :param show_timeline: whether to show a visual timeline of when alerts
                           were firing (default=True)
     """
+
     RESOLUTION_REGEX = r"([0-9]+)([smhdwy])"
 
-    def init(self, datasource="prometheus", resolution="15m",
-             ignore_labels=["instance", "job"],
-             labels=None, show_timeline=True):
+    def init(
+        self,
+        datasource="prometheus",
+        resolution="15m",
+        ignore_labels=["instance", "job"],
+        labels=None,
+        show_timeline=True,
+    ):
         self.datasource = datasource
         self.resolution = self._parse_resolution(resolution)
         self.ignore_labels = ignore_labels
@@ -92,22 +98,24 @@ class PrometheusAlertSummary(View):
         return compressed
 
     def _total_time(self, windows):
-        return reduce(lambda agg, x: agg + (x[1] - x[0]),
-                      windows, timedelta(0))
+        return reduce(lambda agg, x: agg + (x[1] - x[0]), windows, timedelta(0))
 
     def _normalize_time_windows(self, windows):
         """Normalize time windows to a single [0,100] scale."""
         td = self.report.timedelta
         return [
-            (max(0, (round(100 * (w[0] - self.report.start_date) / td, 2))),
-             round(100 * (w[1] - w[0]) / td, 2))
+            (
+                max(0, (round(100 * (w[0] - self.report.start_date) / td, 2))),
+                round(100 * (w[1] - w[0]) / td, 2),
+            )
             for w in windows
         ]
 
     @lru_cache(maxsize=1)
     def _template_vars(self):
         df = self.datasources.query(
-            self.datasource, "ALERTS", step=self.resolution.total_seconds())
+            self.datasource, "ALERTS", step=self.resolution.total_seconds()
+        )
 
         # Filter out pending alerts that never fired
         df = df[df["alertstate"] == "firing"]
@@ -137,7 +145,7 @@ class PrometheusAlertSummary(View):
             firings = [
                 dict(
                     labels=dict(zip(labels, labelvalues)),
-                    windows=self._compute_time_windows(df_times)
+                    windows=self._compute_time_windows(df_times),
                 )
                 for labelvalues, df_times in df_ag
             ]
@@ -147,22 +155,22 @@ class PrometheusAlertSummary(View):
             windows = self._compress_time_windows(all_firings)
             total_time = self._total_time(windows)
 
-            summary.append(dict(
-                alertname=alertname,
-                total_time=total_time,
-                num_firings=len(all_firings),
-                windows=windows,
-            ))
+            summary.append(
+                dict(
+                    alertname=alertname,
+                    total_time=total_time,
+                    num_firings=len(all_firings),
+                    windows=windows,
+                )
+            )
 
-        time_ordered = sorted(summary, key=itemgetter("total_time"),
-                              reverse=True)
+        time_ordered = sorted(summary, key=itemgetter("total_time"), reverse=True)
         timeline = self._normalize_time_windows(
-            list(chain(*[a["windows"] for a in summary])))
+            list(chain(*[a["windows"] for a in summary]))
+        )
 
         return dict(
-            summary=time_ordered,
-            timeline=timeline,
-            show_timeline=self.show_timeline
+            summary=time_ordered, timeline=timeline, show_timeline=self.show_timeline
         )
 
     def _render(self, j2, fmt):

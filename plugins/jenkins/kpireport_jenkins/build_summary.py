@@ -18,6 +18,7 @@ class JenkinsBuildFilter:
     :type invert: bool
     :param invert: whether to invert the filter result
     """
+
     name_filter = None
 
     def __init__(self, name=None, invert=False):
@@ -27,9 +28,9 @@ class JenkinsBuildFilter:
 
     def _process_filters(self, filters):
         if not (isinstance(filters, list) or isinstance(filters, str)):
-            raise ValueError((
-                "Invalid filter type, only string or "
-                "list of strings supported"))
+            raise ValueError(
+                ("Invalid filter type, only string or " "list of strings supported")
+            )
         if not isinstance(filters, list):
             filters = [filters]
         return [re.compile(f) for f in filters]
@@ -66,6 +67,7 @@ class JenkinsBuildSummary(View):
                     the view. These filters are directly passed to
                     :class:`JenkinsBuildFilter`.
     """
+
     def init(self, datasource="jenkins", filters={}):
         self.datasource = datasource
         self.filters = JenkinsBuildFilter(**filters)
@@ -80,17 +82,18 @@ class JenkinsBuildSummary(View):
                 continue
             job_name = row["fullname"]
             job_url = row["url"]
-            builds = self.datasources.query(
-                self.datasource, "get_job_info", job_name)
+            builds = self.datasources.query(self.datasource, "get_job_info", job_name)
             score = builds["score"].iloc[0]
             # Reverse order of builds, Jenkins returns most recent ones first
             build_list = builds.iloc[::-1].T.to_dict().values()
-            summary.append(dict(
-                name=job_name,
-                url=job_url,
-                score=score,
-                builds=build_list,
-            ))
+            summary.append(
+                dict(
+                    name=job_name,
+                    url=job_url,
+                    score=score,
+                    builds=build_list,
+                )
+            )
 
         return dict(summary=summary)
 

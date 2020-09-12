@@ -5,12 +5,13 @@ import re
 from kpireport.datasource import Datasource
 
 import logging
+
 LOG = logging.getLogger(__name__)
 
 
 class MySQLDatasource(Datasource):
-    """Provides an interface for running queries agains a MySQL database.
-    """
+    """Provides an interface for running queries agains a MySQL database."""
+
     def init(self, **kwargs):
         """Initialize the Datasource and MySQL connector.
 
@@ -57,11 +58,12 @@ class MySQLDatasource(Datasource):
 
         if parse_dates is None:
             # Default to trying to parse the first column as some date format.
-            df[df.columns[0]] = pd.to_datetime(df[df.columns[0]],
-                errors="ignore", infer_datetime_format=True)
+            df[df.columns[0]] = pd.to_datetime(
+                df[df.columns[0]], errors="ignore", infer_datetime_format=True
+            )
 
         df = df.set_index(df.columns[0])
-        LOG.debug(f'Query result: {df}')
+        LOG.debug(f"Query result: {df}")
         return df
 
     def format_sql(self, sql: str) -> (str, list):

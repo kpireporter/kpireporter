@@ -7,14 +7,8 @@ setup(
     author_email="diurnalist@gmail.com",
     license="Prosperity Public License",
     packages=["kpireport_sendgrid"],
-    install_requires=[
-        "kpireport",
-        "premailer",
-        "sendgrid"
-    ],
+    install_requires=["kpireport", "premailer", "sendgrid"],
     entry_points={
-        "kpireport.output": [
-            "sendgrid = kpireport_sendgrid:SendGridOutputDriver"
-        ],
-    }
+        "kpireport.output": ["sendgrid = kpireport_sendgrid:SendGridOutputDriver"],
+    },
 )

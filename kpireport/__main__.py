@@ -21,16 +21,20 @@ class ConfigFiles(argparse._AppendAction):
 
 
 parser = argparse.ArgumentParser(
-    prog="kpireport",
-    description="Something",
-    allow_abbrev=False)
-parser.add_argument("-c", "--config-file", type=argparse.FileType("r"),
-                    nargs="+", action="append", default=[])
+    prog="kpireport", description="Something", allow_abbrev=False
+)
+parser.add_argument(
+    "-c",
+    "--config-file",
+    type=argparse.FileType("r"),
+    nargs="+",
+    action="append",
+    default=[],
+)
 parser.add_argument("-s", "--start-date", type=simple_date)
 parser.add_argument("-e", "--end-date", type=simple_date)
 parser.add_argument("--theme-dir", default="/etc/kpireport/theme")
-parser.add_argument("-v", "--verbose", dest="verbosity", action="count",
-                    default=0)
+parser.add_argument("-v", "--verbose", dest="verbosity", action="count", default=0)
 
 args = parser.parse_args(sys.argv[1:])
 

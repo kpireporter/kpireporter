@@ -5,6 +5,7 @@ import os
 from kpireport.output import OutputDriver
 
 import logging
+
 LOG = logging.getLogger(__name__)
 
 
@@ -21,9 +22,7 @@ class StaticOutputDriver(OutputDriver):
     def render_output(self, content, blobs):
         content = content.get_format("html")
         report_dir = os.path.join(self.output_dir, self.report.id)
-        latest_dir = os.path.join(
-            self.output_dir,
-            f"latest-{self.report.title_slug}")
+        latest_dir = os.path.join(self.output_dir, f"latest-{self.report.title_slug}")
 
         os.makedirs(report_dir, exist_ok=True)
         with open(os.path.join(report_dir, "index.html"), "w") as f:

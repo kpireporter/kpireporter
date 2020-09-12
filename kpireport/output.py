@@ -15,10 +15,11 @@ class OutputDriver(ABC):
         supported_formats (List[str]): a list of output formats supported by this
             driver. Defaults to ``["md", "html"]``.
     """
-    id: str = None
-    supported_formats: 'List[str]' = ["md", "html"]
 
-    def __init__(self, report: 'kpireport.report.Report', **kwargs):
+    id: str = None
+    supported_formats: "List[str]" = ["md", "html"]
+
+    def __init__(self, report: "kpireport.report.Report", **kwargs):
         self.report = report
         if "id" in kwargs:
             self.id = kwargs.pop("id")
@@ -35,8 +36,7 @@ class OutputDriver(ABC):
         pass
 
     def render_blob_inline(self, blob, fmt=None):
-        raise NotImplementedError(
-            f"'{self.id}' driver does not support inline blobs")
+        raise NotImplementedError(f"'{self.id}' driver does not support inline blobs")
 
     def can_render(self, fmt: str) -> bool:
         """Determine if this driver supports a given output format.
@@ -50,7 +50,7 @@ class OutputDriver(ABC):
         return fmt in self.supported_formats
 
     @abstractmethod
-    def render_output(self, content: 'kpireport.report.Content', blobs):
+    def render_output(self, content: "kpireport.report.Content", blobs):
         """Render the report content for the target delivery mechanism.
 
         Args:

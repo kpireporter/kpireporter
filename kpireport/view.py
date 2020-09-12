@@ -13,8 +13,8 @@ class ViewException(Exception):
 
 
 class View(ABC):
-    """The view
-    """
+    """The view"""
+
     id: str = None
     title: str = None
     description: str = None
@@ -51,9 +51,12 @@ class View(ABC):
         return getattr(self, f"render_{fmt}")(env)
 
     def add_blob(self, id, blob, mime_type, title=None):
-        self._blobs[id] = dict(id=f"{self.id}/{id}", content=blob,
-                               mime_type=mime_type,
-                               title=title or self.title)
+        self._blobs[id] = dict(
+            id=f"{self.id}/{id}",
+            content=blob,
+            mime_type=mime_type,
+            title=title or self.title,
+        )
 
     def get_blob(self, id):
         return self._blobs.get(id)
@@ -69,8 +72,7 @@ class ViewManager(PluginManager):
     type_noun = "view"
     exc_class = ViewException
 
-    def __init__(self, datasource_manager, report, config,
-                 extension_manager=None):
+    def __init__(self, datasource_manager, report, config, extension_manager=None):
         self.datasource_manager = datasource_manager
         super(ViewManager, self).__init__(report, config, extension_manager)
 
@@ -90,16 +92,18 @@ class ViewManager(PluginManager):
 
             blob = self.call_instance(view_id, "get_blob", blob_id)
             if not blob:
-                raise ViewException((
-                    f"Missing content for blob '{blob_id}'. Make sure the "
-                    "blob was added before rendering the View template"))
+                raise ViewException(
+                    (
+                        f"Missing content for blob '{blob_id}'. Make sure the "
+                        "blob was added before rendering the View template"
+                    )
+                )
 
             return output_driver.render_blob_inline(blob, fmt)
 
         return render_blob
 
-    def render(self, env: Environment, fmt: str,
-               output_driver: OutputDriver) -> list:
+    def render(self, env: Environment, fmt: str, output_driver: OutputDriver) -> list:
         if not output_driver.can_render(fmt):
             return []
 
@@ -111,31 +115,33 @@ class ViewManager(PluginManager):
                 description=view.description,
                 cols=view.cols,
                 blobs=view.blobs,
-                tags=[]
+                tags=[],
             )
 
             try:
                 # Allow any extending package to optionally define its own
                 # ./templates directory at the root module level.
                 view_env = env.overlay(
-                    loader=ChoiceLoader([
-                        PackageLoader(module_root(view.__module__)),
-                        PackageLoader(module_root(View.__module__))
-                    ])
+                    loader=ChoiceLoader(
+                        [
+                            PackageLoader(module_root(view.__module__)),
+                            PackageLoader(module_root(View.__module__)),
+                        ]
+                    )
                 )
                 view_env.extend(view_id=id, fmt=fmt)
                 view_env.filters["blob"] = self._blob_filter(output_driver)
 
                 output = view.render(view_env, fmt=fmt)
                 if not isinstance(output, str):
-                    raise ViewException((
-                        "The view did not render a valid string"))
+                    raise ViewException(("The view did not render a valid string"))
 
                 block.update(output=output)
             except Exception as exc:
                 self.log.exception("foo")
-                self.log.error((
-                    f"Error rendering {self.type_noun} {id} ({fmt}): {exc}"))
+                self.log.error(
+                    (f"Error rendering {self.type_noun} {id} ({fmt}): {exc}")
+                )
                 block.update(output=f"Error rendering {id}", tags=["error"])
 
             blocks.append(block)

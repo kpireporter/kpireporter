@@ -11,6 +11,7 @@ class PrometheusDatasource(Datasource):
     :param host: the hostname of the Prometheus server (may include port),
                  e.g., :samp:`https://prometheus.example.com:9090`
     """
+
     def init(self, host=None):
         if not host:
             raise ValueError("Missing required parameter: 'host'")
@@ -37,12 +38,15 @@ class PrometheusDatasource(Datasource):
                   be in a ``time`` column; any labels associated with the
                   metric will be added as additional columns.
         """
-        res = requests.get(f"{self.host}/api/v1/query_range", params=dict(
-            start=self.report.start_date.timestamp(),
-            end=self.report.end_date.timestamp(),
-            step=step,
-            query=query.strip()
-        ))
+        res = requests.get(
+            f"{self.host}/api/v1/query_range",
+            params=dict(
+                start=self.report.start_date.timestamp(),
+                end=self.report.end_date.timestamp(),
+                step=step,
+                query=query.strip(),
+            ),
+        )
         res.raise_for_status()
         json = res.json()
 

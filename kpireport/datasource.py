@@ -4,15 +4,17 @@ import pandas as pd
 from kpireport.plugin import PluginManager
 
 import logging
+
 LOG = logging.getLogger(__name__)
 
-EXTENSION_NAMESPACE = 'kpireport.datasource'
+EXTENSION_NAMESPACE = "kpireport.datasource"
 
 
 class DatasourceError(Exception):
     """
     A base class for errors originating from the datasource.
     """
+
     pass
 
 
@@ -25,6 +27,7 @@ class Datasource(ABC):
     :param **kwargs: Additional datasource parameters, declared as ``args``
                      in the report configuration.
     """
+
     id = None
 
     def __init__(self, report, **kwargs):
@@ -68,6 +71,7 @@ class DatasourceManager(PluginManager):
 
         if not isinstance(result, pd.core.base.PandasObject):
             raise self.exc_class(
-                f"Datasource {name} returned unexpected query result type")
+                f"Datasource {name} returned unexpected query result type"
+            )
 
         return result

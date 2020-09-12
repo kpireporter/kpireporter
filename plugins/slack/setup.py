@@ -7,13 +7,8 @@ setup(
     author_email="diurnalist@gmail.com",
     license="Prosperity Public License",
     packages=["kpireport_slack"],
-    install_requires=[
-        "kpireport",
-        "slackclient"
-    ],
+    install_requires=["kpireport", "slackclient"],
     entry_points={
-        "kpireport.output": [
-            "slack = kpireport_slack:SlackOutputDriver"
-        ],
-    }
+        "kpireport.output": ["slack = kpireport_slack:SlackOutputDriver"],
+    },
 )

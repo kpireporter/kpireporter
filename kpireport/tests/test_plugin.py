@@ -17,9 +17,9 @@ class TestPluginManager(PluginManager):
 
 
 class PluginManagerTestCase(unittest.TestCase):
-
-    def _make_plugin_manager(self, conf={NAME: {"plugin": PLUGIN}},
-                             plugins=[(PLUGIN, MagicMock())]):
+    def _make_plugin_manager(
+        self, conf={NAME: {"plugin": PLUGIN}}, plugins=[(PLUGIN, MagicMock())]
+    ):
         mgr = make_test_extension_manager(plugins)
         return TestPluginManager(MagicMock(), conf, extension_manager=mgr)
 
@@ -33,9 +33,7 @@ class PluginManagerTestCase(unittest.TestCase):
 
     def test_invalid_args(self):
         with self.assertRaises(TestException):
-            self._make_plugin_manager(
-                conf={NAME: {"plugin": PLUGIN, "args": "foo"}}
-            )
+            self._make_plugin_manager(conf={NAME: {"plugin": PLUGIN, "args": "foo"}})
 
     def test_raises_on_invoke(self):
         def test_plugin():
@@ -50,9 +48,7 @@ class PluginManagerTestCase(unittest.TestCase):
                 return (posarg, kwarg)
 
         mgr = self._make_plugin_manager(plugins=[(PLUGIN, TestPlugin)])
-        self.assertEqual(
-            mgr.call_instance(NAME, "my_method", 1, kwarg=2),
-            (1, 2))
+        self.assertEqual(mgr.call_instance(NAME, "my_method", 1, kwarg=2), (1, 2))
 
     def test_multiple_instances(self):
         class TestPlugin(BaseTestPlugin):
@@ -64,11 +60,10 @@ class PluginManagerTestCase(unittest.TestCase):
                 "first": {"plugin": PLUGIN},
                 "second": {"plugin": PLUGIN},
             },
-            plugins=[(PLUGIN, TestPlugin)])
+            plugins=[(PLUGIN, TestPlugin)],
+        )
 
-        self.assertEqual(
-            mgr.call_instance("second", "my_method", "arg"),
-            "arg")
+        self.assertEqual(mgr.call_instance("second", "my_method", "arg"), "arg")
 
     def test_multiple_plugins(self):
         class FirstTestPlugin(BaseTestPlugin):
@@ -79,9 +74,8 @@ class PluginManagerTestCase(unittest.TestCase):
             def my_method(self, input):
                 return input
 
-        mgr = self._make_plugin_manager(plugins=[
-            ("first", FirstTestPlugin),
-            (PLUGIN, SecondTestPlugin)
-        ])
+        mgr = self._make_plugin_manager(
+            plugins=[("first", FirstTestPlugin), (PLUGIN, SecondTestPlugin)]
+        )
 
         self.assertEqual(mgr.call_instance(NAME, "my_method", "arg"), "arg")

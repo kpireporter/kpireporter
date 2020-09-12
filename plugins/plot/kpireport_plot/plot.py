@@ -7,6 +7,7 @@ import pandas as pd
 from kpireport.view import View
 
 import logging
+
 LOG = logging.getLogger(__name__)
 
 DATE_FORMAT = "%b %-d\n(%a)"
@@ -83,9 +84,20 @@ class Plot(View):
     :type plot_rc: dict
     :param plot_rc: properties to set as :class:`matplotlib.RcParams`
     """
-    def init(self, datasource=None, query=None, query_args={},
-             time_column="time", kind="line", stacked=False, legend=None,
-             bar_labels=False, xtick_rotation=0, plot_rc={}):
+
+    def init(
+        self,
+        datasource=None,
+        query=None,
+        query_args={},
+        time_column="time",
+        kind="line",
+        stacked=False,
+        legend=None,
+        bar_labels=False,
+        xtick_rotation=0,
+        plot_rc={},
+    ):
         self.datasource = datasource
         self.query = query
         self.query_args = query_args
@@ -101,14 +113,17 @@ class Plot(View):
         self.text_color = "#222222"
         self.axis_color = "#cccccc"
         self.plot_colors = [
-            "#0F5F0F", "#2D882D", "#94D794",
-            "#DEA271", "#764013",
-            "#B25B8C", "#5F0F3C",
+            "#0F5F0F",
+            "#2D882D",
+            "#94D794",
+            "#DEA271",
+            "#764013",
+            "#B25B8C",
+            "#5F0F3C",
         ]
 
         if not (self.datasource and self.query):
-            raise ValueError((
-                "Both a 'datasource' and 'query' parameter are required"))
+            raise ValueError(("Both a 'datasource' and 'query' parameter are required"))
 
     @property
     def matplotlib_rc(self):
@@ -142,27 +157,31 @@ class Plot(View):
             rc_params.setdefault(k, v)
         return rc_params
 
-    def _plot_bar(self, df: 'pandas.DataFrame', ax):
-        """Render a bar chart with the current DataFrame.
-        """
+    def _plot_bar(self, df: "pandas.DataFrame", ax):
+        """Render a bar chart with the current DataFrame."""
+
         def label_bars(rects):
             if not self.bar_labels:
                 return
             for rect in rects:
                 height = rect.get_height()
-                ax.text(rect.get_x() + rect.get_width()/2., 1.05*height,
-                        '%d' % int(height),
-                        ha="center", va="bottom",
-                        color=rect.get_facecolor(),
-                        fontsize="small", fontweight="bold")
+                ax.text(
+                    rect.get_x() + rect.get_width() / 2.0,
+                    1.05 * height,
+                    "%d" % int(height),
+                    ha="center",
+                    va="bottom",
+                    color=rect.get_facecolor(),
+                    fontsize="small",
+                    fontweight="bold",
+                )
 
         if isinstance(df.index, pd.DatetimeIndex):
-            ax.xaxis.set_major_formatter(
-                mdates.DateFormatter(DATE_FORMAT))
+            ax.xaxis.set_major_formatter(mdates.DateFormatter(DATE_FORMAT))
 
         plot_fn = getattr(ax, self.kind, None)
         if not (plot_fn and callable(plot_fn)):
-            raise ValueError(f'Plot function {self.kind} does not exist')
+            raise ValueError(f"Plot function {self.kind} does not exist")
 
         rects = plot_fn(df.index, df[df.columns[0]])
         label_bars(rects)
@@ -173,13 +192,11 @@ class Plot(View):
                 label_bars(rects)
                 bottom += df[col]
 
-    def _plot_default(self, df: 'pandas.DataFrame', ax):
-        df.plot(ax=ax, kind=self.kind, legend=None, title=None,
-                stacked=self.stacked)
+    def _plot_default(self, df: "pandas.DataFrame", ax):
+        df.plot(ax=ax, kind=self.kind, legend=None, title=None, stacked=self.stacked)
 
     def render_figure(self):
-        df = self.datasources.query(self.datasource, self.query,
-                                    **self.query_args)
+        df = self.datasources.query(self.datasource, self.query, **self.query_args)
         if self.time_column in df:
             df = df.set_index(self.time_column)
 
@@ -187,15 +204,16 @@ class Plot(View):
             # The auto-grouping behavior only makes sense if we're not told
             # to create a stacked graph.
             if df.columns.size == 2:
-                LOG.debug((
-                    f"Automatically grouping data by column='{df.columns[1]}'"))
+                LOG.debug((f"Automatically grouping data by column='{df.columns[1]}'"))
                 df = df.groupby(df.columns[1])
             elif df.columns.size > 2:
-                LOG.warn((
-                    f"Dataframe has multiple columns: {list(df.columns)}. "
-                    "Two-dimensional plots will work best with only a value "
-                    "column and an optional grouping column."
-                ))
+                LOG.warn(
+                    (
+                        f"Dataframe has multiple columns: {list(df.columns)}. "
+                        "Two-dimensional plots will work best with only a value "
+                        "column and an optional grouping column."
+                    )
+                )
 
         # Ensure data is sorted along index; if it is not, matplotlib can
         # fail to properly graph it.
@@ -225,8 +243,7 @@ class Plot(View):
             figbytes = io.BytesIO()
             fig.savefig(figbytes)
             figname = "figure.png"
-            self.add_blob(figname, figbytes, mime_type="image/png",
-                          title="Figure")
+            self.add_blob(figname, figbytes, mime_type="image/png", title="Figure")
 
             plt.close(fig)
 

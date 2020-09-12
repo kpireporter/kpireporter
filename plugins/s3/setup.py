@@ -7,14 +7,8 @@ setup(
     author_email="diurnalist@gmail.com",
     license="Prosperity Public License",
     packages=["kpireport_s3"],
-    install_requires=[
-        "kpireport",
-        "kpireport-static",
-        "boto3"
-    ],
+    install_requires=["kpireport", "kpireport-static", "boto3"],
     entry_points={
-        "kpireport.output": [
-            "s3 = kpireport_s3:S3OutputDriver"
-        ],
-    }
+        "kpireport.output": ["s3 = kpireport_s3:S3OutputDriver"],
+    },
 )

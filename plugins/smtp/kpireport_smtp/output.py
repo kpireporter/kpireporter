@@ -44,9 +44,16 @@ class SMTPOutputDriver(OutputDriver):
             are placed in folders named after the View ID; this base URL should
             point to the root path for all of these folders.
     """
-    def init(self, email_from=None, email_to=[], smtp_host="localhost",
-             smtp_port=25, image_strategy="embed",
-             image_remote_base_url=None):
+
+    def init(
+        self,
+        email_from=None,
+        email_to=[],
+        smtp_host="localhost",
+        smtp_port=25,
+        image_strategy="embed",
+        image_remote_base_url=None,
+    ):
         if not (email_from and email_to):
             raise ValueError("Both 'from' and 'to' addresses are required")
 
@@ -56,11 +63,12 @@ class SMTPOutputDriver(OutputDriver):
         self.smtp_port = smtp_port
         self.image_strategy = image_strategy
         if image_remote_base_url:
-            self.image_remote_base_url = (
-                image_remote_base_url.format(**self.report.__dict__))
+            self.image_remote_base_url = image_remote_base_url.format(
+                **self.report.__dict__
+            )
         else:
             self.image_remote_base_url = None
-        self.cache_buster = f'?_={datetime.now()}'
+        self.cache_buster = f"?_={datetime.now()}"
 
     def _parse_address(self, address):
         username, domain = address.split("@")
@@ -73,8 +81,7 @@ class SMTPOutputDriver(OutputDriver):
             path = "/".join([self.image_remote_base_url, blob["id"]])
             return Markup(f"""<img src="{path}{self.cache_buster}" />""")
         else:
-            raise ValueError(
-                f"Unsupported image strategy '{self.image_strategy}'")
+            raise ValueError(f"Unsupported image strategy '{self.image_strategy}'")
 
     def render_output(self, content, blobs):
         msg = EmailMessage()
@@ -91,11 +98,11 @@ class SMTPOutputDriver(OutputDriver):
             for blob in blobs:
                 mime_type = blob.get("mime_type")
                 if not mime_type:
-                    raise ValueError(
-                        f"No mime type specified for blob {blob['id']}")
+                    raise ValueError(f"No mime type specified for blob {blob['id']}")
                 maintype, subtype = mime_type.split("/")
-                payload.add_related(blob["content"].getvalue(),
-                                    maintype, subtype, cid=blob["id"])
+                payload.add_related(
+                    blob["content"].getvalue(), maintype, subtype, cid=blob["id"]
+                )
 
         # Send the message via local SMTP server.
         with smtplib.SMTP(self.smtp_host, port=self.smtp_port) as s:

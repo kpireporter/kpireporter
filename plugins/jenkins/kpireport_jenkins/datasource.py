@@ -4,6 +4,7 @@ import pandas as pd
 from kpireport.datasource import Datasource
 
 import logging
+
 LOG = logging.getLogger(__name__)
 
 
@@ -20,6 +21,7 @@ class JenkinsDatasource(Datasource):
         user (str): Jenkins user to authenticate as.
         api_token (str): Jenkins user API token to authenticate with.
     """
+
     def init(self, host=None, user=None, api_token=None):
         if not host:
             raise ValueError("Missing required paramter: 'host'")

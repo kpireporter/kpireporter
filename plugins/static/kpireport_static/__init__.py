@@ -1,3 +1,3 @@
 from .output import StaticOutputDriver
 
-__all__ = ['StaticOutputDriver']
+__all__ = ["StaticOutputDriver"]

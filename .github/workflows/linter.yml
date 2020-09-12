@@ -18,6 +18,8 @@
         - name: Lint codebase
           uses: docker://github/super-linter:v3
           env:
+            # Only lint new/changed files
+            VALIDATE_ALL_CODEBASE: false
             # TODO: turn this back on when it's clear how to get flake8 to
             # OK the type annotations in use; possibly the type annotations
             # are bad.

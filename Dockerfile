@@ -19,7 +19,7 @@ RUN pip install \
 FROM python:slim as base
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
-    default-mysql-client \
+    libmysqlcppconn-dev \
   && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /opt/kpireport

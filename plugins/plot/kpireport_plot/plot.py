@@ -150,7 +150,6 @@ class Plot(View):
             "legend.fontsize": "small",
             "date.autoformatter.day": DATE_FORMAT,
             "figure.dpi": 144,  # Retina display (ish)
-            "savefig.bbox": "tight",
             "savefig.pad_inches": 0.083,
         }
         for k, v in rc_defaults.items():

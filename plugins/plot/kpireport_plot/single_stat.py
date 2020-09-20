@@ -46,13 +46,13 @@ class SingleStat(View):
     @lru_cache(maxsize=1)
     def template_args(self):
         df = self.datasources.query(self.datasource, self.query)
-        stat_value = df.index.array[0]
+        stat_value = float(df.index.array[0])
         stat_delta = None
         stat_delta_direction = None
 
         if self.comparison_query:
             df_cmp = self.datasources.query(self.datasource, self.comparison_query)
-            stat_cmp_value = df_cmp.index.array[0]
+            stat_cmp_value = float(df_cmp.index.array[0])
             stat_delta = stat_value - stat_cmp_value
             stat_delta_direction = "up" if stat_delta >= 0 else "down"
 

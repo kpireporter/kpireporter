@@ -63,9 +63,7 @@ services:
       - "127.0.0.1:8080:80"
 
   kpireport:
-    build:
-      context: ..
-      target: dev
+    image: ${DOCKER_IMAGE}:${DOCKER_TAG}
     stdin_open: True
     tty: True
     env_file: .env

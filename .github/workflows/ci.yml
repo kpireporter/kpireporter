@@ -1,0 +1,132 @@
+name: Build Docker image
+
+on:
+  push:
+    branches:
+      - 'master'
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  docker:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Assemble version information
+        id: prep
+        run: |
+          # Copied from https://github.com/docker/build-push-action#complete-workflow
+          DOCKER_IMAGE=diurnalist/kpireporter
+          VERSION=noop
+          if [[ $GITHUB_REF == refs/tags/* ]]; then
+            VERSION=${GITHUB_REF#refs/tags/}
+          elif [[ $GITHUB_REF == refs/heads/* ]]; then
+            VERSION=$(echo ${GITHUB_REF#refs/heads/} | sed -r 's#/+#-#g')
+            if [ "${{ github.event.repository.default_branch }}" = "$VERSION" ]; then
+              VERSION=edge
+            fi
+          fi
+          TAGS="${DOCKER_IMAGE}:${VERSION}"
+          if [[ $VERSION =~ ^v[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]]; then
+            MINOR=${VERSION%.*}
+            MAJOR=${MINOR%.*}
+            TAGS="$TAGS,${DOCKER_IMAGE}:${MINOR},${DOCKER_IMAGE}:${MAJOR},${DOCKER_IMAGE}:latest"
+          fi
+          echo ::set-output name=version::${VERSION}
+          echo ::set-output name=tags::${TAGS}
+          echo ::set-output name=created::$(date -u +'%Y-%m-%dT%H:%M:%SZ')
+
+      # For multi-arch support (e.g., ARM vs. x86)
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Cache Docker layers
+        uses: actions/cache@v2
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Build and push
+        id: docker_build
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          file: ./Dockerfile
+          platforms: linux/amd64,linux/arm64,linux/386
+          push: true
+          tags: ${{ steps.prep.outputs.tags }}
+          labels: |
+            org.opencontainers.image.title=${{ github.event.repository.name }}
+            org.opencontainers.image.description=${{ github.event.repository.description }}
+            org.opencontainers.image.url=${{ github.event.repository.html_url }}
+            org.opencontainers.image.source=${{ github.event.repository.clone_url }}
+            org.opencontainers.image.version=${{ steps.prep.outputs.version }}
+            org.opencontainers.image.created=${{ steps.prep.outputs.created }}
+            org.opencontainers.image.revision=${{ github.sha }}
+            org.opencontainers.image.licenses=${{ github.event.repository.license.spdx_id }}
+          cache-from: type=local,src=/tmp/.buildx-cache
+          cache-to: type=local,dest=/tmp/.buildx-cache
+
+  docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Python 3.x
+      uses: actions/setup-python@v1
+      with:
+        python-version: "3.x"
+
+    - name: Install tox
+      run: pip install tox
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v1
+
+    - name: Cache Docker layers
+      uses: actions/cache@v2
+      with:
+        path: /tmp/.buildx-cache
+        key: ${{ runner.os }}-buildx-${{ github.sha }}
+        restore-keys: |
+          ${{ runner.os }}-buildx-
+
+    - name: Generate example output
+      run: |
+        touch $SCP_IDENTITY_FILE
+
+        ./dev/run.sh -c examples/mysql.yaml
+        ./dev/run.sh --no-rebuild -c examples/jenkins.yaml
+        ./dev/run.sh --no-rebuild -c examples/prometheus.yaml
+      env:
+        DOCKER_CACHE_FROM: type=local,src=/tmp/.buildx-cache
+        SCP_IDENTITY_FILE: /tmp/dummy_scp_identity_file
+
+    - name: Archive examples
+      uses: actions/upload-artifact@v1
+      with:
+        name: examples
+        path: _build
+
+    - name: Trigger ReadTheDocs build
+      run: |
+        api_base=https://readthedocs.org/api/v3
+        curl -Ssf --data-binary '' \
+          -H "Authorization: Token $READTHEDOCS_API_TOKEN" \
+          "$api_base/projects/kpi-reporter/versions/latest/builds/"
+      env:
+        READTHEDOCS_API_TOKEN: ${{ secrets.READTHEDOCS_API_TOKEN }}

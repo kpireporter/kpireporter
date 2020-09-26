@@ -4,6 +4,11 @@ set -e -u -o pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 PROJ="$DIR/.."
 
+# Allow overriding the name of the docker image to use in the compose env.
+export DOCKER_IMAGE="${DOCKER_IMAGE:-diurnalist/kpireporter}"
+export DOCKER_TAG=dev
+DOCKER_CACHE_FROM="${DOCKER_CACHE_FROM:-}"
+
 pushd "$DIR" >/dev/null
 
 usage() {
@@ -49,6 +54,11 @@ log_step() {
   log
 }
 
+log_and_run() {
+  log "+ Executing: $@"
+  "$@"
+}
+
 rebuild() {
   mkdir -p "$PROJ/_build"
   touch "$DIR/.env"
@@ -58,7 +68,13 @@ rebuild() {
 
   log_step "Rebuilding application container ..."
   cat "$PROJ/plugins/"*/requirements.txt >"$PROJ/plugin-requirements.txt"
-  _dockercompose build kpireport
+  declare -a build_cmd=()
+  build_cmd+=(docker build --target dev --tag "$DOCKER_IMAGE:$DOCKER_TAG")
+  if [[ -n "$DOCKER_CACHE_FROM" ]]; then
+    build_cmd+=(--cache-from "$DOCKER_CACHE_FROM")
+  fi
+  build_cmd+=("$PROJ")
+  log_and_run "${build_cmd[@]}"
   _dockercompose rm -f --stop kpireport
 
   log_step "Regenerating fixture data ..."

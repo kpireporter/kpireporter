@@ -58,9 +58,12 @@ class MySQLDatasource(Datasource):
 
         if parse_dates is None:
             # Default to trying to parse the first column as some date format.
-            df[df.columns[0]] = pd.to_datetime(
-                df[df.columns[0]], errors="ignore", infer_datetime_format=True
-            )
+            try:
+                df[df.columns[0]] = pd.to_datetime(
+                    df[df.columns[0]], infer_datetime_format=True
+                )
+            except Exception:
+                pass
 
         df = df.set_index(df.columns[0])
         LOG.debug(f"Query result: {df}")

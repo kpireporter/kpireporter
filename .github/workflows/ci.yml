@@ -59,6 +59,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-buildx-
 
+      - name: Assemble build requirements
+        run: |
+          make plugin-requirements.txt
+
       - name: Build and push
         id: docker_build
         uses: docker/build-push-action@v2

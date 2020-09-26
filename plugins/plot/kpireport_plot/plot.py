@@ -199,6 +199,10 @@ class Plot(View):
         if self.time_column in df:
             df = df.set_index(self.time_column)
 
+        # Ensure data is sorted along index; if it is not, matplotlib can
+        # fail to properly graph it.
+        df = df.sort_index()
+
         if not self.stacked:
             # The auto-grouping behavior only makes sense if we're not told
             # to create a stacked graph.
@@ -213,10 +217,6 @@ class Plot(View):
                         "column and an optional grouping column."
                     )
                 )
-
-        # Ensure data is sorted along index; if it is not, matplotlib can
-        # fail to properly graph it.
-        df = df.sort_index()
 
         with plt.rc_context(self.matplotlib_rc):
             fig, ax = plt.subplots(figsize=[self.cols, 2], constrained_layout=True)

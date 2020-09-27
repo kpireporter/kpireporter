@@ -19,7 +19,7 @@ RUN pip install --no-cache-dir \
 FROM python:slim as base
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
-    libmysqlcppconn-dev \
+    libmysqlcppconn-dev ssmtp \
   && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /opt/kpireport
@@ -60,3 +60,8 @@ COPY setup.* ./
 RUN pip install --no-cache-dir . plugins/static \
   && find plugins -mindepth 1 -maxdepth 1 -type d \
     -exec pip install --no-cache-dir {} \;
+
+# COPY docker/entrypoint.sh /docker-entrypoint.sh
+# ENTRYPOINT [ "/docker-entrypoint.sh" ]
+
+# CMD [ "python", "-m", "kpireport" ]

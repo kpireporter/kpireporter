@@ -12,7 +12,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 COPY requirements.txt ./requirements.txt
 COPY plugin-requirements.txt ./plugin-requirements.txt
-RUN pip install \
+RUN pip install --no-cache-dir \
   -r requirements.txt \
   -r plugin-requirements.txt
 
@@ -41,7 +41,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends \
 ADD https://raw.githubusercontent.com/eficode/wait-for/master/wait-for /usr/local/bin/wait-for
 RUN chmod +x /usr/local/bin/wait-for
 
-RUN pip install tox
+RUN pip install --no-cache-dir tox
 
 COPY ./dev/entrypoint.sh /docker-entrypoint.sh
 ENTRYPOINT [ "/docker-entrypoint.sh" ]

@@ -22,12 +22,14 @@ class PrometheusAlertSummary(View):
             length will be more accurate, but may decrease performance when the
             report interval is large, as it requires pulling more data from
             Prometheus. (default ``"15m"``)
-        ignore_labels (List[str]): a set of labels to hide from the output
+        hide_labels (List[str]): a set of labels to hide from the output
             display. Alerts containing these labels will still be listed, but
             the label values will not be printed.
             (default ``["instance", "job"]``)
         labels (Dict[str,str]): a set of labels that the alert must contain in
             order to be displayed (default ``None``)
+        ignore_labels (Dict[str,str]): a set of labels that the alert must _not_
+            contain in order to be displayed (default ``None``)
         show_timeline (bool): whether to show a visual timeline of when alerts
             were firing (default ``True``)
     """
@@ -38,14 +40,16 @@ class PrometheusAlertSummary(View):
         self,
         datasource="prometheus",
         resolution="15m",
-        ignore_labels=None,
+        hide_labels=None,
         labels=None,
+        ignore_labels=None,
         show_timeline=True,
     ):
         self.datasource = datasource
         self.resolution = self._parse_resolution(resolution)
-        self.ignore_labels = ignore_labels or ["instance", "job"]
+        self.hide_labels = hide_labels or ["instance", "job"]
         self.labels = labels
+        self.ignore_labels = ignore_labels
         self.show_timeline = show_timeline
 
     def _parse_resolution(self, res):
@@ -117,10 +121,13 @@ class PrometheusAlertSummary(View):
 
         if self.labels:
             for key, value in self.labels.items():
-                df = df[df[key] == value]
+                df = df[df[key].contains(value)]
+        if self.ignore_labels:
+            for key, value in self.ignore_labels.items():
+                df = df[~df[key].contains(value)]
 
-        ignore_labels = ["__name__", "alertstate"] + self.ignore_labels
-        df = df.drop(labels=ignore_labels, axis="columns", errors="ignore")
+        hide_labels = ["__name__", "alertstate"] + self.hide_labels
+        df = df.drop(labels=hide_labels, axis="columns", errors="ignore")
 
         summary = []
         for alertname in df["alertname"].unique():

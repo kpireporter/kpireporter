@@ -73,6 +73,7 @@ rebuild() {
   if [[ -n "$DOCKER_CACHE_DIR" ]]; then
     build_cmd+=(--cache-from "type=local,src=$DOCKER_CACHE_DIR")
     build_cmd+=(--cache-to "type=local,dest=$DOCKER_CACHE_DIR")
+    build_cmd+=(--load)
   fi
   build_cmd+=("$PROJ")
   log_and_run "${build_cmd[@]}"

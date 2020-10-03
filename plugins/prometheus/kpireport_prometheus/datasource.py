@@ -81,8 +81,8 @@ class PrometheusDatasource(Datasource):
     def _validate_basic_auth(self, basic_auth):
         if not basic_auth:
             return
-        if (not isinstance(basic_auth, dict) or
-            all(k in basic_auth for k in ['username', 'password'])):
+        if (not (isinstance(basic_auth, dict) and
+            all(k in basic_auth for k in ['username', 'password']))):
             raise ValueError(
                 "Basic auth must be dict with 'username' and 'password' keys")
         return basic_auth

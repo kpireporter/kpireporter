@@ -69,7 +69,7 @@ rebuild() {
   log_step "Rebuilding application container ..."
   cat "$PROJ/plugins/"*/requirements.txt >"$PROJ/plugin-requirements.txt"
   declare -a build_cmd=()
-  build_cmd+=(docker build --target dev --tag "$DOCKER_IMAGE:$DOCKER_TAG")
+  build_cmd+=(docker build -f "$PROJ/docker/Dockerfile" --target dev --tag "$DOCKER_IMAGE:$DOCKER_TAG")
   if [[ -n "$DOCKER_CACHE_FROM" ]]; then
     build_cmd+=(--cache-from "$DOCKER_CACHE_FROM")
   fi

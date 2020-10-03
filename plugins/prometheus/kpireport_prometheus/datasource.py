@@ -38,9 +38,10 @@ class PrometheusDatasource(Datasource):
                 short, it may make sense to reduce this.
 
         Returns:
-            pandas.DataFrame: a table of time series results. The timeseries
-                value will be in a ``time`` column; any labels associated with
-                the metric will be added as additional columns.
+            pandas.DataFrame: a table of time series results.
+
+                The timeseries value will be in a ``time`` column; any labels
+                associated with the metric will be added as additional columns.
         """
         if self.basic_auth:
             auth = requests.auth.HTTPBasicAuth(

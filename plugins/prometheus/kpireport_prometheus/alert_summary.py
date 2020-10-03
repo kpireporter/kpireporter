@@ -13,28 +13,23 @@ class PrometheusAlertSummary(View):
 
     Supported output formats: ``html``, ``md``, ``slack``
 
-    :type datasource: str
-    :param datasource: the ID of the Prometheus Datasource to query
-    :type resolution: str
-    :param resolution: the size of the time window used to group alerts--the
-                       window is used to define buckets. A higher resolution
-                       is a lower time window (e.g., "5m" versus "1h"--"5m"
-                       is the higher resolution). Higher resolutions mean the
-                       timeline and time estimates for outage length will be
-                       more accurate, but may decrease performance when the
-                       report interval is large, as it requires pulling more
-                       data from Prometheus. (default=15m)
-    :type ignore_labels: List[str]
-    :param ignore_labels: a set of labels to hide from the output display.
-                          Alerts containing these labels will still be listed,
-                          but the label values will not be printed.
-                          (default=["instance", "job"])
-    :type labels: Dict[str,str]
-    :param labels: a set of labels that the alert must contain in order to
-                   be displayed (default=None)
-    :type show_timeline: bool
-    :param show_timeline: whether to show a visual timeline of when alerts
-                          were firing (default=True)
+    Attributes:
+        datasource (str): the ID of the Prometheus Datasource to query
+        resolution (str): the size of the time window used to group alerts--the
+            window is used to define buckets. A higher resolution is a lower
+            time window (e.g., "5m" versus "1h"--"5m" is the higher resolution).
+            Higher resolutions mean the timeline and time estimates for outage
+            length will be more accurate, but may decrease performance when the
+            report interval is large, as it requires pulling more data from
+            Prometheus. (default ``"15m"``)
+        ignore_labels (List[str]): a set of labels to hide from the output
+            display. Alerts containing these labels will still be listed, but
+            the label values will not be printed.
+            (default ``["instance", "job"]``)
+        labels (Dict[str,str]): a set of labels that the alert must contain in
+            order to be displayed (default ``None``)
+        show_timeline (bool): whether to show a visual timeline of when alerts
+            were firing (default ``True``)
     """
 
     RESOLUTION_REGEX = r"([0-9]+)([smhdwy])"
@@ -43,13 +38,13 @@ class PrometheusAlertSummary(View):
         self,
         datasource="prometheus",
         resolution="15m",
-        ignore_labels=["instance", "job"],
+        ignore_labels=None,
         labels=None,
         show_timeline=True,
     ):
         self.datasource = datasource
         self.resolution = self._parse_resolution(resolution)
-        self.ignore_labels = ignore_labels
+        self.ignore_labels = ignore_labels or ["instance", "job"]
         self.labels = labels
         self.show_timeline = show_timeline
 

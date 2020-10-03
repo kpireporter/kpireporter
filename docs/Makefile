@@ -15,7 +15,7 @@ help:
 .PHONY: help livehtml Makefile
 
 livehtml:
-	sphinx-autobuild -b html -z ../kpireport -z ../plugins \
+	sphinx-autobuild --watch ../kpireport --watch ../plugins --ignore "_extra/*" \
 		"$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS)
 
 # Catch-all target: route all unknown targets to Sphinx using the new

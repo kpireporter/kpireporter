@@ -121,10 +121,10 @@ class PrometheusAlertSummary(View):
 
         if self.labels:
             for key, value in self.labels.items():
-                df = df[df[key].contains(value)]
+                df = df[df[key].str.contains(value)]
         if self.ignore_labels:
             for key, value in self.ignore_labels.items():
-                df = df[~df[key].contains(value)]
+                df = df[~df[key].str.contains(value)]
 
         hide_labels = ["__name__", "alertstate"] + self.hide_labels
         df = df.drop(labels=hide_labels, axis="columns", errors="ignore")

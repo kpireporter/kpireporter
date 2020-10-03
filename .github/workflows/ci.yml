@@ -118,7 +118,7 @@ jobs:
         ./dev/run.sh --no-rebuild -c examples/jenkins.yaml
         ./dev/run.sh --no-rebuild -c examples/prometheus.yaml
       env:
-        DOCKER_CACHE_FROM: type=local,src=/tmp/.buildx-cache
+        DOCKER_CACHE_DIR: /tmp/.buildx-cache
         SCP_IDENTITY_FILE: /tmp/dummy_scp_identity_file
 
     - name: Archive examples

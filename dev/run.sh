@@ -7,7 +7,7 @@ PROJ="$DIR/.."
 # Allow overriding the name of the docker image to use in the compose env.
 export DOCKER_IMAGE="${DOCKER_IMAGE:-diurnalist/kpireporter}"
 export DOCKER_TAG=dev
-DOCKER_CACHE_FROM="${DOCKER_CACHE_FROM:-}"
+DOCKER_CACHE_DIR="${DOCKER_CACHE_DIR:-}"
 
 pushd "$DIR" >/dev/null
 
@@ -70,8 +70,9 @@ rebuild() {
   cat "$PROJ/plugins/"*/requirements.txt >"$PROJ/plugin-requirements.txt"
   declare -a build_cmd=()
   build_cmd+=(docker build -f "$PROJ/docker/Dockerfile" --target dev --tag "$DOCKER_IMAGE:$DOCKER_TAG")
-  if [[ -n "$DOCKER_CACHE_FROM" ]]; then
-    build_cmd+=(--cache-from "$DOCKER_CACHE_FROM")
+  if [[ -n "$DOCKER_CACHE_DIR" ]]; then
+    build_cmd+=(--cache-from "type=local,src=$DOCKER_CACHE_DIR")
+    build_cmd+=(--cache-to "type=local,dest=$DOCKER_CACHE_DIR")
   fi
   build_cmd+=("$PROJ")
   log_and_run "${build_cmd[@]}"

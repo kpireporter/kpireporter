@@ -4,3 +4,10 @@
 .tox/*
 __pycache__/*
 *.pyc
+*.egg-info
+# Test output
+_build
+# Docs
+docs/
+*.rst
+*.md

@@ -39,9 +39,15 @@ class MySQLDatasource(Datasource):
 
         .. NOTE::
 
-           By default, automatic date parsing will occur over the first column
-           returned by the query. This can be disabled by passing in an empty
-           list or dict to the ``parse_dates`` kwarg.
+           By default, no automatic date parsing will occur. To ensure that your
+           timeseries data is properly parsed as a date, use the ``parse_dates``
+           kwarg supported by :meth:`pandas.read_sql`, e.g.,
+
+           .. code-block:: python
+
+              self.datasources.query('my_db', 'select time, value from table',
+                parse_dates=['time'])
+
 
         Args:
             sql (str): the SQL query to execute
@@ -55,18 +61,7 @@ class MySQLDatasource(Datasource):
         """
         sql, params = self._format_sql(sql)
         kwargs.setdefault("params", params)
-        parse_dates = kwargs.setdefault("parse_dates", None)
         df = pd.read_sql(sql, self.db, **kwargs)
-
-        if parse_dates is None:
-            # Default to trying to parse the first column as some date format.
-            try:
-                df[df.columns[0]] = pd.to_datetime(
-                    df[df.columns[0]], infer_datetime_format=True
-                )
-            except Exception:
-                pass
-
         df = df.set_index(df.columns[0])
         LOG.debug(f"Query result: {df}")
         return df

@@ -141,7 +141,6 @@ class ViewManager(PluginManager):
 
                 block.update(output=output)
             except Exception as exc:
-                self.log.exception("foo")
                 self.log.error(
                     (f"Error rendering {self.type_noun} {id} ({fmt}): {exc}")
                 )

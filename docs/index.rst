@@ -21,6 +21,7 @@ rendered as :ref:`HTML <static-plugin>`.
 
 .. toctree::
    :caption: Getting started
+   :maxdepth: 1
 
    getting-started/installation
    getting-started/configuration

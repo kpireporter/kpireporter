@@ -7,7 +7,7 @@ Examples
 Top-of-funnel report
 ====================
 
-`View HTML <./examples/latest-top-of-funnel-report>`_
+`View HTML <../examples/latest-top-of-funnel-report>`_
 
 This example utilizes a MySQL Datasource and multiple Plot visualizations to
 show a high-level overview of the number of new signups over the last week
@@ -18,7 +18,7 @@ show a high-level overview of the number of new signups over the last week
    <details>
      <summary><strong>Show/hide configuration YAML</strong></summary>
 
-.. literalinclude:: ../examples/mysql.yaml
+.. literalinclude:: ../../examples/mysql.yaml
    :language: yaml
 
 .. raw:: html
@@ -28,7 +28,7 @@ show a high-level overview of the number of new signups over the last week
 CI report
 =========
 
-`View HTML <./examples/latest-ci-report>`_
+`View HTML <../examples/latest-ci-report>`_
 
 This example uses both a View and Datasource provided by the Jenkins plugin to
 show an overview of build jobs and their success/failure statuses.
@@ -38,7 +38,7 @@ show an overview of build jobs and their success/failure statuses.
    <details>
      <summary><strong>Show/hide configuration YAML</strong></summary>
 
-.. literalinclude:: ../examples/jenkins.yaml
+.. literalinclude:: ../../examples/jenkins.yaml
    :language: yaml
 
 .. raw:: html
@@ -48,7 +48,7 @@ show an overview of build jobs and their success/failure statuses.
 Ops report
 ==========
 
-`View HTML <./examples/latest-ops-report>`_
+`View HTML <../examples/latest-ops-report>`_
 
 This example uses both a View and Datasource provided by the Prometheus plugin
 to show a visualization of some time series data representing server load, as
@@ -60,7 +60,7 @@ window.
    <details>
      <summary><strong>Show/hide configuration YAML</strong></summary>
 
-.. literalinclude:: ../examples/prometheus.yaml
+.. literalinclude:: ../../examples/prometheus.yaml
     :language: yaml
 
 .. raw:: html

@@ -5,13 +5,20 @@
 Plot
 =====
 
+.. image:: https://img.shields.io/pypi/v/kpireport-plot
+   :target: https://pypi.org/project/kpireport-plot
+
+.. code-block::
+
+   pip install kpireport-plot
+
 Plot
 ====
 
-The Plot View is a simple workhorse plugin for displaying a variety of
+The Plot is a simple workhorse View for displaying a variety of
 timeseries data. It is designed to be compatible with several Datasources and
 handle most KPI graphs, which tend to plot only a single metric or perhaps
-a set of related metrics.
+a set of related metrics. It utilizes :mod:`matplotlib` under the hood.
 
 .. raw:: html
 

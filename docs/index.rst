@@ -25,16 +25,17 @@ rendered as :ref:`HTML <static-plugin>`.
    getting-started/installation
    getting-started/configuration
    getting-started/examples
+   about
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Plugins
    :glob:
 
    plugins/*
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
    :caption: Development
 
    development/architecture

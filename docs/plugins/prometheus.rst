@@ -5,6 +5,13 @@
 Prometheus
 ===========
 
+.. image:: https://img.shields.io/pypi/v/kpireport-prometheus
+   :target: https://pypi.org/project/kpireport-prometheus
+
+.. code-block::
+
+   pip install kpireport-prometheus
+
 The Prometheus plugin provides both a Datasource capable of returning PromQL
 query results and a View that summarizes alerts fired by the Prometheus server
 over the report interval.

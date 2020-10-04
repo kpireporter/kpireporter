@@ -6,6 +6,9 @@ Installation
 
 KPI Reporter is a Python module that is installable via ``pip``:
 
+.. image:: https://img.shields.io/pypi/v/kpireport
+   :target: https://pypi.org/project/kpireport
+
 .. image:: https://img.shields.io/pypi/pyversions/kpireport
    :target: https://pypi.org/project/kpireport
 

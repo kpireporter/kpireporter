@@ -54,6 +54,10 @@ templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 
 intersphinx_mapping = {
+    "boto3": (
+        "https://boto3.amazonaws.com/v1/documentation/api/latest/index.html",
+        "https://boto3.amazonaws.com/v1/documentation/api/latest/objects.inv",
+    ),
     "pandas": (
         "http://pandas.pydata.org/pandas-docs/stable/",
         "http://pandas.pydata.org/pandas-docs/stable/objects.inv",

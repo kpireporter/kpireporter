@@ -10,6 +10,13 @@ LOG = logging.getLogger(__name__)
 
 
 class S3OutputDriver(StaticOutputDriver):
+    """
+    Attributes:
+        bucket (str): the S3 bucket to upload to.
+        prefix (str): the key prefix.
+        kwargs: any additional keyword arguments are passed in to the
+            :class:`boto3.client` constructor.
+    """
     def init(self, **kwargs):
         self.bucket = kwargs.pop("bucket", None)
         self.prefix = kwargs.pop("prefix", None)
@@ -24,11 +31,6 @@ class S3OutputDriver(StaticOutputDriver):
         super(S3OutputDriver, self).init(output_dir=self.tmp_dir.name)
 
     def render_output(self, content, blobs):
-        """Write the static output to the specified S3 bucket.
-
-        Args:
-            content (dict): something
-        """
         super(S3OutputDriver, self).render_output(content, blobs)
 
         with self.tmp_dir as tmp_dir:

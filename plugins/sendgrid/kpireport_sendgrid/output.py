@@ -14,6 +14,20 @@ LOG = logging.getLogger(__name__)
 
 
 class SendGridOutputDriver(OutputDriver):
+    """Email a report via SendGrid.
+
+    .. note::
+
+        When testing, you can set a ``SENDGRID_SANDBOX_ENABLED=1`` environment
+        variable, which will only verify the mail payload on SendGrid, but
+        will not actually send it.
+
+    Attributes:
+        email_from (str): the sender email address.
+        email_to (List[str]): a list of target email addresses.
+        api_key (str): a SendGrid API key authorized to send mail on behalf of
+            the sending address.
+    """
     def init(self, email_from=None, email_to=None, api_key=None):
         if not (email_from and email_to):
             raise ValueError("Both 'from' and 'to' addresses are required")

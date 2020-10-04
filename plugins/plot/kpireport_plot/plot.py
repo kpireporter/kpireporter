@@ -58,31 +58,26 @@ class Plot(View):
     | 2020-01-02 | 2.7      | Germany |
     +------------+----------+---------+
 
-
-    :type datasource: str
-    :param datasource: ID of Datasource to fetch from
-    :type query: str
-    :param query: the query to execute against the Datasource
-    :type query_args: dict
-    :param query_args: additional arguments to pass to the query function.
-                       Some Datasources may support additional parameters.
-    :type time_column: str
-    :param time_column: the name of the column in the query result table that
-                        contains timeseries data. (Default="time")
-    :type kind: str
-    :param kind: the kind of plot to draw. Currently only "line" and "bar" are
-                 officially supported, though other types supported by
-                 matplotlib may be possible. (Default="line")
-    :type stacked: bool
-    :param stacked: whether to display the line/bar graph types as a stacked
-                    plot, where each series is stacked atop the last.
-    :type bar_labels: bool
-    :param bar_labels: whether to label each bar with its value (only relevant
-                       when kind is "bar".)
-    :type xtick_rotation: Union[int, str]
-    :param xtick_rotation: how much to rotate the X labels by when displaying.
-    :type plot_rc: dict
-    :param plot_rc: properties to set as :class:`matplotlib.RcParams`
+    Attributes:
+        datasource (str): ID of Datasource to fetch from.
+        query (str): the query to execute against the Datasource.
+        query_args (dict): additional arguments to pass to the query function.
+            Some Datasources may support additional parameters.
+        time_column (str): the name of the column in the query result table that
+            contains timeseries data. (Default ``"time"``)
+        kind (str): the kind of plot to draw. Currently only "line" and "bar"
+            are officially supported, though other types supported by matplotlib
+            may be possible. (Default ``"line"``)
+        stacked (bool): whether to display the line/bar graph types as a stacked
+            plot, where each series is stacked atop the last. (Default
+            ``False``)
+        bar_labels (bool): whether to label each bar with its value (only
+            relevant when kind is "bar".) (Default ``False``)
+        xtick_rotation (Union[int, str]): how much to rotate the X labels by
+            when displaying.
+        plot_rc (dict): properties to set as :class:`matplotlib.RcParams`. This
+            can be used to customize the display of the output chart beyond
+            the defaults provided by the Theme.
     """
 
     def init(

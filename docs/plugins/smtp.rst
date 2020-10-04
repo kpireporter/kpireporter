@@ -5,10 +5,7 @@
 SMTP
 =====
 
-Output driver
-=============
-
 .. autoclass:: SMTPOutputDriver
    :members:
    :show-inheritance:
-   :exclude-members: init
+   :exclude-members: init, render_output

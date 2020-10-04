@@ -5,10 +5,7 @@
 Slack
 ======
 
-Output driver
-=============
-
 .. autoclass:: SlackOutputDriver
    :members:
    :show-inheritance:
-   :exclude-members: init
+   :exclude-members: init, render_output

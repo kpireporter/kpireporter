@@ -51,7 +51,7 @@ class MySQLDatasource(Datasource):
         :returns: a table with any rows returned by the query. Columns
                   selected in the query will be columns in the output table.
         """
-        sql, params = self.format_sql(sql)
+        sql, params = self._format_sql(sql)
         kwargs.setdefault("params", params)
         parse_dates = kwargs.setdefault("parse_dates", None)
         df = pd.read_sql(sql, self.db, **kwargs)
@@ -69,7 +69,7 @@ class MySQLDatasource(Datasource):
         LOG.debug(f"Query result: {df}")
         return df
 
-    def format_sql(self, sql: str) -> (str, list):
+    def _format_sql(self, sql: str) -> (str, list):
         """Replace special tokens in the SQL query.
 
         :type sql: str

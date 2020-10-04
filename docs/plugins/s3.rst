@@ -5,10 +5,7 @@
 S3
 ===
 
-Output driver
-=============
-
 .. autoclass:: S3OutputDriver
    :members:
    :show-inheritance:
-   :exclude-members: init
+   :exclude-members: init, render_output

@@ -29,11 +29,8 @@ Datasource
    :show-inheritance:
    :exclude-members: init
 
-Views
-=====
-
 Build summary
--------------
+=============
 
 .. figure:: ../../examples/rendered/html/jenkins.build_summary.png
    :target: /examples/latest-ci-report/index.html

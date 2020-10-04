@@ -21,13 +21,19 @@ rendered as :ref:`HTML <static-plugin>`.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
+   :caption: Contents
 
    getting-started
-   plugins/index
    api/index
    development
    about
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Plugins
+   :glob:
+
+   plugins/*
 
 
 Indices and tables

@@ -13,6 +13,15 @@ LOG = logging.getLogger(__name__)
 
 
 class SlackOutputDriver(OutputDriver):
+    """Send a report to a Slack channel.
+
+    Attributes:
+        api_token (str): a Slack API token with authorization to publish a
+            message to the target channel.
+        channels (List[str]): a list of Slack channels to publish the report to.
+        image_remote_base_url (str): ??
+    """
+
     # Slack has its own Markdown language
     supported_formats = ["slack"]
 

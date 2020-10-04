@@ -5,10 +5,7 @@
 Static HTML
 ============
 
-Output driver
-=============
-
 .. autoclass:: StaticOutputDriver
    :members:
    :show-inheritance:
-   :exclude-members: init
+   :exclude-members: init, render_output

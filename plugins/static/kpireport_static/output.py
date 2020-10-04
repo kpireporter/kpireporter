@@ -10,6 +10,12 @@ LOG = logging.getLogger(__name__)
 
 
 class StaticOutputDriver(OutputDriver):
+    """Export a report's HTML contents to disk.
+
+    Attributes:
+        output_dir (str): the directory to output the report HTML contents to.
+            (Default ``"./_build"``)
+    """
     def init(self, output_dir="_build"):
         self.output_dir = output_dir
 

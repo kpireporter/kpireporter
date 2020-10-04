@@ -36,6 +36,7 @@ def load(*files) -> dict:
         f.close()
 
     conf.setdefault("title", "Status report {from}-{to}")
+    conf.setdefault("theme", {})
     conf.setdefault("datasources", {})
     conf.setdefault("views", {})
     conf.setdefault("outputs", {"static": {"plugin": "static"}})

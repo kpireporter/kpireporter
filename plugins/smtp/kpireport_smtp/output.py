@@ -21,13 +21,12 @@ class SMTPOutputDriver(OutputDriver):
         image_strategy (str): Strategy to use for including images in the mail
             contents. Two options are available:
 
-            ``embed``:
-                embed the image directly in the mail using Content-ID
+              * ``embed``: embed the image directly in the mail using Content-ID
                 (`RFC2392 <https://tools.ietf.org/html/rfc2392>`_) linked
                 resources. These should be compatible with most modern desktop
                 and web mail clients.
-            ``remote``:
-                link the image to a remote resource. For this strategy
+
+              * ``remote``: link the image to a remote resource. For this strategy
                 to work, the image assets must exist on a server reachable via
                 the public Internet (and not require authentication). Consider
                 using the SMTP plugin in conjunction with e.g., the

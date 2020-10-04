@@ -30,3 +30,4 @@ against an existing MySQL database.
 .. autoclass:: MySQLDatasource
    :members:
    :show-inheritance:
+   :exclude-members: init

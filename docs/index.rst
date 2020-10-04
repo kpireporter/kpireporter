@@ -40,6 +40,7 @@ rendered as :ref:`HTML <static-plugin>`.
 
    development/architecture
    development/plugins
+   api/index
 
 
 Indices and tables

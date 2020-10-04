@@ -1,4 +1,4 @@
-.. _getting-started-configuration:
+.. _configuration-file:
 
 ===================
 Configuration file
@@ -47,3 +47,41 @@ Schema
     (str) output ID:
       plugin: (str) The name of the plugin
       args: (dict) Plugin arguments (plugin-specific)
+
+View instances
+==============
+
+The View instances defined in the ``views`` section define what is rendered in
+the final report. Each view is placed into a layout in the order in which they
+are defined, i.e., the first declared View will show at the top, and the last
+will show at the bottom.
+
+The report layout follows a simple grid system with 6 columns. By default, Views
+will each take the full width. However, you can change this with the ``cols``
+configuration option. For example, consider this configuration:
+
+.. code-block:: yaml
+
+  views:
+    view_a:
+    view_b:
+      cols: 2
+    view_c:
+      cols: 4
+    view_d:
+    view_e:
+      cols: 3
+    view_f:
+      cols: 3
+
+The views would be rendered in the report like this:
+
+  +------------------------------+
+  | View A                       |
+  +---------+--------------------+
+  | View B  | View C             |
+  +---------+--------------------+
+  | View D                       |
+  +---------------+--------------+
+  | View E        | View F       |
+  +---------------+--------------+

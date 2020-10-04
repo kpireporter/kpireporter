@@ -14,14 +14,34 @@ LOG = logging.getLogger(__name__)
 
 
 class Theme:
-    """The theme"""
+    """The report theme options.
 
-    def __init__(self, num_columns=6):
+    Attributes:
+        num_columns (int): the number of columns in the report grid. (Default 6)
+        theme_dir (str): a directory where additional templates can be found.
+            These templates will override the default templates of the same
+            name, and can be used to alter the overall report appearance.
+    """
+    def __init__(self, num_columns=6, theme_dir=None):
         self.num_columns = num_columns
+        self.theme_dir = theme_dir
 
 
 class Report:
-    """The report object."""
+    """The report object.
+
+    .. note::
+
+       This class is not meant to be instantiated directly; instead, use the
+       :class:`ReportFactory` class to generate an instance.
+
+    Attributes:
+        title (str): the report title.
+        interval_days (int): number of days.
+        start_date (dateobj): the start date.
+        end_date (dateobj): the end date.
+        theme (Theme): the report Theme.
+    """
 
     version = VERSION
 
@@ -52,14 +72,39 @@ class Report:
 
 
 class Content:
-    """Contents"""
+    """The rendered report, in a variety of formats.
 
+    Attributes:
+        j2 (Jinja2): a :mod:`Jinja2` context to use for loading and rendering
+            templates.
+        report (Report): the Report object for the current report.
+        formats (List[str]): the list of all formats available for the report.
+            Any formats added via :meth:`add_format` will be reflected here.
+    """
     def __init__(self, j2: "Environment", report: "Report"):
         self.j2 = j2
         self.report = report
         self._formats = {}
 
     def add_format(self, fmt: str, views: "list[View]"):
+        """Render the specified format and add to the output contents.
+
+        If a layout file is found for this format, it will be used to render
+        the raw output. If a layout file is not found, there will be no raw
+        output, however, the list of Views will still be stored for the output
+        format. This can be important for output drivers that may not be able
+        to display/send a final rendered report in text, but could still render
+        each view separately. The :ref:`Slack <slack-plugin>` output driver is
+        a good example of this.
+
+        The layout file is expected to exist at
+        ``./templates/layout/default.{fmt}``, e.g.,
+        ``./template/layout/default.html`` for the HTML format.
+
+        Args:
+            fmt (str): the output format, e.g., ``"md"`` or ``"html"``.
+            views (List[View]): the list of Views to render
+        """
         try:
             template = self.j2.get_template(f"layout/default.{fmt}")
         except TemplateNotFound:
@@ -93,7 +138,7 @@ class Content:
         """
         return self._formats.get(fmt, {}).get("content")
 
-    def get_views(self, fmt: str) -> "list[kpireport.view.View]":
+    def get_views(self, fmt: str) -> "list[View]":
         """Get the rendered views for the given format.
 
         Args:
@@ -106,6 +151,20 @@ class Content:
 
 
 class ReportFactory:
+    """A factory class for building and executing an entire report.
+
+    Once you have a report parsed from its YAML :ref:`configuration-file`, you
+    can execute the report like so:
+
+    .. code-block:: python
+
+       ReportFactory(conf).create()
+
+    Attributes:
+        config (dict): the (parsed) configuration YAML file.
+        supported_formats (List[str]): the output formats that any report can
+            target.
+    """
     supported_formats = ["html", "md", "slack"]
 
     def __init__(self, config):
@@ -117,8 +176,8 @@ class ReportFactory:
         end_date = config.get("end_date", datetime.now())
         start_date = config.get("start_date", end_date - timedelta(days=interval_days))
 
-        theme = Theme()
         title = config.get("title", "Status report")
+        theme = Theme(**config.get("theme", {}))
 
         self.report = Report(
             title=title,
@@ -130,9 +189,17 @@ class ReportFactory:
         self.dm = DatasourceManager(self.report, datasource_conf)
         self.vm = ViewManager(self.dm, self.report, view_conf)
         self.odm = OutputDriverManager(self.report, output_conf)
-        self.env = create_jinja_environment()
+        self.env = create_jinja_environment(theme)
 
     def create(self):
+        """Render all Views in the report and output using the output driver.
+
+        .. important::
+
+           This will send the report using all configured output drivers!
+           Disable any output drivers you don't wish to send to during testing.
+
+        """
         for id, output_driver in self.odm.instances:
             LOG.info(f"Sending report via output driver {id}")
             content = Content(self.env, self.report)

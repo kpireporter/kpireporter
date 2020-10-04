@@ -121,14 +121,17 @@ class ViewManager(PluginManager):
             try:
                 # Allow any extending package to optionally define its own
                 # ./templates directory at the root module level.
-                view_env = env.overlay(
-                    loader=ChoiceLoader(
-                        [
-                            PackageLoader(module_root(view.__module__)),
-                            PackageLoader(module_root(View.__module__)),
-                        ]
-                    )
-                )
+                view_pkg_loader = PackageLoader(module_root(view.__module__))
+                if isinstance(env.loader, ChoiceLoader):
+                    # If we're already using a ChoiceLoader it's because there
+                    # is a theme directory loader in place; ensure we always
+                    # let the theme take priority.
+                    loaders = env.loader.loaders.copy()
+                    loaders.insert(1, view_pkg_loader)
+                    new_loader = ChoiceLoader(loaders)
+                else:
+                    new_loader = ChoiceLoader([view_pkg_loader, env.loader])
+                view_env = env.overlay(loader=new_loader)
                 view_env.extend(view_id=id, fmt=fmt)
                 view_env.filters["blob"] = self._blob_filter(output_driver)
 

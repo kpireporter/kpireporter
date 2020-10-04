@@ -60,6 +60,8 @@ def run(argv=None):
         conf.update(start_date=args.start_date)
     if args.end_date:
         conf.update(end_date=args.end_date)
+    if args.theme_dir:
+        conf.get("theme").update(theme_dir=args.theme_dir)
 
     start = timer()
 

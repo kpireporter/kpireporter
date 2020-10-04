@@ -10,13 +10,13 @@ LOG = logging.getLogger(__name__)
 
 
 class MySQLDatasource(Datasource):
-    """Provides an interface for running queries agains a MySQL database."""
+    """Provides an interface for running queries agains a MySQL database.
 
+    Attributes:
+        kwargs: any keyword arguments are passed through to
+            :meth:`MySQLdb.Connect`
+    """
     def init(self, **kwargs):
-        """Initialize the Datasource and MySQL connector.
-
-        :param **kwargs: keywoard arguments passed to :meth:`MySQLdb.Connect`
-        """
         self.db = MySQLdb.connect(**kwargs)
 
     def query(self, sql: str, **kwargs) -> pd.DataFrame:
@@ -43,13 +43,15 @@ class MySQLDatasource(Datasource):
            returned by the query. This can be disabled by passing in an empty
            list or dict to the ``parse_dates`` kwarg.
 
+        Args:
+            sql (str): the SQL query to execute
+            kwargs: keyword arguments passed to :meth:`pandas.read_sql`
 
-        :type sql: str
-        :param sql: the SQL query to execute
-        :param **kwargs**: keyword arguments passed to :meth:`pandas.read_sql`
-        :rtype: pandas.DataFrame
-        :returns: a table with any rows returned by the query. Columns
-                  selected in the query will be columns in the output table.
+        Returns:
+            pandas.DataFrame: a table with any rows returned by the query.
+
+                Columns selected in the query will be columns in the output
+                table.
         """
         sql, params = self._format_sql(sql)
         kwargs.setdefault("params", params)

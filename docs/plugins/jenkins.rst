@@ -33,7 +33,7 @@ Build summary
 =============
 
 .. figure:: ../../examples/rendered/html/jenkins.build_summary.png
-   :target: /examples/latest-ci-report/index.html
+   :target: ./examples/latest-ci-report/index.html
    :alt: jenkins.build_summary
 
    An example showing jobs matching a certain name pattern "\*-app"

@@ -43,7 +43,7 @@ a set of related metrics.
    </details>
 
 .. figure:: ../../examples/rendered/html/plot.png
-   :target: ../../examples/latest-top-of-funnel-report/index.html
+   :target: ./examples/latest-top-of-funnel-report/index.html
    :alt: plot example
 
    A simple line plot from MySQL data
@@ -88,7 +88,7 @@ which is included as part of the Plot plugin for convenience.
    </details>
 
 .. figure:: ../../examples/rendered/html/single_stat.png
-   :target: ../../examples/latest-top-of-funnel-report/index.html
+   :target: ./examples/latest-top-of-funnel-report/index.html
    :alt: example of single stat combined with plot
 
    An example of a plot view combined with a single stat view

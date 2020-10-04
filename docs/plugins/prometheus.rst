@@ -74,7 +74,7 @@ Alert summary
    </details>
 
 .. figure:: ../../examples/rendered/html/prometheus.alert_summary.png
-   :target: ../../examples/latest-ops-report/index.html
+   :target: ./examples/latest-ops-report/index.html
    :alt: prometheus.alert_summary
 
    An example rendered alert summary. The timeline at the top displays the

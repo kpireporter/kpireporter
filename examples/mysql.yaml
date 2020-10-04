@@ -25,6 +25,8 @@ views:
           as total_signups
         from kpireport.signups
         where created_at >= {from} and created_at < {to}
+      query_args:
+        parse_dates: ['created_at']
   new_signups:
     plugin: plot
     title: Daily new sign-ups

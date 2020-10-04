@@ -2,6 +2,8 @@
 .kpireport__stat {
     width: 100%;
     font-size: 36px;
+} .kpireport__stat > span {
+    display: block;
 }
 
 .kpireport__stat .delta {
@@ -16,8 +18,8 @@
 </style>
 
 <div class="kpireport__stat">
-    {{ label }}
-    {% if stat_delta is not none %}
+    <span>{{ label }}</span>
+    {%- if stat_delta is not none %}
     <span class="delta {{ direction }}">{% if direction == "up" %}▲{% else %}▼{% endif %}{{ stat_delta }}</span>
-    {% endif %}
+    {% endif -%}
 </div>

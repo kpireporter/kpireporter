@@ -20,13 +20,11 @@ rendered as :ref:`HTML <static-plugin>`.
    as well. For more information, see :ref:`about-motivation`.
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents
+   :caption: Getting started
 
-   getting-started
-   api/index
-   development
-   about
+   getting-started/installation
+   getting-started/configuration
+   getting-started/examples
 
 .. toctree::
    :maxdepth: 2
@@ -34,6 +32,13 @@ rendered as :ref:`HTML <static-plugin>`.
    :glob:
 
    plugins/*
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Development
+
+   development/architecture
+   development/plugins
 
 
 Indices and tables

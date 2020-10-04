@@ -7,6 +7,7 @@
 *.pyc
 __pycache__/
 dist/
+build/
 # Dynamically-generated plugin deps
 plugin-requirements.txt
 # Report generation

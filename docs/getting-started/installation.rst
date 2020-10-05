@@ -46,9 +46,10 @@ one week ago. To specify different windows, use the ``--start-date`` and
 Plugins
 =======
 
-KPI Reporter only comes with a the :ref:`plot-plugin` and :ref:`static-plugin`
-plugins by default. For additional functionality, you should install the
-plugins relevant for your report.
+If you are not using the distributed Docker image, and are installing KPI
+Reporter via pip, you will have to install some small set of additional plugins
+to get started. Two simple plugins you may want are the :ref:`plot-plugin` and
+:ref:`static-plugin` ones.
 
 Plugins provided as part of KPI Reporter project are prefixed ``kpireport-``,
 and so are installed like the following:

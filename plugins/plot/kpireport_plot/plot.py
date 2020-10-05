@@ -11,6 +11,7 @@ import logging
 LOG = logging.getLogger(__name__)
 
 DATE_FORMAT = "%b %-d\n(%a)"
+FIGURE_PPI = 72  # Default PPI in matplotlib, not customizable
 
 
 class Plot(View):
@@ -144,8 +145,9 @@ class Plot(View):
             "legend.borderpad": 0,
             "legend.fontsize": "small",
             "date.autoformatter.day": DATE_FORMAT,
-            "figure.dpi": 144,  # Retina display (ish)
-            "savefig.pad_inches": 0.083,
+            "figure.dpi": FIGURE_PPI * 2,
+            "savefig.bbox": "tight",
+            "savefig.pad_inches": 10 / FIGURE_PPI,
         }
         for k, v in rc_defaults.items():
             rc_params.setdefault(k, v)
@@ -214,7 +216,8 @@ class Plot(View):
                 )
 
         with plt.rc_context(self.matplotlib_rc):
-            fig, ax = plt.subplots(figsize=[self.cols, 2], constrained_layout=True)
+            figsize = [((self.cols * self.report.theme.column_width) / FIGURE_PPI), 2]
+            fig, ax = plt.subplots(figsize=figsize, constrained_layout=True)
 
             if self.kind == "bar":
                 self._plot_bar(df, ax)

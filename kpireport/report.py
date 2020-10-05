@@ -22,8 +22,9 @@ class Theme:
             These templates will override the default templates of the same
             name, and can be used to alter the overall report appearance.
     """
-    def __init__(self, num_columns=6, theme_dir=None):
+    def __init__(self, num_columns=6, column_width=86, theme_dir=None):
         self.num_columns = num_columns
+        self.column_width = column_width
         self.theme_dir = theme_dir
 
 

@@ -6,11 +6,12 @@
 -->
 <style>
 {% block global_styles %}
+{% set outer_padding = 20 %}
+{% set wrapper_padding = 20 %}
+{% set max_width = (report.theme.column_width * report.theme.num_columns) + (wrapper_padding * 2) %}
     /* -------------------------------------
         GLOBAL RESETS
     ------------------------------------- */
-
-    /*All the styling goes here*/
 
     img {
       border: none;
@@ -52,23 +53,21 @@
       width: 100%;
     }
 
-    /* Set a max-width, and make it display as block so it will automatically stretch to that width, but will also shrink down on a phone or something */
+    /* Set a max-width, and make it display as block so it will automatically
+       stretch to that width, but will also shrink down on a phone or something */
     .container {
       display: block;
       margin: 0 auto !important;
-      /* makes it centered */
-      max-width: 580px;
-      padding: 10px;
-      width: 580px;
+      max-width: {{ max_width }}px;
+      padding: {{ outer_padding }}px;
+      width: {{ max_width }}px;
     }
 
     /* This should also be a block element, so that it will fill 100% of the .container */
     .content {
-      box-sizing: border-box;
       display: block;
       margin: 0 auto;
-      max-width: 580px;
-      padding: 10px;
+      max-width: {{ max_width }}px;
     }
 
     /* -------------------------------------
@@ -96,7 +95,7 @@
 
     .wrapper {
       box-sizing: border-box;
-      padding: 20px;
+      padding: {{ wrapper_padding }}px;
     }
 
     .content-block {

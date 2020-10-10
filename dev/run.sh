@@ -17,7 +17,7 @@ Usage: run.sh [-h] [--no-rebuild] [--watch] ARGS
 
 Run a report against a local development Docker-Compose stack, with most
 services mocked for testing. Good for exploring examples and playing with
-output formatting. ARGS are passed on to the kpimailer script.
+output formatting. ARGS are passed on to the kpireport script.
 
 When the local development stack is running, the following services are
 available:

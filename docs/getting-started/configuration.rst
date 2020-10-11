@@ -26,27 +26,9 @@ section.
 Schema
 ======
 
-.. code-block:: yaml
-
-  ---
-  title: (str) The title of the report
-
-  datasources:
-    (str) datasource ID:
-      plugin: (str) The name of the plugin
-      args: (dict) Plugin arguments (plugin-specific)
-
-  views:
-    (str) view ID:
-      plugin: (str) The name of the plugin
-      title: (str, optional) A title to display above the rendered view
-      cols: (int, optional) The column span of the view in the report layout
-      args: (dict) Plugin arguments (plugin-specific)
-
-  outputs:
-    (str) output ID:
-      plugin: (str) The name of the plugin
-      args: (dict) Plugin arguments (plugin-specific)
+.. jsonschema:: ../../schema/configuration.schema.json
+   :lift_definitions:
+   :auto_reference:
 
 View instances
 ==============

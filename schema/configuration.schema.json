@@ -1,0 +1,131 @@
+{
+  "$id": "https://kpi-reporter.readthedocs.io/page/configuration.schema.json",
+  "$schema": "http://json-schema.org/draft/2019-09/schema#",
+  "title": "Configuration file",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "Title of the report."
+    },
+    "interval_days": {
+      "type": "integer",
+      "description": "The report interval in days. This value is only used if start_date is not explicitly defined.",
+      "default": 7
+    },
+    "start_date": {
+      "type": "string",
+      "format": "date",
+      "description": "Beginning of reporting period.",
+      "default": "End date minus the number of dates in interval_days."
+    },
+    "end_date": {
+      "type": "string",
+      "format": "date",
+      "description": "End of reporting period.",
+      "default": "Current date."
+    },
+    "theme": {
+      "$ref": "#/definitions/theme"
+    },
+    "datasources": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/datasource"
+      }
+    },
+    "views": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/view"
+      }
+    },
+    "outputs": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "#/definitions/output"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "definitions": {
+    "theme": {
+      "type": "object",
+      "properties": {
+        "num_columns": {
+          "type": "integer",
+          "description": "Number of columns in view grid layout.",
+          "default": 6
+        },
+        "column_width": {
+          "type": "integer",
+          "description": "Width of single column in view grid layout, in pixels.",
+          "default": 86
+        },
+        "theme_dir": {
+          "type": "string",
+          "description": "Path to directory with additional theme assets."
+        }
+      },
+      "additionalProperties": false
+    },
+    "datasource": {
+      "type": "object",
+      "properties": {
+        "plugin": {
+          "type": "string",
+          "description": "Name of datasource plugin to use."
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "required": ["plugin"],
+      "additionalProperties": false
+    },
+    "view": {
+      "type": "object",
+      "properties": {
+        "plugin": {
+          "type": "string",
+          "description": "Name of view plugin to use."
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": true
+        },
+        "title": {
+          "type": "string",
+          "description": "Optional headline title for the view."
+        },
+        "description": {
+          "type": "string",
+          "description": "Optional description for the view."
+        },
+        "cols": {
+          "type": "integer",
+          "description": "Number of grid columns to take up.",
+          "default": "Total number of columns defined in theme (full bleed)."
+        }
+      },
+      "required": ["plugin"],
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "plugin": {
+          "type": "string",
+          "description": "Name of output driver plugin to use."
+        },
+        "args": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "required": ["plugin"],
+      "additionalProperties": false
+    }
+  }
+}

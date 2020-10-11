@@ -16,9 +16,10 @@
 from datetime import datetime
 from io import BytesIO
 import os
-from pkg_resources import get_distribution
-import requests
+import shutil
 from zipfile import ZipFile
+
+import requests
 
 from kpireport import VERSION
 
@@ -41,6 +42,7 @@ release = VERSION
 extensions = [
     "sphinx.ext.autodoc",
     "sphinx.ext.intersphinx",
+    "sphinx-jsonschema",
     "sphinx_rtd_theme",
     "sphinxcontrib.napoleon",
 ]
@@ -82,6 +84,12 @@ html_static_path = ["_static"]
 
 html_css_files = ["css/custom.css"]
 
+html_extra_path = ["_extra"]
+
+# Copy schema file(s)
+os.makedirs("_extra", exist_ok=True)
+shutil.copy("../schema/configuration.schema.json", "_extra/")
+
 
 def artifact_sort(artifact):
     return datetime.strptime(artifact.get("created_at"), "%Y-%m-%dT%H:%M:%S%z")
@@ -92,7 +100,7 @@ gh_repo = os.getenv("GITHUB_REPOSITORY")
 gh_token = os.getenv("GITHUB_TOKEN")
 
 try:
-    if not gh_repo:
+    if not (gh_repo and gh_token):
         raise ValueError("Missing GitHub environment variables")
 
     gh_artifacts_url = f"{gh_api_base}/repos/{gh_repo}/actions/artifacts"
@@ -113,10 +121,8 @@ try:
         zip_res.raise_for_status()
         zipfile = ZipFile(BytesIO(zip_res.content))
         zipfile.extractall("_extra/examples")
-        html_extra_path = ["_extra"]
 except Exception as e:
     print("Unable to fetch GHA artifacts: ", e)
-    html_extra_path = ["../_build"]
 
 
 # Mock all the extra_requires modules. Without this, Sphinx cannot

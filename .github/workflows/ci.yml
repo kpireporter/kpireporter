@@ -1,5 +1,8 @@
 name: Build Docker image
 
+env:
+  PYTHON_VERSION: 3.8
+
 on:
   push:
     branches:
@@ -72,7 +75,7 @@ jobs:
           platforms: linux/amd64,linux/386
           push: true
           tags: ${{ steps.prep.outputs.tags }}
-          build-args: python_version=3.8
+          build-args: python_version=${PYTHON_VERSION}
           labels: |
             org.opencontainers.image.title=${{ github.event.repository.name }}
             org.opencontainers.image.description=${{ github.event.repository.description }}
@@ -122,7 +125,6 @@ jobs:
         ./dev/run.sh --no-rebuild -c examples/jenkins.yaml
         ./dev/run.sh --no-rebuild -c examples/prometheus.yaml
       env:
-        DOCKER_CACHE_DIR: /tmp/.buildx-cache
         SCP_IDENTITY_FILE: /tmp/dummy_scp_identity_file
 
     - name: Archive examples

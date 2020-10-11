@@ -1,4 +1,5 @@
-FROM python:3 as builder
+ARG python_version=3.8
+FROM python:$python_version as builder
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
         build-essential \
@@ -12,11 +13,12 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 COPY requirements.txt ./requirements.txt
 COPY plugin-requirements.txt ./plugin-requirements.txt
+RUN pip install --upgrade pip wheel
 RUN pip install --no-cache-dir \
   -r requirements.txt \
   -r plugin-requirements.txt
 
-FROM python:slim as base
+FROM python:$python_version-slim as base
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
     libmysqlcppconn-dev \

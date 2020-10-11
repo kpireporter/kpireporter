@@ -30,18 +30,21 @@
     },
     "datasources": {
       "type": "object",
+      "description": "Set of named datasource instances; the keys define the IDs.",
       "additionalProperties": {
         "$ref": "#/definitions/datasource"
       }
     },
     "views": {
       "type": "object",
+      "description": "Set of named view instances; the keys define the IDs.",
       "additionalProperties": {
         "$ref": "#/definitions/view"
       }
     },
     "outputs": {
       "type": "object",
+      "description": "Set of named output driver instances; the keys define the IDs.",
       "additionalProperties": {
         "$ref": "#/definitions/output"
       }

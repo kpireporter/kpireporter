@@ -75,7 +75,7 @@ jobs:
           platforms: linux/amd64,linux/386
           push: true
           tags: ${{ steps.prep.outputs.tags }}
-          build-args: python_version=${PYTHON_VERSION}
+          build-args: python_version=${{ env.PYTHON_VERSION }}
           labels: |
             org.opencontainers.image.title=${{ github.event.repository.name }}
             org.opencontainers.image.description=${{ github.event.repository.description }}

@@ -1,4 +1,4 @@
-ARG python_version=3.8
+ARG python_version=3
 FROM python:$python_version as builder
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \

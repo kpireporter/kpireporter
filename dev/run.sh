@@ -69,7 +69,7 @@ rebuild() {
   cat "$PROJ/plugins/"*/requirements.txt >"$PROJ/plugin-requirements.txt"
   declare -a build_cmd=()
   build_cmd+=(docker build -f "$PROJ/docker/Dockerfile" --target dev --tag "$DOCKER_IMAGE:$DOCKER_TAG")
-  if [[ "$CI" == "true" ]]; then
+  if [[ "${CI:-false}" == "true" ]]; then
     build_cmd+=(--cache-from "type=local,src=/tmp/.buildx-cache")
     build_cmd+=(--cache-to "type=local,dest=/tmp/.buildx-cache")
     build_cmd+=(--build-arg "python_version=$PYTHON_VERSION")

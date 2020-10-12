@@ -62,7 +62,7 @@ class SendGridOutputDriver(OutputDriver):
         return flag in ["1", "y", "yes", "true"]
 
     def render_blob_inline(self, blob, fmt=None):
-        return Markup(f"""<img src="cid:{blob["id"]}" />""")
+        return Markup(f"""<img src="cid:{blob.id}" />""")
 
     def render_output(self, content, blobs):
         msg = Mail(
@@ -84,13 +84,13 @@ class SendGridOutputDriver(OutputDriver):
 
         attachment = []
         for blob in blobs:
-            encoded_content = b64encode(blob["content"].getvalue()).decode()
+            encoded_content = b64encode(blob.content.getvalue()).decode()
             attachment.append(
                 Attachment(
                     file_content=encoded_content,
-                    file_name=blob["id"],
-                    file_type=blob.get("mime_type"),
-                    content_id=blob["id"],
+                    file_name=blob.id,
+                    file_type=blob.mime_type,
+                    content_id=blob.id,
                     disposition="inline",
                 )
             )

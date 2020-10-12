@@ -22,9 +22,9 @@ class StaticOutputDriver(OutputDriver):
 
     def render_blob_inline(self, blob, fmt=None):
         if fmt == "md":
-            return f"""![{blob["title"]}]({blob["id"]})"""
+            return f"""![{blob.title}]({blob.id})"""
         else:
-            return Markup(f"""<img src="{blob["id"]}" />""")
+            return Markup(f"""<img src="{blob.id}" />""")
 
     def render_output(self, content, blobs):
         content = content.get_format("html")
@@ -36,10 +36,10 @@ class StaticOutputDriver(OutputDriver):
             f.write(content)
 
         for blob in blobs:
-            blob_path = os.path.join(report_dir, blob["id"])
+            blob_path = os.path.join(report_dir, blob.id)
             os.makedirs(os.path.dirname(blob_path), exist_ok=True)
             with open(blob_path, "wb") as f:
-                f.write(blob["content"].getvalue())
+                f.write(blob.content.getvalue())
 
         try:
             os.makedirs(latest_dir, exist_ok=True)

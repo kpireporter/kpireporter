@@ -77,9 +77,9 @@ class SMTPOutputDriver(OutputDriver):
 
     def render_blob_inline(self, blob, fmt=None):
         if self.image_strategy == "embed":
-            return Markup(f"""<img src="cid:{blob["id"]}" />""")
+            return Markup(f"""<img src="cid:{blob.id}" />""")
         elif self.image_strategy == "remote":
-            path = "/".join([self.image_remote_base_url, blob["id"]])
+            path = "/".join([self.image_remote_base_url, blob.id])
             return Markup(f"""<img src="{path}{self.cache_buster}" />""")
         else:
             raise ValueError(f"Unsupported image strategy '{self.image_strategy}'")
@@ -99,10 +99,10 @@ class SMTPOutputDriver(OutputDriver):
             for blob in blobs:
                 mime_type = blob.get("mime_type")
                 if not mime_type:
-                    raise ValueError(f"No mime type specified for blob {blob['id']}")
+                    raise ValueError(f"No mime type specified for blob {blob.id}")
                 maintype, subtype = mime_type.split("/")
                 payload.add_related(
-                    blob["content"].getvalue(), maintype, subtype, cid=blob["id"]
+                    blob.content.getvalue(), maintype, subtype, cid=blob.id
                 )
 
         # Send the message via local SMTP server.

@@ -119,8 +119,8 @@ class SlackOutputDriver(OutputDriver):
 
             if self.image_remote_base_url:
                 for blob in view.get("blobs"):
-                    image_url = f"{self.image_remote_base_url}/{blob['id']}"
-                    title = blob.get("title", blob["id"])
+                    image_url = f"{self.image_remote_base_url}/{blob.id}"
+                    title = blob.get("title", blob.id)
                     blks.append(
                         blocks.ImageBlock(
                             title=title, image_url=image_url, alt_text=title

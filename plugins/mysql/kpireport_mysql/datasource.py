@@ -16,6 +16,7 @@ class MySQLDatasource(Datasource):
         kwargs: any keyword arguments are passed through to
             :meth:`MySQLdb.Connect`
     """
+
     def init(self, **kwargs):
         self.db = MySQLdb.connect(**kwargs)
 

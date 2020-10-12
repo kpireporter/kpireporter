@@ -17,6 +17,7 @@ class S3OutputDriver(StaticOutputDriver):
         kwargs: any additional keyword arguments are passed in to the
             :class:`boto3.client` constructor.
     """
+
     def init(self, **kwargs):
         self.bucket = kwargs.pop("bucket", None)
         self.prefix = kwargs.pop("prefix", None)

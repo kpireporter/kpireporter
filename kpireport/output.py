@@ -12,8 +12,9 @@ class OutputDriver(ABC):
     Attributes:
         report (:class:`~kpireport.report.Report`): the current report.
         id (str): the Output driver ID declared in the report configuration.
-        supported_formats (List[str]): a list of output formats supported by this
-            driver. Defaults to ``["md", "html"]``.
+        supported_formats (List[str]): a list of output formats supported by
+            this driver. Defaults to ``["md", "html"]``.
+
     """
 
     id: str = None

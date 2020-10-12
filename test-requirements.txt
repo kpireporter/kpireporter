@@ -1,6 +1,6 @@
 nose
 nose-watch
-pep8
+pycodestyle
 pylama
 # We have to install the base package explicitly
 # because tox will attempt to install it only after

@@ -22,6 +22,7 @@ class Theme:
             These templates will override the default templates of the same
             name, and can be used to alter the overall report appearance.
     """
+
     def __init__(self, num_columns=6, column_width=86, theme_dir=None):
         self.num_columns = num_columns
         self.column_width = column_width
@@ -82,6 +83,7 @@ class Content:
         formats (List[str]): the list of all formats available for the report.
             Any formats added via :meth:`add_format` will be reflected here.
     """
+
     def __init__(self, j2: "Environment", report: "Report"):
         self.j2 = j2
         self.report = report
@@ -166,6 +168,7 @@ class ReportFactory:
         supported_formats (List[str]): the output formats that any report can
             target.
     """
+
     supported_formats = ["html", "md", "slack"]
 
     def __init__(self, config):

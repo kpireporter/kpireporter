@@ -63,7 +63,7 @@ class PluginManager:
         fn = getattr(instance, method)
 
         if not callable(fn):
-            raise self.exc_class((f"No such method {method} for {self.type_noun} {id}"))
+            raise self.exc_class(f"No such method {method} for {self.type_noun} {id}")
 
         return fn(*args, **kwargs)
 
@@ -81,7 +81,7 @@ class PluginManager:
         plugin_kwargs = config.get("args", {})
         if not isinstance(plugin_kwargs, dict):
             raise ValueError(
-                (f"Malformed plugin arguments: expected dict, " f"got {plugin_kwargs}")
+                (f"Malformed plugin arguments: expected dict, got {plugin_kwargs}")
             )
 
         plugin_kwargs.setdefault("id", id)

@@ -16,6 +16,7 @@ class StaticOutputDriver(OutputDriver):
         output_dir (str): the directory to output the report HTML contents to.
             (Default ``"./_build"``)
     """
+
     def init(self, output_dir="_build"):
         self.output_dir = output_dir
 

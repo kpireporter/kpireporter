@@ -15,6 +15,7 @@ class PrometheusDatasource(Datasource):
             authenticating to the server. Must be a dictionary with ``username``
             and ``password`` keys.
     """
+
     def init(self, host=None, basic_auth=None):
         if not host:
             raise ValueError("Missing required parameter: 'host'")
@@ -29,7 +30,8 @@ class PrometheusDatasource(Datasource):
         Args:
             query (str): the PromQL query
             step (str): the step size for the range query. The Datasource will
-                execute a `range query <https://prometheus.io/docs/prometheus/latest/querying/api/#range-queries>`_
+                execute a `range query
+                <https://prometheus.io/docs/prometheus/latest/querying/api/#range-queries>`_
                 over the report window and capture all time series data
                 within the report boundaries. The step size indicates the
                 query resolution. A lower value provides more granularity
@@ -45,7 +47,8 @@ class PrometheusDatasource(Datasource):
         """
         if self.basic_auth:
             auth = requests.auth.HTTPBasicAuth(
-                self.basic_auth['username'], self.basic_auth['password'])
+                self.basic_auth["username"], self.basic_auth["password"]
+            )
         else:
             auth = None
 
@@ -81,8 +84,11 @@ class PrometheusDatasource(Datasource):
     def _validate_basic_auth(self, basic_auth):
         if not basic_auth:
             return
-        if (not (isinstance(basic_auth, dict) and
-            all(k in basic_auth for k in ['username', 'password']))):
+        if not (
+            isinstance(basic_auth, dict)
+            and all(k in basic_auth for k in ["username", "password"])
+        ):
             raise ValueError(
-                "Basic auth must be dict with 'username' and 'password' keys")
+                "Basic auth must be dict with 'username' and 'password' keys"
+            )
         return basic_auth

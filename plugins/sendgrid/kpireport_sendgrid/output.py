@@ -28,6 +28,7 @@ class SendGridOutputDriver(OutputDriver):
         api_key (str): a SendGrid API key authorized to send mail on behalf of
             the sending address.
     """
+
     def init(self, email_from=None, email_to=None, api_key=None):
         if not (email_from and email_to):
             raise ValueError("Both 'from' and 'to' addresses are required")

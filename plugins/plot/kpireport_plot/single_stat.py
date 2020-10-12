@@ -21,6 +21,7 @@ class SingleStat(View):
             is displayed, or "percent", meaning the percentage
             increase/decrease is displayed. (Default ``"raw"``)
     """
+
     def init(
         self,
         datasource=None,

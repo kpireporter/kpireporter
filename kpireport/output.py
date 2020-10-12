@@ -35,7 +35,25 @@ class OutputDriver(ABC):
         """
         pass
 
-    def render_blob_inline(self, blob, fmt=None):
+    def render_blob_inline(self, blob: "kpireport.view.Blob", fmt=None):
+        """Render a blob file inline in the report output.
+
+        Blobs are typically binary image files; many output formats afford some
+        way of displaying them directly, e.g., in HTML via an <img> tag. Each
+        output driver can define how to render a blob inline. An email output
+        driver may implement some way of attaching the image and referencing it
+        in the mail message, while a HTML file output driver may use an <img>
+        tag and link to the file, or perhaps use a data-uri.
+
+        This function is used when invoking the ``blob`` template filter.
+
+        Args:
+            blob (kpireport.view.Blob): the Blob to render.
+            fmt (str): the output format.
+
+        Returns:
+            str: the rendered Blob output.
+        """
         raise NotImplementedError(f"'{self.id}' driver does not support inline blobs")
 
     def can_render(self, fmt: str) -> bool:

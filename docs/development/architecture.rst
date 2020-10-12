@@ -31,3 +31,28 @@ types of plugins:
 Plugins are Python modules, and can be installed however you prefer, e.g.,
 with ``pip``. Plugins must be installed into the same Python path as
 KPI Reporter, as that is how they are automatically discovered at runtime.
+
+Why Dataframes?
+===============
+
+The data interchange format between the View and Datasource layers is the
+:class:`pandas.DataFrame`. There are a few reasons for this:
+
+  * The abstraction is already widely used by data scientists.
+  * A wide variety of shapes of data can be expressed.
+  * The abstraction maps easily to most database storage abstractions (e.g.,
+    row-based or column-based tabular data.)
+  * Documentation is plentiful and kept up-to-date.
+  * Visualization libraries (e.g., :module:`matplotlib`) have good support for
+    rendering DataFrames built-in.
+
+That said, there are some downsides:
+
+  * DataFrames are arguably harder to transform than plan JSON data structures.
+  * DataFrames don't readily support mixing list and dict-like structures; some
+    normalization is typically needed (see the source for the
+    :ref:`jenkins-plugin` for an example.)
+
+The architecture intends to allow for wide interoperability between the View
+and Datasource layers, so having a well-formed, if limiting, data interface is
+important enough to override these concerns.

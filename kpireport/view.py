@@ -12,6 +12,14 @@ class ViewException(Exception):
     pass
 
 
+class Blob:
+    def __init__(self, id, content, mime_type=None, title=None):
+        self.id = id
+        self.content = content
+        self.mime_type = mime_type
+        self.title = title
+
+
 class View(ABC):
     """The view"""
 
@@ -51,18 +59,18 @@ class View(ABC):
         return getattr(self, f"render_{fmt}")(env)
 
     def add_blob(self, id, blob, mime_type, title=None):
-        self._blobs[id] = dict(
+        self._blobs[id] = Blob(
             id=f"{self.id}/{id}",
             content=blob,
             mime_type=mime_type,
             title=title or self.title,
         )
 
-    def get_blob(self, id):
+    def get_blob(self, id) -> Blob:
         return self._blobs.get(id)
 
     @property
-    def blobs(self):
+    def blobs(self) -> "List[Blob]":
         return self._blobs.values()
 
 

@@ -7,6 +7,7 @@ PROJ="$DIR/.."
 # Allow overriding the name of the docker image to use in the compose env.
 export DOCKER_IMAGE="${DOCKER_IMAGE:-diurnalist/kpireporter}"
 export DOCKER_TAG=dev
+export PYTHON_VERSION=${PYTHON_VERSION:-3.8}
 
 pushd "$DIR" >/dev/null
 

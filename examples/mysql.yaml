@@ -65,3 +65,12 @@ views:
           and created_at < {from}
       comparison_type: percent
       # comparison_type: raw
+  new_signups_table:
+    plugin: table
+    args:
+      datasource: db
+      query: |
+        select date_format(created_at, '%%Y-%%m-%%d') as Day, count(*) as 'Daily total'
+        from kpireport.signups
+        where created_at >= {from} and created_at < {to}
+        group by day(created_at)

@@ -20,7 +20,7 @@
     }
 
     body {
-      background-color: #f6f6f6;
+      background-color: {{ report.theme.background_offset() }};
       font-family: sans-serif;
       -webkit-font-smoothing: antialiased;
       font-size: 14px;
@@ -49,7 +49,7 @@
     ------------------------------------- */
 
     .body {
-      background-color: #f6f6f6;
+      background-color: {{ report.theme.background_offset() }};
       width: 100%;
     }
 
@@ -74,7 +74,7 @@
         HEADER, FOOTER, MAIN
     ------------------------------------- */
     .main {
-      background: #ffffff;
+      background: {{ report.theme.background_color }};
       border-radius: 3px;
       width: 100%;
     }
@@ -88,7 +88,7 @@
       padding-bottom: 0;
     }
     .report_date {
-      color: #aaaaaa;
+      color: {{ report.theme.text_offset() }};
     } .report_date strong {
         font-size: 16px;
       }
@@ -124,7 +124,7 @@
       .footer p,
       .footer span,
       .footer a {
-        color: #999999;
+        color: {{ report.theme.text_offset() }};
         font-size: 12px;
         text-align: center;
     }
@@ -136,7 +136,7 @@
     h2,
     h3,
     h4 {
-      color: #000000;
+      color: {{ report.theme.text_color }};
       font-family: sans-serif;
       font-weight: 400;
       line-height: 1.4;

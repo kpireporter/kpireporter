@@ -18,15 +18,49 @@ class Theme:
 
     Attributes:
         num_columns (int): the number of columns in the report grid. (Default 6)
+        column_width (int): the width of each column, in pixels. (Default 86)
         theme_dir (str): a directory where additional templates can be found.
             These templates will override the default templates of the same
             name, and can be used to alter the overall report appearance.
+        ui_colors (List[str]): a list of user interface colors.
+        colors (List[str]): a list of series colors.
     """
 
-    def __init__(self, num_columns=6, column_width=86, theme_dir=None):
+    def __init__(self, num_columns=6, column_width=86, theme_dir=None,
+                 ui_colors=None, colors=None):
         self.num_columns = num_columns
         self.column_width = column_width
         self.theme_dir = theme_dir
+        self.ui_colors = ui_colors or [
+            "#222222",
+            "#888888",
+            "#cccccc",
+            "#ededed",
+            "#ffffff",
+        ]
+        self.colors = colors or [
+            "#0F5F0F",
+            "#2D882D",
+            "#94D794",
+            "#DEA271",
+            "#764013",
+            "#B25B8C",
+            "#5F0F3C",
+        ]
+
+    @property
+    def text_color(self):
+        return self.ui_colors[0]
+
+    def text_offset(self, offset=1):
+        return self.ui_colors[offset]
+
+    @property
+    def background_color(self):
+        return self.ui_colors[-1]
+
+    def background_offset(self, offset=1):
+        return self.ui_colors[-(1 + offset)]
 
 
 class Report:

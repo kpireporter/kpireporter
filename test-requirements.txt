@@ -20,3 +20,4 @@ pylama
 -e ./plugins/sendgrid
 -e ./plugins/slack
 -e ./plugins/smtp
+-e ./plugins/table

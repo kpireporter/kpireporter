@@ -2,7 +2,7 @@ from functools import lru_cache
 
 from kpireport.view import View
 
-class TableView(View):
+class Table(View):
     """Render data fetched from a datasource as a table.
 
     Attributes:

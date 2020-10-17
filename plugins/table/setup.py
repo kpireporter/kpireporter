@@ -11,6 +11,6 @@ setup(
         "kpireport",
     ],
     entry_points={
-        "kpireport.view": ["table = kpireport_table:TableView"],
+        "kpireport.view": ["table = kpireport_table:Table"],
     },
 )

@@ -10,26 +10,5 @@ formats: all
 python:
   version: 3.8
   install:
+    - requirements: test-requirements.txt
     - requirements: docs/requirements.txt
-    - method: pip
-      path: .
-    - method: pip
-      path: plugins/static  # Install first, as some plugins extend this
-    - method: pip
-      path: plugins/jenkins
-    - method: pip
-      path: plugins/mysql
-    - method: pip
-      path: plugins/plot
-    - method: pip
-      path: plugins/prometheus
-    - method: pip
-      path: plugins/s3
-    - method: pip
-      path: plugins/scp
-    - method: pip
-      path: plugins/sendgrid
-    - method: pip
-      path: plugins/slack
-    - method: pip
-      path: plugins/smtp

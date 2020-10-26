@@ -84,13 +84,13 @@ class ViewManager(PluginManager):
         self.datasource_manager = datasource_manager
         super(ViewManager, self).__init__(report, config, extension_manager)
 
-    def plugin_factory(self, Plugin, plugin_kwargs, config):
+    def plugin_factory(self, config, plugin_class, plugin_kwargs):
         for attr in ["title", "description", "cols"]:
             value = config.get(attr)
             if value:
                 plugin_kwargs.setdefault(attr, value)
 
-        return Plugin(self.report, self.datasource_manager, **plugin_kwargs)
+        return plugin_class(self.report, self.datasource_manager, **plugin_kwargs)
 
     def _blob_filter(self, output_driver):
         @evalcontextfilter

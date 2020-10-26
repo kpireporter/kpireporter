@@ -24,23 +24,23 @@ class PluginManagerTestCase(unittest.TestCase):
         return TestPluginManager(MagicMock(), conf, extension_manager=mgr)
 
     def test_missing_plugin(self):
-        with self.assertRaises(TestException):
-            self._make_plugin_manager(conf={NAME: {}})
+        mgr = self._make_plugin_manager(conf={NAME: {}})
+        self.assertIsInstance(mgr.errors(NAME)[0], TestException)
 
     def test_invalid_plugin(self):
-        with self.assertRaises(TestException):
-            self._make_plugin_manager(conf={NAME: {"plugin": "missing"}})
+        mgr = self._make_plugin_manager(conf={NAME: {"plugin": "missing"}})
+        self.assertIsInstance(mgr.errors(NAME)[0], TestException)
 
     def test_invalid_args(self):
-        with self.assertRaises(TestException):
-            self._make_plugin_manager(conf={NAME: {"plugin": PLUGIN, "args": "foo"}})
+        mgr = self._make_plugin_manager(conf={NAME: {"plugin": PLUGIN, "args": "foo"}})
+        self.assertIsInstance(mgr.errors(NAME)[0], TestException)
 
-    def test_raises_on_invoke(self):
+    def test_error_on_invoke(self):
         def test_plugin():
             raise ValueError("I'm a bad plugin!")
 
-        with self.assertRaises(TestException):
-            self._make_plugin_manager(plugins=[(PLUGIN, test_plugin)])
+        mgr = self._make_plugin_manager(plugins=[(PLUGIN, test_plugin)])
+        self.assertIsInstance(mgr.errors(NAME)[0], TestException)
 
     def test_call_instance(self):
         class TestPlugin(BaseTestPlugin):

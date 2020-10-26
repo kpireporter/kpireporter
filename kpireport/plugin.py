@@ -1,4 +1,6 @@
+from collections import defaultdict
 import logging
+from typing import DefaultDict
 import stevedore
 
 
@@ -39,12 +41,15 @@ class PluginManager:
             self.log.info(f"Loaded {self.type_noun} plugins: {loaded_names}")
 
         self._instances = {}
+        self._errors = defaultdict(list)
         for id, conf in config.items():
             try:
                 self._instances[id] = self.create_instance(id, conf)
                 self.log.info(f"Initialized {self.type_noun} {id}")
             except Exception as exc:
-                raise self.exc_class(f"Failed to load {self.type_noun} {id}") from exc
+                self.log.debug(f"Failed to load {self.type_noun} {id}",
+                    exc_info=self.log.isEnabledFor(logging.DEBUG))
+                self._errors[id].append(exc)
 
     @property
     def instances(self):
@@ -71,22 +76,28 @@ class PluginManager:
         plugin = config.get("plugin")
 
         if not plugin:
-            raise ValueError(
+            raise self.exc_class(
                 (f"Each {self.type_noun} must define a 'plugin' attribute")
             )
 
         if plugin not in self._mgr:
-            raise ValueError(f"Plugin {plugin} not loaded")
+            raise self.exc_class(f"Plugin {plugin} not loaded")
 
         plugin_kwargs = config.get("args", {})
         if not isinstance(plugin_kwargs, dict):
-            raise ValueError(
+            raise self.exc_class(
                 (f"Malformed plugin arguments: expected dict, got {plugin_kwargs}")
             )
 
         plugin_kwargs.setdefault("id", id)
 
-        return self.plugin_factory(self._mgr[plugin].plugin, plugin_kwargs, config)
+        try:
+            return self.plugin_factory(config, self._mgr[plugin].plugin, plugin_kwargs)
+        except Exception as exc:
+            raise self.exc_class(f"Plugin {plugin} raised error on create") from exc
 
-    def plugin_factory(self, Plugin, plugin_kwargs, config):
-        return Plugin(self.report, **plugin_kwargs)
+    def plugin_factory(self, config, plugin_class, plugin_kwargs):
+        return plugin_class(self.report, **plugin_kwargs)
+
+    def errors(self, id: str) -> "List[Exception]":
+        return self._errors[id]

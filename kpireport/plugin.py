@@ -47,8 +47,10 @@ class PluginManager:
                 self._instances[id] = self.create_instance(id, conf)
                 self.log.info(f"Initialized {self.type_noun} {id}")
             except Exception as exc:
-                self.log.debug(f"Failed to load {self.type_noun} {id}",
-                    exc_info=self.log.isEnabledFor(logging.DEBUG))
+                self.log.debug(
+                    f"Failed to load {self.type_noun} {id}",
+                    exc_info=self.log.isEnabledFor(logging.DEBUG)
+                )
                 self._errors[id].append(exc)
 
     @property

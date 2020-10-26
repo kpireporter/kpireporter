@@ -23,6 +23,14 @@ section.
 
       kpireport -c base-config.yaml -c extra-config.yaml
 
+A full example
+==============
+
+For more examples see :ref:`getting-started-examples`.
+
+.. literalinclude:: ../../examples/full.yaml
+   :language: yaml
+
 Schema
 ======
 

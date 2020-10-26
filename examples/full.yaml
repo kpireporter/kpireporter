@@ -1,0 +1,40 @@
+---
+title: My report
+
+datasources:
+  db:
+    plugin: mysql
+    args:
+      host: 127.0.0.1
+  jenkins:
+    plugin: jenkins
+    args:
+      host: 127.0.0.1:8000
+
+views:
+  line_plot:
+    title: A line plot
+    plugin: plot
+    args:
+      # Note that this refers to the "db" datasource registered above.
+      datasource: db
+      query: |
+        select time, value from my_db.my_table
+        where time > {from} and time < {to}
+  results_table:
+    title: A table of values
+    plugin: table
+    args:
+      # Note that this refers to the "db" datasource registered above.
+      datasource: db
+      query: |
+        select count(value), value from my_db.my_table
+        where time > {from} and time < {to}
+        group by value
+
+outputs:
+  mail:
+    plugin: smtp
+    args:
+      smtp_host: 127.0.0.1
+      smtp_port: 1025

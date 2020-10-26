@@ -49,7 +49,7 @@ class PluginManager:
             except Exception as exc:
                 self.log.debug(
                     f"Failed to load {self.type_noun} {id}",
-                    exc_info=self.log.isEnabledFor(logging.DEBUG)
+                    exc_info=self.log.isEnabledFor(logging.DEBUG),
                 )
                 self._errors[id].append(exc)
 

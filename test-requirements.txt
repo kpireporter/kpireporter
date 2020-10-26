@@ -1,3 +1,4 @@
+black
 nose
 nose-watch
 pycodestyle

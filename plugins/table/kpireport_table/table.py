@@ -21,6 +21,7 @@ class Table(View):
         max_rows (int): maximum number of rows to display. If the output table
             has more rows, they are ignored. (Default 10)
     """
+
     def init(self, datasource=None, query=None, query_args=None, max_rows=None):
         self.datasource = datasource
         self.query = query
@@ -58,7 +59,8 @@ class Table(View):
         </style>
         """
         table = self._query().to_html(
-            classes="kpireport-table", border=0, index_names=False)
+            classes="kpireport-table", border=0, index_names=False
+        )
         return f"{styles}\n{table}"
 
     def render_md(self, j2):
@@ -68,4 +70,4 @@ class Table(View):
         return self._query().to_markdown(tablefmt="grid")
 
     # def render_slack(self, j2):
-        # Render as image?
+    # Render as image?

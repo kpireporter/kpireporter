@@ -26,8 +26,14 @@ class Theme:
         colors (List[str]): a list of series colors.
     """
 
-    def __init__(self, num_columns=6, column_width=86, theme_dir=None,
-                 ui_colors=None, colors=None):
+    def __init__(
+        self,
+        num_columns=6,
+        column_width=86,
+        theme_dir=None,
+        ui_colors=None,
+        colors=None,
+    ):
         self.num_columns = num_columns
         self.column_width = column_width
         self.theme_dir = theme_dir

@@ -1,4 +1,4 @@
-import MySQLdb
+import pymysql
 import pandas as pd
 import re
 
@@ -14,11 +14,11 @@ class MySQLDatasource(Datasource):
 
     Attributes:
         kwargs: any keyword arguments are passed through to
-            :meth:`MySQLdb.Connect`
+            :meth:`pymysql.connect`
     """
 
     def init(self, **kwargs):
-        self.db = MySQLdb.connect(**kwargs)
+        self.db = pymysql.connect(**kwargs)
 
     def query(self, sql: str, **kwargs) -> pd.DataFrame:
         """Execute a query SQL string.

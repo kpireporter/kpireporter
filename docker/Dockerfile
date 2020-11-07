@@ -3,7 +3,6 @@ FROM python:$python_version as builder
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
         build-essential \
-        default-libmysqlclient-dev \
         python3-dev \
     && rm -rf /var/lib/apt/lists/*
 
@@ -18,11 +17,7 @@ RUN pip install --no-cache-dir \
   -r requirements.txt \
   -r plugin-requirements.txt
 
-FROM python:$python_version-slim as base
-
-RUN apt-get update -y && apt-get install -y --no-install-recommends \
-    libmysqlcppconn-dev \
-  && rm -rf /var/lib/apt/lists/*
+FROM python:$python_version as base
 
 RUN mkdir /opt/kpireport
 WORKDIR /opt/kpireport

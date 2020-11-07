@@ -64,9 +64,9 @@ intersphinx_mapping = {
         "http://pandas.pydata.org/pandas-docs/stable/",
         "http://pandas.pydata.org/pandas-docs/stable/objects.inv",
     ),
-    "MySQLdb": (
-        "https://mysqlclient.readthedocs.io/",
-        "https://mysqlclient.readthedocs.io/objects.inv",
+    "pymysql": (
+        "https://pymysql.readthedocs.io/",
+        "https://pymysql.readthedocs.io/page/objects.inv",
     ),
 }
 

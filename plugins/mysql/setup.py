@@ -7,7 +7,7 @@ setup(
     author_email="diurnalist@gmail.com",
     license="Prosperity Public License",
     packages=["kpireport_mysql"],
-    install_requires=["kpireport", "mysqlclient"],
+    install_requires=["kpireport", "PyMySQL"],
     entry_points={
         "kpireport.datasource": ["mysql = kpireport_mysql:MySQLDatasource"],
     },

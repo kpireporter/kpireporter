@@ -7,7 +7,7 @@ setup(
     author_email="diurnalist@gmail.com",
     license="Prosperity Public License",
     packages=["kpireport_prometheus"],
-    install_requires=["kpireport", "requests"],
+    install_requires=["kpireport", "Pillow", "requests"],
     package_data={"kpireport_prometheus": ["templates/*"]},
     entry_points={
         "kpireport.datasource": [

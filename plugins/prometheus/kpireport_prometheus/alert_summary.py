@@ -36,7 +36,7 @@ class PrometheusAlertSummary(View):
             contain in order to be displayed (default ``None``)
         show_timeline (bool): whether to show a visual timeline of when alerts
             were firing (default ``True``)
-        timeline_height (int): rendered height of the timeline in pixels 
+        timeline_height (int): rendered height of the timeline in pixels
             (default ``15``)
     """
 

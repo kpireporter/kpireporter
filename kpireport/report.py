@@ -23,15 +23,18 @@ class Theme:
             These templates will override the default templates of the same
             name, and can be used to alter the overall report appearance.
         ui_colors (List[str]): a list of user interface colors. This is expected to
-            be a 5-tuple of (text color, lighter text color, dark bg color, bg accent, bg color)
+            be a 5-tuple of (text color, lighter text color, dark bg color, bg accent,
+            bg color)
         error_colors (List[str]): a list of error colors used when views render an
-            error vs. success state. This is expected to be a 2-tuple of (dark, light).
+            error vs. success state. This is expected to be a 2-tuple of
+            (dark, light).
         success_colors (List[str]): a list of success colors used when views render
-            an error vs. success state. This is expected to be a 2-tuple of (dark, light).
-        series_colors (List[str]): a list of series colors. There can be as many or as few
-            series colors in the theme; you just want to ensure you can handle whatever
-            needs you have for plotting or displaying data in charts or graphs such that
-            series can be identified clearly.
+            an error vs. success state. This is expected to be a 2-tuple of
+            (dark, light).
+        series_colors (List[str]): a list of series colors. There can be as many or as
+            few series colors in the theme; you just want to ensure you can handle
+            whatever needs you have for plotting or displaying data in charts or graphs
+            such that series can be identified clearly.
     """
 
     def __init__(
@@ -92,7 +95,7 @@ class Theme:
 
     @property
     def success_background_color(self):
-        return self.success_colors[1]
+        return self.success_colors
 
     @property
     def error_color(self):

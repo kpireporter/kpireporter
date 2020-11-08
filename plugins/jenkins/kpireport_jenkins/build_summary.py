@@ -95,7 +95,7 @@ class JenkinsBuildSummary(View):
                 )
             )
 
-        return dict(summary=summary)
+        return dict(summary=summary, theme=self.report.theme)
 
     def _render(self, j2, fmt):
         template = j2.get_template(f"jenkins_build_summary.{fmt}")

@@ -1,11 +1,15 @@
 from datetime import timedelta
+import io
 from itertools import chain
 from functools import lru_cache, reduce
 from operator import itemgetter
 import pandas as pd
+from PIL import Image, ImageDraw
 import re
 
 from kpireport.view import View
+
+DEFAULT_TIMELINE_HEIGHT = 15
 
 
 class PrometheusAlertSummary(View):
@@ -32,6 +36,8 @@ class PrometheusAlertSummary(View):
             contain in order to be displayed (default ``None``)
         show_timeline (bool): whether to show a visual timeline of when alerts
             were firing (default ``True``)
+        timeline_height (int): rendered height of the timeline in pixels 
+            (default ``15``)
     """
 
     RESOLUTION_REGEX = r"([0-9]+)([smhdwy])"
@@ -44,6 +50,7 @@ class PrometheusAlertSummary(View):
         labels=None,
         ignore_labels=None,
         show_timeline=True,
+        timeline_height=None,
     ):
         self.datasource = datasource
         self.resolution = self._parse_resolution(resolution)
@@ -51,6 +58,7 @@ class PrometheusAlertSummary(View):
         self.labels = labels
         self.ignore_labels = ignore_labels
         self.show_timeline = show_timeline
+        self.timeline_height = timeline_height or DEFAULT_TIMELINE_HEIGHT
 
     def _parse_resolution(self, res):
         match = re.match(self.RESOLUTION_REGEX, res)
@@ -100,12 +108,12 @@ class PrometheusAlertSummary(View):
         return reduce(lambda agg, x: agg + (x[1] - x[0]), windows, timedelta(0))
 
     def _normalize_time_windows(self, windows):
-        """Normalize time windows to a single [0,100] scale."""
+        """Normalize time windows to a single [0,1] scale."""
         td = self.report.timedelta
         return [
             (
-                max(0, (round(100 * (w[0] - self.report.start_date) / td, 2))),
-                round(100 * (w[1] - w[0]) / td, 2),
+                max(0, (w[0] - self.report.start_date) / td),
+                (w[1] - w[0]) / td,
             )
             for w in windows
         ]
@@ -167,13 +175,33 @@ class PrometheusAlertSummary(View):
             )
 
         time_ordered = sorted(summary, key=itemgetter("total_time"), reverse=True)
-        timeline = self._normalize_time_windows(
-            list(chain(*[a["windows"] for a in summary]))
-        )
+        timeline = self._render_timeline(summary) if self.show_timeline else None
 
         return dict(
-            summary=time_ordered, timeline=timeline, show_timeline=self.show_timeline
+            summary=time_ordered, timeline=timeline, theme=self.report.theme,
         )
+
+    def _render_timeline(self, summary):
+        timeline_data = self._normalize_time_windows(
+            list(chain(*[a["windows"] for a in summary]))
+        )
+        theme = self.report.theme
+        twidth = self.cols * theme.column_width
+        theight = self.timeline_height
+        figbytes = io.BytesIO()
+        figname = "alert_summary.timeline.png"
+        with Image.new("RGB", (twidth, theight), color=theme.success_colors[-1]) as im:
+            draw = ImageDraw.Draw(im)
+            for x1, x2 in timeline_data:
+                draw.rectangle([
+                    (x1 * twidth, 0),
+                    ((x1 + x2) * twidth, theight)
+                ], fill=theme.error_colors[0])
+            im.save(figbytes, format="PNG")
+            self.add_blob(
+                figname, figbytes, mime_type="image/png",
+                title="Alert timeline")
+        return figname
 
     def _render(self, j2, fmt):
         template = j2.get_template(f"prometheus_alert_summary.{fmt}")

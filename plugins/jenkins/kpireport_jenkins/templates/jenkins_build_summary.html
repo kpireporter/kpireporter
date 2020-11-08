@@ -19,14 +19,14 @@
   .jenkinsBuild_icon {
     width: 100%;
     display: inline-block;
-    background: gray;
+    background: {{ theme.background_offset(2) }};
     border-radius: 3px;
   }
   .jenkinsBuild_icon.success {
-    background: green;
+    background: {{ theme.success_color }};
   }
   .jenkinsBuild_icon.failure {
-    background: red;
+    background: {{ theme.error_color }};
   }
 </style>
 

@@ -27,7 +27,8 @@ class View(ABC):
     title: str = None
     description: str = None
 
-    def __init__(self, report, datasources: DatasourceManager, **kwargs):
+    def __init__(self, report: 'Report', datasources: DatasourceManager,
+                 **kwargs):
         self.report = report
         self.datasources = datasources
         self._blobs = {}

@@ -22,8 +22,16 @@ class Theme:
         theme_dir (str): a directory where additional templates can be found.
             These templates will override the default templates of the same
             name, and can be used to alter the overall report appearance.
-        ui_colors (List[str]): a list of user interface colors.
-        colors (List[str]): a list of series colors.
+        ui_colors (List[str]): a list of user interface colors. This is expected to
+            be a 5-tuple of (text color, lighter text color, dark bg color, bg accent, bg color)
+        error_colors (List[str]): a list of error colors used when views render an
+            error vs. success state. This is expected to be a 2-tuple of (dark, light).
+        success_colors (List[str]): a list of success colors used when views render
+            an error vs. success state. This is expected to be a 2-tuple of (dark, light).
+        series_colors (List[str]): a list of series colors. There can be as many or as few
+            series colors in the theme; you just want to ensure you can handle whatever
+            needs you have for plotting or displaying data in charts or graphs such that
+            series can be identified clearly.
     """
 
     def __init__(
@@ -32,7 +40,9 @@ class Theme:
         column_width=86,
         theme_dir=None,
         ui_colors=None,
-        colors=None,
+        error_colors=None,
+        success_colors=None,
+        series_colors=None
     ):
         self.num_columns = num_columns
         self.column_width = column_width
@@ -44,7 +54,15 @@ class Theme:
             "#ededed",
             "#ffffff",
         ]
-        self.colors = colors or [
+        self.error_colors = error_colors or [
+            "#8b0000",
+            "#ffcccb",
+        ]
+        self.success_colors = success_colors or [
+            "#008000",
+            "#d5ffd5",
+        ]
+        self.series_colors = series_colors or [
             "#0F5F0F",
             "#2D882D",
             "#94D794",
@@ -67,6 +85,22 @@ class Theme:
 
     def background_offset(self, offset=1):
         return self.ui_colors[-(1 + offset)]
+
+    @property
+    def success_color(self):
+        return self.success_colors[0]
+
+    @property
+    def success_background_color(self):
+        return self.success_colors[1]
+
+    @property
+    def error_color(self):
+        return self.error_colors[0]
+
+    @property
+    def error_background_color(self):
+        return self.error_colors[1]
 
 
 class Report:

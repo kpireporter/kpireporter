@@ -86,6 +86,7 @@ class Plot(View):
         datasource=None,
         query=None,
         query_args={},
+        link_url=None,
         time_column="time",
         kind="line",
         stacked=False,
@@ -97,6 +98,7 @@ class Plot(View):
         self.datasource = datasource
         self.query = query
         self.query_args = query_args
+        self.link_url = link_url
         self.time_column = time_column
         self.kind = kind
         self.stacked = stacked
@@ -105,18 +107,10 @@ class Plot(View):
         self.legend = legend
         self.plot_rc = plot_rc
 
-        # TODO: make these configurable via the Theme
-        self.text_color = "#222222"
-        self.axis_color = "#cccccc"
-        self.plot_colors = [
-            "#0F5F0F",
-            "#2D882D",
-            "#94D794",
-            "#DEA271",
-            "#764013",
-            "#B25B8C",
-            "#5F0F3C",
-        ]
+        theme = self.report.theme
+        self.text_color = theme.text_color
+        self.axis_color = theme.text_offset()
+        self.plot_colors = theme.series_colors
 
         if not (self.datasource and self.query):
             raise ValueError(("Both a 'datasource' and 'query' parameter are required"))
@@ -248,11 +242,11 @@ class Plot(View):
 
     def render_html(self, j2):
         template = j2.get_template("plot.html")
-        return template.render(figure=self.render_figure())
+        return template.render(figure=self.render_figure(), link_url=self.link_url)
 
     def render_md(self, j2):
         template = j2.get_template("plot.md")
-        return template.render(figure=self.render_figure())
+        return template.render(figure=self.render_figure(), link_url=self.link_url)
 
     def render_slack(self, j2):
         self.render_figure()

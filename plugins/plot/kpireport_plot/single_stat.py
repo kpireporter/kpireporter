@@ -12,6 +12,18 @@ class SingleStat(View):
         label (str): a templated label that can be used to change how the stat
             is rendered. A ``{stat}`` template variable will be filled
             in with the stat value. (Default ``"{stat}"``)
+
+            This can be used to create arbitrary other rendered output, e.g.:
+
+              .. code-block::
+
+                # Add a separate link element
+                label: |
+                  {stat} <a href="https://example.com">More</a>
+
+        link_url (str): a hyperlink URL to open if the viewer clicks on the
+            rendered output. The link wraps the entire display.
+            (Default ``None``)
         comparison_query (str): an optional query to use as a comparison value.
             If defined, the current stat will be displayed,
             and the delta between the stat obtained via
@@ -27,12 +39,14 @@ class SingleStat(View):
         datasource=None,
         query=None,
         label="{stat}",
+        link_url=None,
         comparison_query=None,
         comparison_type="raw",
     ):
         self.datasource = datasource
         self.query = query
         self.label = label
+        self.link_url = link_url
         self.comparison_query = comparison_query
         self.comparison_type = comparison_type
 
@@ -61,7 +75,13 @@ class SingleStat(View):
 
         label = self.label.format(stat=stat_value)
 
-        return dict(label=label, stat_delta=stat_delta, direction=stat_delta_direction)
+        return dict(
+            label=label,
+            link_url=self.link_url,
+            stat_delta=stat_delta,
+            direction=stat_delta_direction,
+            theme=self.report.theme,
+        )
 
     def render_html(self, j2):
         template = j2.get_template("single_stat.html")

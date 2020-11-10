@@ -3,23 +3,30 @@
     width: 100%;
     font-size: 36px;
 } .kpireport__stat > span {
-    display: block;
+    display: inline-block;
 }
 
 .kpireport__stat .delta {
     font-size: 50%;
+    margin-left: 10px;
 }
   .kpireport__stat .delta.up {
-      color: green;
+      color: {{ theme.success_color }};
   }
   .kpireport__stat .delta.down {
-      color: red;
+      color: {{ theme.error_color }};
   }
 </style>
 
 <div class="kpireport__stat">
+{% if link_url %}
+  <a href="{{ link_url }}">
+{% endif %}
     <span>{{ label }}</span>
     {%- if stat_delta is not none %}
     <span class="delta {{ direction }}">{% if direction == "up" %}▲{% else %}▼{% endif %}{{ stat_delta }}</span>
     {% endif -%}
+{% if link_url %}
+  </a>
+{% endif %}
 </div>

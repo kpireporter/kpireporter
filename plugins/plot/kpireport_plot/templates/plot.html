@@ -1,1 +1,7 @@
+{% if link_url %}
+<a href="{{ link_url }}">
+{% endif %}
 {{ figure | blob }}
+{% if link_url %}
+</a>
+{% endif %}

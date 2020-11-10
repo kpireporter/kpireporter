@@ -190,13 +190,13 @@ class PrometheusAlertSummary(View):
         theight = self.timeline_height
         figbytes = io.BytesIO()
         figname = "alert_summary.timeline.png"
-        with Image.new("RGB", (twidth, theight), color=theme.success_colors[-1]) as im:
+        with Image.new("RGB", (twidth, theight), color=theme.background_offset()) as im:
             draw = ImageDraw.Draw(im)
             for x1, x2 in timeline_data:
                 draw.rectangle([
                     (x1 * twidth, 0),
                     ((x1 + x2) * twidth, theight)
-                ], fill=theme.error_colors[0])
+                ], fill=theme.error_color)
             im.save(figbytes, format="PNG")
             self.add_blob(
                 figname, figbytes, mime_type="image/png",

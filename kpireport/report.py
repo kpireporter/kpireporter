@@ -95,7 +95,7 @@ class Theme:
 
     @property
     def success_background_color(self):
-        return self.success_colors
+        return self.success_colors[-1]
 
     @property
     def error_color(self):
@@ -103,7 +103,7 @@ class Theme:
 
     @property
     def error_background_color(self):
-        return self.error_colors[1]
+        return self.error_colors[-1]
 
 
 class Report:

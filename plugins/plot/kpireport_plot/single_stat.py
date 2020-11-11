@@ -85,7 +85,7 @@ class SingleStat(View):
 
     def render_html(self, j2):
         template = j2.get_template("single_stat.html")
-        return template.render(theme=self.report.theme, **self.template_args())
+        return template.render(**self.template_args())
 
     def render_md(self, j2):
         template = j2.get_template("single_stat.md")

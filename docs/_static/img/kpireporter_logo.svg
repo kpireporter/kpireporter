@@ -1,0 +1,20 @@
+<svg width="133" height="70" viewBox="0 0 133 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g filter="url(#filter0_d)">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M79.9254 3.09005C80.9803 0.839727 83.6596 -0.129403 85.91 0.925434L117.91 15.9254L118.297 23.8693L86.2974 42.8693C84.1604 44.1382 81.3995 43.4344 80.1307 41.2974C78.8618 39.1604 79.5656 36.3995 81.7026 35.1307L106.397 20.4684L82.09 9.07456C79.8397 8.01973 78.8706 5.34037 79.9254 3.09005ZM56.0507 3.03998C57.1332 5.27712 56.1972 7.96823 53.96 9.05072L30.3703 20.4651L54.3515 35.1633C56.4705 36.462 57.1354 39.2326 55.8367 41.3515C54.538 43.4705 51.7674 44.1354 49.6485 42.8367L18.6485 23.8367L19.04 15.9493L50.04 0.949283C52.2771 -0.133208 54.9682 0.802827 56.0507 3.03998ZM11 0.5C13.4853 0.5 15.5 2.51472 15.5 5V39C15.5 41.4853 13.4853 43.5 11 43.5C8.51472 43.5 6.5 41.4853 6.5 39V5C6.5 2.51472 8.51472 0.5 11 0.5ZM69 0.5C71.4853 0.5 73.5 2.51472 73.5 5V57C73.5 59.4853 71.4853 61.5 69 61.5C66.5147 61.5 64.5 59.4853 64.5 57V5C64.5 2.51472 66.5147 0.5 69 0.5ZM126 0.5C128.485 0.5 130.5 2.51472 130.5 5V39C130.5 41.4853 128.485 43.5 126 43.5C123.515 43.5 121.5 41.4853 121.5 39V5C121.5 2.51472 123.515 0.5 126 0.5Z" fill="url(#paint0_linear)"/>
+</g>
+<defs>
+<filter id="filter0_d" x="0.5" y="0.498932" width="132" height="69.0011" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0"/>
+<feOffset dx="-2" dy="4"/>
+<feGaussianBlur stdDeviation="2"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0"/>
+<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow" result="shape"/>
+</filter>
+<linearGradient id="paint0_linear" x1="68.5" y1="0.498932" x2="68.5" y2="61.5" gradientUnits="userSpaceOnUse">
+<stop stop-color="#94CD4B"/>
+<stop offset="1" stop-color="#8DA54A"/>
+</linearGradient>
+</defs>
+</svg>

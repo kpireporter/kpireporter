@@ -1,6 +1,6 @@
-========================
-KPI Reporter documentation
-========================
+============
+KPI Reporter
+============
 
 KPI Reporter is a **developer-friendly**, **highly customizable** tool for
 sending periodic reports for the metrics that matter for your team or project.

@@ -32,7 +32,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 FROM base as dev
 
 RUN apt-get update -y && apt-get install -y --no-install-recommends \
-        netcat \
+        entr netcat silversearcher-ag \
     && rm -rf /var/lib/apt/lists/*
 
 ADD https://raw.githubusercontent.com/eficode/wait-for/master/wait-for /usr/local/bin/wait-for

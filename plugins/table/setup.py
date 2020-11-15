@@ -9,6 +9,7 @@ setup(
     packages=["kpireport_table"],
     install_requires=[
         "kpireport",
+        "tabulate",
     ],
     entry_points={
         "kpireport.view": ["table = kpireport_table:Table"],

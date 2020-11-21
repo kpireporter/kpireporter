@@ -4,9 +4,9 @@ set -e -u -o pipefail
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 export pypi_token="${PYPI_TOKEN:-}"
 
-plugins="$@"
+PLUGIN=""
 
-publish() {
+publish_path() {
   local root="$(realpath --relative-to=$DIR/.. $1)"
   local current_tag="$2"
   local next_tag="$3"
@@ -37,15 +37,46 @@ publish() {
 }
 
 publish_plugin() {
-  local current_tag="$(git describe --tags $(git rev-list --tags -- $1))"
+  local current_tag="$(git describe --tags $(git rev-list --tags --max-count=1 -- $1))"
   local next_tag="$(reno -q --rel-notes-dir $1/releasenotes semver-next)"
-  publish "$1" "$current_tag" "$next_tag"
+  publish_path "$1" "$current_tag" "$next_tag"
 }
-export -f publish_plugin
 
-if [[ -z "$plugins" ]]; then
-  publish $DIR/..
-  find $DIR/../plugins -maxdepth 1 -mindepth 1 -type d -exec bash -c 'publish_plugin {}' \;
-else
-  for plugin in $plugins; do publish_plugin plugins/$plugin; done
-fi
+cmd_publish() {
+  if [[ -n "$PLUGIN" ]]; then
+    publish_plugin plugins/$PLUGIN
+  else
+    publish_path $DIR/..
+    export -f publish_plugin
+    find $DIR/../plugins -maxdepth 1 -mindepth 1 -type d -exec bash -c 'publish_plugin {}' \;
+  fi
+}
+
+cmd_note() {
+  declare -a reno_args=()
+  if [[ -n "$PLUGIN" ]]; then
+    reno_args+=(--rel-notes-dir "plugins/$PLUGIN/releasenotes")
+  fi
+  reno "${reno_args[@]}" "$@"
+}
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    note)
+      shift
+      cmd_note "$@"
+      break
+      ;;
+    publish)
+      cmd_publish
+      ;;
+    --plugin)
+      PLUGIN="$2"
+      shift
+      ;;
+    -h|--help)
+      usage
+      ;;
+  esac
+  shift
+done

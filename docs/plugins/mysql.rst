@@ -4,15 +4,7 @@
 MySQL
 ======
 
-.. image:: https://img.shields.io/pypi/v/kpireport-mysql
-   :target: https://pypi.org/project/kpireport-mysql
-
-.. code-block::
-
-   pip install kpireport-mysql
-
-The MySQL plugin provides a Datasource that enables execution of SQL queries
-against an existing MySQL database.
+.. include:: ../../plugins/mysql/README.rst
 
 .. raw:: html
 
@@ -31,3 +23,9 @@ against an existing MySQL database.
    :members:
    :show-inheritance:
    :exclude-members: init
+
+Changelog
+=========
+
+.. release-notes::
+   :relnotessubdir: plugins/mysql/releasenotes

@@ -45,6 +45,7 @@ extensions = [
     "sphinx-jsonschema",
     "sphinx_rtd_theme",
     "sphinxcontrib.napoleon",
+    "reno.sphinxext",
 ]
 
 # Add any paths that contain templates here, relative to this directory.

@@ -3,13 +3,16 @@ set -e -u -o pipefail
 
 DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 export pypi_token="${PYPI_TOKEN:-}"
+# Navigate to root
+pushd "$DIR/.." >/dev/null
 
 PLUGIN=""
 
 publish_path() {
-  local root="$(realpath --relative-to=$DIR/.. $1)"
+  local root="$(realpath --relative-to=. $1)"
   local current_tag="$2"
   local next_tag="$3"
+  local version_file="$4"
 
   if [[ "$root" != "." ]]; then
     commit_line="$root: $next_tag"
@@ -22,8 +25,8 @@ publish_path() {
   if [[ "$current_tag" != "$next_tag" ]]; then
     echo "Publishing $root ($current_tag -> $next_tag) ..."
     pushd "$root" >/dev/null
-    sed -i "s!$current_tag!$next_tag!g" setup.py
-    git add setup.py
+    sed -i "s!$current_tag!$next_tag!g" "$version_file"
+    git add "$version_file"
     git commit -m "$commit_line"
     git tag -a -m "$next_tag" "$tag_name"
     # git push --tags origin HEAD
@@ -37,18 +40,25 @@ publish_path() {
 }
 
 publish_plugin() {
-  local current_tag="$(git describe --tags $(git rev-list --tags --max-count=1 -- $1))"
+  local current_tag="$(git describe --tags $(git rev-list --no-walk --max-count=1 --tags -- $1))"
   local next_tag="$(reno -q --rel-notes-dir $1/releasenotes semver-next)"
-  publish_path "$1" "$current_tag" "$next_tag"
+  publish_path "$1" "$current_tag" "$next_tag" setup.py
+}
+
+publish_root() {
+  local current_tag="$(git describe --tags $(git rev-list --no-walk --tags) | grep -v '.*+.*')"
+  local next_tag="$(reno -q semver-next)"
+  publish_path "." "$current_tag" "$next_tag" kpireport/version.py
 }
 
 cmd_publish() {
   if [[ -n "$PLUGIN" ]]; then
     publish_plugin plugins/$PLUGIN
   else
-    publish_path $DIR/..
+    publish_root
     export -f publish_plugin
-    find $DIR/../plugins -maxdepth 1 -mindepth 1 -type d -exec bash -c 'publish_plugin {}' \;
+    export -f publish_path
+    # find $DIR/../plugins -maxdepth 1 -mindepth 1 -type d -exec bash -c 'publish_plugin {}' \;
   fi
 }
 

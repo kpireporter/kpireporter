@@ -1,0 +1,3 @@
+---
+release_tag_re: ((?:[\d.ab]|rc)+)\+smtp
+report_version_format: '{0}'

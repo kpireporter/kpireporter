@@ -5,12 +5,8 @@
 SMTP
 =====
 
-.. image:: https://img.shields.io/pypi/v/kpireport-smtp
-   :target: https://pypi.org/project/kpireport-smtp
-
-.. code-block::
-
-   pip install kpireport-smtp
+.. include:: ../../plugins/smtp/README.rst
+   :start-line: 4
 
 API
 ===
@@ -19,3 +15,9 @@ API
    :members:
    :show-inheritance:
    :exclude-members: init, render_output, render_blob_inline
+
+Changelog
+=========
+
+.. release-notes::
+   :relnotessubdir: plugins/smtp/releasenotes

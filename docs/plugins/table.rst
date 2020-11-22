@@ -6,6 +6,7 @@ Table
 ======
 
 .. include:: ../../plugins/table/README.rst
+   :start-line: 4
 
 API
 ===

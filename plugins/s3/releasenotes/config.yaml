@@ -1,0 +1,2 @@
+---
+release_tag_re: ((?:[\d.ab]|rc)+)\+s3

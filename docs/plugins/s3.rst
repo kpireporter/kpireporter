@@ -5,14 +5,19 @@
 S3
 ===
 
-.. image:: https://img.shields.io/pypi/v/kpireport-s3
-   :target: https://pypi.org/project/kpireport-s3
+.. include:: ../../plugins/s3/README.rst
+   :start-line: 4
 
-.. code-block::
-
-   pip install kpireport-s3
+API
+===
 
 .. autoclass:: S3OutputDriver
    :members:
    :show-inheritance:
    :exclude-members: init, render_output
+
+Changelog
+=========
+
+.. release-notes::
+   :relnotessubdir: plugins/s3/releasenotes

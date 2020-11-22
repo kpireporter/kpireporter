@@ -1,0 +1,3 @@
+---
+release_tag_re: ((?:[\d.ab]|rc)+)\+sendgrid
+report_version_format: '{0}'

@@ -5,14 +5,19 @@
 SendGrid
 =========
 
-.. image:: https://img.shields.io/pypi/v/kpireport-sendgrid
-   :target: https://pypi.org/project/kpireport-sendgrid
+.. include:: ../../plugins/sendgrid/README.rst
+   :start-line: 4
 
-.. code-block::
-
-   pip install kpireport-sendgrid
+API
+===
 
 .. autoclass:: SendGridOutputDriver
    :members:
    :show-inheritance:
    :exclude-members: init, render_output
+
+Changelog
+=========
+
+.. release-notes::
+   :relnotessubdir: plugins/sendgrid/releasenotes

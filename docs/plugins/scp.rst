@@ -6,6 +6,7 @@ SCP (secure copy)
 ==================
 
 .. include:: ../../plugins/scp/README.rst
+   :start-line: 4
 
 API
 ===

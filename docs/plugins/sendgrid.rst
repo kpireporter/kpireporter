@@ -14,7 +14,7 @@ API
 .. autoclass:: SendGridOutputDriver
    :members:
    :show-inheritance:
-   :exclude-members: init, render_output
+   :exclude-members: init, render_output, render_blob_inline
 
 Changelog
 =========

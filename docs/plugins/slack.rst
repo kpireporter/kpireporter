@@ -5,14 +5,19 @@
 Slack
 ======
 
-.. image:: https://img.shields.io/pypi/v/kpireport-slack
-   :target: https://pypi.org/project/kpireport-slack
+.. include:: ../../plugins/slack/README.rst
+   :start-line: 4
 
-.. code-block::
-
-   pip install kpireport-slack
+API
+===
 
 .. autoclass:: SlackOutputDriver
    :members:
    :show-inheritance:
    :exclude-members: init, render_output
+
+Changelog
+=========
+
+.. release-notes::
+   :relnotessubdir: plugins/slack/releasenotes

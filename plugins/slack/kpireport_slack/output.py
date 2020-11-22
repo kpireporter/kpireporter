@@ -13,13 +13,16 @@ LOG = logging.getLogger(__name__)
 
 
 class SlackOutputDriver(OutputDriver):
-    """Send a report to a Slack channel.
+    """Send a report to one or more Slack channel(s).
 
     Attributes:
         api_token (str): a Slack API token with authorization to publish a
             message to the target channel.
         channels (List[str]): a list of Slack channels to publish the report to.
-        image_remote_base_url (str): ??
+        image_remote_base_url (str): a base URL where blob assets (images etc.)
+            are served. It is highly recommended to use another plugin, such as
+            the :ref:`s3-plugin` or :ref:`scp-plugin` plugin, in order to place
+            the assets in the expected folder structure.
     """
 
     # Slack has its own Markdown language
@@ -40,7 +43,7 @@ class SlackOutputDriver(OutputDriver):
                 "ignored. If you would like image blobs rendered in "
                 "your Slack message, specify a base URL and "
                 "additionally publish your report to some remote URL "
-                "via, e.g., the 'html' plugin."
+                "via, e.g., the 's3' plugin."
             )
         else:
             self.image_remote_base_url = image_remote_base_url.format(

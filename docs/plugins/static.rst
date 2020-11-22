@@ -15,4 +15,4 @@ Static HTML
 .. autoclass:: StaticOutputDriver
    :members:
    :show-inheritance:
-   :exclude-members: init, render_output
+   :exclude-members: init, render_output, render_blob_inline

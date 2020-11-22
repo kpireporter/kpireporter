@@ -5,14 +5,18 @@
 Table
 ======
 
-.. image:: https://img.shields.io/pypi/v/kpireport-table
-   :target: https://pypi.org/project/kpireport-table
+.. include:: ../../plugins/table/README.rst
 
-.. code-block::
-
-   pip install kpireport-table
+API
+===
 
 .. autoclass:: Table
    :members:
    :show-inheritance:
    :exclude-members: init
+
+Changelog
+=========
+
+.. release-notes::
+   :relnotessubdir: plugins/table/releasenotes

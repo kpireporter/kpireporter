@@ -5,14 +5,18 @@
 SCP (secure copy)
 ==================
 
-.. image:: https://img.shields.io/pypi/v/kpireport-scp
-   :target: https://pypi.org/project/kpireport-scp
+.. include:: ../../plugins/scp/README.rst
 
-.. code-block::
-
-   pip install kpireport-scp
+API
+===
 
 .. autoclass:: SCPOutputDriver
    :members:
    :show-inheritance:
    :exclude-members: init, render_output
+
+Changelog
+=========
+
+.. release-notes::
+   :relnotessubdir: plugins/scp/releasenotes

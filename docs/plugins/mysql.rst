@@ -5,6 +5,7 @@ MySQL
 ======
 
 .. include:: ../../plugins/mysql/README.rst
+   :start-line: 4
 
 .. raw:: html
 

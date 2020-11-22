@@ -6,6 +6,7 @@ Plot
 =====
 
 .. include:: ../../plugins/plot/README.rst
+   :start-line: 4
 
 .. autoclass:: Plot
    :members:

@@ -1,3 +1,7 @@
+================
+kpireport-mysql
+================
+
 .. image:: https://img.shields.io/pypi/v/kpireport-mysql
    :target: https://pypi.org/project/kpireport-mysql
 

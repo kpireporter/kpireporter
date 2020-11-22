@@ -1,3 +1,7 @@
+===============
+kpireport-plot
+===============
+
 .. image:: https://img.shields.io/pypi/v/kpireport-plot
    :target: https://pypi.org/project/kpireport-plot
 

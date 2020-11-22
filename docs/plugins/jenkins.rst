@@ -5,6 +5,7 @@ Jenkins
 ========
 
 .. include:: ../../plugins/jenkins/README.rst
+   :start-line: 4
 
 .. raw:: html
 

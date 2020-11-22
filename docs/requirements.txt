@@ -1,5 +1,6 @@
 requests
-reno
+# Use reno fork w/ report_version_format support
+git+https://github.com/diurnalist/reno@master#egg=reno
 sphinx>2.0.0
 sphinx-autobuild
 sphinx-autodoc-typehints

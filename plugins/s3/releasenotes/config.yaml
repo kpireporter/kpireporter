@@ -1,2 +1,3 @@
 ---
 release_tag_re: ((?:[\d.ab]|rc)+)\+s3
+report_version_format: '{0}'

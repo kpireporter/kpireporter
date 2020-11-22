@@ -5,14 +5,19 @@
 Static HTML
 ============
 
-.. image:: https://img.shields.io/pypi/v/kpireport-static
-   :target: https://pypi.org/project/kpireport-static
+.. include:: ../../plugins/static/README.rst
+   :start-line: 4
 
-.. code-block::
-
-   pip install kpireport-static
+API
+===
 
 .. autoclass:: StaticOutputDriver
    :members:
    :show-inheritance:
    :exclude-members: init, render_output, render_blob_inline
+
+Changelog
+=========
+
+.. release-notes::
+   :relnotessubdir: plugins/static/releasenotes

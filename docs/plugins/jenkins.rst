@@ -7,35 +7,14 @@ Jenkins
 .. include:: ../../plugins/jenkins/README.rst
    :start-line: 4
 
-.. raw:: html
-
-   <details>
-     <summary><strong>Show/hide example configuration YAML</strong></summary>
-
-.. literalinclude:: ../../examples/jenkins.yaml
-   :language: yaml
-
-.. raw:: html
-
-   </details>
-
-Datasource
-==========
+API
+===
 
 .. currentmodule:: kpireport_jenkins.datasource
 .. autoclass:: JenkinsDatasource
    :members:
    :show-inheritance:
    :exclude-members: init
-
-Build summary
-=============
-
-.. figure:: ../../examples/rendered/html/jenkins.build_summary.png
-   :target: ./examples/latest-ci-report/index.html
-   :alt: jenkins.build_summary
-
-   An example showing jobs matching a certain name pattern "\*-app"
 
 .. currentmodule:: kpireport_jenkins.build_summary
 .. autoclass:: JenkinsBuildSummary

@@ -7,17 +7,8 @@ MySQL
 .. include:: ../../plugins/mysql/README.rst
    :start-line: 4
 
-.. raw:: html
-
-   <details>
-     <summary><strong>Show/hide example configuration YAML</strong></summary>
-
-.. literalinclude:: ../../examples/mysql.yaml
-   :language: yaml
-
-.. raw:: html
-
-   </details>
+API
+===
 
 .. currentmodule:: kpireport_mysql.datasource
 .. autoclass:: MySQLDatasource

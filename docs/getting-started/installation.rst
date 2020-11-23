@@ -19,8 +19,10 @@ KPI Reporter is a Python module that is installable via ``pip``:
 Docker
 ======
 
-A Docker image is available on DockerHub with all dependencies required by
-:ref:`all available plugins <plugins-available>`:
+A `Docker image
+<https://hub.docker.com/repository/docker/diurnalist/kpireporter>`_ is available
+on DockerHub with all dependencies required by :ref:`all available plugins
+<plugins-available>`.
 
 .. image:: https://images.microbadger.com/badges/version/diurnalist/kpireporter.svg
    :target: https://hub.docker.com/repository/docker/diurnalist/kpireporter

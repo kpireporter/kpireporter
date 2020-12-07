@@ -16,3 +16,9 @@ server's webroot or simply keep a backup around.
 .. note::
 
    Currently only the HTML format is supported.
+
+.. note::
+
+   This plugin utilizes ``fabric`` for executing commands over SSH, which in
+   turn utilizes ``paramiko``, which is licensed under LGPL 2.1. A copy of this
+   license is included in ``LGPL-2.1.md`` in the plugin source.

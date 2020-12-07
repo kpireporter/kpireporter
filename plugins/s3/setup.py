@@ -3,8 +3,8 @@ from setuptools import setup
 setup(
     name="kpireport-s3",
     version="0.0.1",
-    author="Jason Anderson",
-    author_email="diurnalist@gmail.com",
+    author="KPI Reporter LLC",
+    author_email="dev@kpireporter.com",
     license="Prosperity Public License",
     packages=["kpireport_s3"],
     install_requires=["kpireport", "kpireport-static", "boto3"],

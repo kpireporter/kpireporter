@@ -3,8 +3,8 @@ from setuptools import setup
 setup(
     name="kpireport-smtp",
     version="0.0.1",
-    author="Jason Anderson",
-    author_email="diurnalist@gmail.com",
+    author="KPI Reporter LLC",
+    author_email="dev@kpireporter.com",
     license="Prosperity Public License",
     packages=["kpireport_smtp"],
     install_requires=["kpireport", "premailer"],

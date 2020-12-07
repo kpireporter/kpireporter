@@ -1,8 +1,8 @@
 # The Prosperity Public License 3.0.0
 
-Contributor: Jason Anderson
+Contributor: KPI Reporter LLC
 
-Source Code: https://github.com/diurnalist/kpireporter
+Source Code: https://github.com/kpireporter/kpireporter
 
 ## Purpose
 

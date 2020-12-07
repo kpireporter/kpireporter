@@ -28,8 +28,8 @@ from kpireport import VERSION
 
 module_name = "kpireport"
 project = "kpireport"
-copyright = "2020, Jason Anderson"
-author = "Jason Anderson"
+copyright = "2020 KPI Reporter LLC"
+author = "KPI Reporter LLC"
 
 release = VERSION
 

@@ -97,7 +97,7 @@ class SMTPOutputDriver(OutputDriver):
         if self.image_strategy == "embed":
             payload = msg.get_payload()[1]
             for blob in blobs:
-                mime_type = blob.get("mime_type")
+                mime_type = blob.mime_type
                 if not mime_type:
                     raise ValueError(f"No mime type specified for blob {blob.id}")
                 maintype, subtype = mime_type.split("/")

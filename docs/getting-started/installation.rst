@@ -20,12 +20,12 @@ Docker
 ======
 
 A `Docker image
-<https://hub.docker.com/repository/docker/diurnalist/kpireporter>`_ is available
+<https://hub.docker.com/repository/docker/kpireporter/kpireporter>`_ is available
 on DockerHub with all dependencies required by :ref:`all available plugins
 <plugins-available>`.
 
-.. image:: https://images.microbadger.com/badges/version/diurnalist/kpireporter.svg
-   :target: https://hub.docker.com/repository/docker/diurnalist/kpireporter
+.. image:: https://images.microbadger.com/badges/version/kpireporter/kpireporter.svg
+   :target: https://hub.docker.com/repository/docker/kpireporter/kpireporter
 
 Usage
 =====

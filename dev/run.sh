@@ -5,7 +5,7 @@ DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" >/dev/null 2>&1 && pwd)"
 PROJ="$DIR/.."
 
 # Allow overriding the name of the docker image to use in the compose env.
-export DOCKER_IMAGE="${DOCKER_IMAGE:-diurnalist/kpireporter}"
+export DOCKER_IMAGE="${DOCKER_IMAGE:-kpireporter/kpireporter}"
 export DOCKER_TAG=dev
 export PYTHON_VERSION=${PYTHON_VERSION:-3.8}
 

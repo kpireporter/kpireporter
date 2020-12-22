@@ -1,4 +1,4 @@
-DOCKER_REPO ?= diurnalist/kpireporter
+DOCKER_REPO ?= kpireporter/kpireporter
 DOCKER_TAG  ?= 0.0.1
 
 .PHONY: build

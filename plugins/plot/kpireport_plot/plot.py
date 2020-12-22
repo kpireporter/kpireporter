@@ -222,8 +222,8 @@ class Plot(View):
             else:
                 self._plot_default(df, ax)
 
-            if self.legend is None and (
-                getattr(df, "groups", None) or len(df.columns) > 1):
+            if self.legend is None and (getattr(df, "groups", None) or
+                                        len(df.columns) > 1):
                 # Automatically generate legend by default if we're plotting
                 # multiple series or grouped data.
                 ax.legend(df.groups, bbox_to_anchor=(0, -0.5))

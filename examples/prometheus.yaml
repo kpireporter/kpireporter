@@ -15,6 +15,7 @@ views:
       datasource: prom
       query: |
         100 - (avg by(hostname) (irate(node_cpu_seconds_total{mode="idle"}[5m])) * 100
+      groupby: hostname
       plot_rc:
         lines.linewidth: 1
   critical_alerts:

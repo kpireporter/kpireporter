@@ -29,9 +29,8 @@ class Plot(View):
 
      * The returned table should ideally only have two columns: one for the
        time, and one for the value of the metric at that time.
-     * The table can have three columns, in which case the data will be
-       grouped by the last column. This can be useful if you want to display
-       multiple series in one plot.
+     * If the table has more than two columns, it is assumed that each column is
+       a separate series and will be displayed as such, unless ``groupby`` is used.
 
     Example of valid two-column result table:
 
@@ -46,6 +45,21 @@ class Plot(View):
     +------------+----------+
 
     Example of valid three-column result table:
+
+    +------------+----------+---------+
+    | time       | value_a  | value_b |
+    +============+==========+=========+
+    | 2020-01-01 | 1.0      | 0.4     |
+    +------------+----------+---------+
+    | 2020-01-01 | 3.2      | 0.2     |
+    +------------+----------+---------+
+    | 2020-01-02 | 1.2      | 0.2     |
+    +------------+----------+---------+
+    | 2020-01-02 | 2.7      | 0.7     |
+    +------------+----------+---------+
+
+    Example of valid three-column result table, where ``groupby: country`` would cause
+    the data to be segmented according to the ``country`` column:
 
     +------------+----------+---------+
     | time       | value    | country |
@@ -72,6 +86,8 @@ class Plot(View):
         stacked (bool): whether to display the line/bar graph types as a stacked
             plot, where each series is stacked atop the last. (Default
             ``False``)
+        groupby (str): the name of the column in the query result table that should be
+            used to group the data into separate series. (Default ``None``)
         bar_labels (bool): whether to label each bar with its value (only
             relevant when kind is "bar".) (Default ``False``)
         xtick_rotation (Union[int, str]): how much to rotate the X labels by
@@ -89,6 +105,7 @@ class Plot(View):
         link_url=None,
         time_column="time",
         kind="line",
+        groupby=None,
         stacked=False,
         legend=None,
         bar_labels=False,
@@ -101,6 +118,7 @@ class Plot(View):
         self.link_url = link_url
         self.time_column = time_column
         self.kind = kind
+        self.groupby = groupby
         self.stacked = stacked
         self.bar_labels = bar_labels
         self.xtick_rotation = xtick_rotation
@@ -194,20 +212,8 @@ class Plot(View):
         # fail to properly graph it.
         df = df.sort_index()
 
-        if not self.stacked:
-            # The auto-grouping behavior only makes sense if we're not told
-            # to create a stacked graph.
-            if df.columns.size == 2:
-                LOG.debug((f"Automatically grouping data by column='{df.columns[1]}'"))
-                df = df.groupby(df.columns[1])
-            elif df.columns.size > 2:
-                LOG.warn(
-                    (
-                        f"Dataframe has multiple columns: {list(df.columns)}. "
-                        "Two-dimensional plots will work best with only a value "
-                        "column and an optional grouping column."
-                    )
-                )
+        if self.groupby:
+            df = df.groupby(self.groupby)
 
         with plt.rc_context(self.matplotlib_rc):
             figsize = [((self.cols * self.report.theme.column_width) / FIGURE_PPI), 2]

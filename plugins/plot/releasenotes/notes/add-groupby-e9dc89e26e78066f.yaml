@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    Adds a new ``groupby`` configuration parameter, allowing grouping of the queried
+    data on some arbitrary column or columns. This replaces the old "auto-grouping"
+    mechanism, which was a bit buggy and not well-suited to all shapes of data.

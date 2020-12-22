@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Fixes an issue where non-grouped data with multiple columns would only have
+    the first series plotted, and no legend would be auto-applied.

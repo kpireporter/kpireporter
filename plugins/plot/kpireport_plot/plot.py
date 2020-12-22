@@ -191,14 +191,12 @@ class Plot(View):
         if not (plot_fn and callable(plot_fn)):
             raise ValueError(f"Plot function {self.kind} does not exist")
 
-        rects = plot_fn(df.index, df[df.columns[0]])
-        label_bars(rects)
-        if self.stacked:
-            bottom = df[df.columns[0]]
-            for col in df.columns[1:]:
-                rects = plot_fn(df.index, df[col], bottom=bottom)
-                label_bars(rects)
-                bottom += df[col]
+        label_bars(plot_fn(df.index, df[df.columns[0]]))
+        bottom = df[df.columns[0]]
+        for col in df.columns[1:]:
+            label_bars(plot_fn(df.index, df[col], bottom=(
+                bottom if self.stacked else None)))
+            bottom += df[col]
 
     def _plot_default(self, df: "pandas.DataFrame", ax):
         df.plot(ax=ax, kind=self.kind, legend=None, title=None, stacked=self.stacked)
@@ -224,9 +222,10 @@ class Plot(View):
             else:
                 self._plot_default(df, ax)
 
-            if self.legend is None and getattr(df, "groups", None):
+            if self.legend is None and (
+                getattr(df, "groups", None) or len(df.columns) > 1):
                 # Automatically generate legend by default if we're plotting
-                # grouped data.
+                # multiple series or grouped data.
                 ax.legend(df.groups, bbox_to_anchor=(0, -0.5))
             elif self.legend:
                 l_kwargs = self.legend if isinstance(self.legend, dict) else {}

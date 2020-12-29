@@ -18,3 +18,5 @@ docs/_build/
 dev/.kpireport_ready_signal
 # Env files
 .env
+# Prevent licenses from being accidentally committed
+*.pem

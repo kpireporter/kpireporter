@@ -1,3 +1,4 @@
+authlib
 jinja2
 pandas
 python-slugify

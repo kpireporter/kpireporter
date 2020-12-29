@@ -1,12 +1,15 @@
 from datetime import datetime, timedelta
+from functools import partial
+
 from jinja2 import TemplateNotFound
 from slugify import slugify
 
-from kpireport.datasource import DatasourceManager
-from kpireport.output import OutputDriverManager
-from kpireport.view import ViewManager
-from kpireport.utils import create_jinja_environment
-from kpireport.version import VERSION
+from .datasource import DatasourceManager
+from .license import License
+from .output import OutputDriverManager
+from .view import ViewManager
+from .utils import create_jinja_environment
+from .version import VERSION
 
 import logging
 
@@ -45,7 +48,7 @@ class Theme:
         ui_colors=None,
         error_colors=None,
         success_colors=None,
-        series_colors=None
+        series_colors=None,
     ):
         self.num_columns = num_columns
         self.column_width = column_width
@@ -188,7 +191,7 @@ class Content:
         try:
             template = self.j2.get_template(f"layout/default.{fmt}")
         except TemplateNotFound:
-            LOG.warning(
+            LOG.debug(
                 (
                     f"No parent template found for format {fmt}, so no "
                     "final output text can be written. Views will still "
@@ -272,6 +275,9 @@ class ReportFactory:
         self.odm = OutputDriverManager(self.report, output_conf)
         self.env = create_jinja_environment(theme)
 
+        self.license = License(config.get("license_key"))
+        self.env.globals["print_license"] = self.license.render
+
     def create(self):
         """Render all Views in the report and output using the output driver.
 
@@ -285,6 +291,9 @@ class ReportFactory:
             LOG.info(f"Sending report via output driver {id}")
             content = Content(self.env, self.report)
             for fmt in self.supported_formats:
+                self.env.globals["print_license"] = partial(self.license.render, fmt)
                 views = self.vm.render(self.env, fmt, output_driver)
                 content.add_format(fmt, views)
+            if not self.license.rendered:
+                raise ValueError("Template is missing `{{ print_license() }}` call")
             output_driver.render_output(content, self.vm.blobs)

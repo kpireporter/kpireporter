@@ -1,12 +1,15 @@
 import argparse
 from datetime import datetime
 from itertools import chain
+from glob import glob
 import logging
 import sys
 from timeit import default_timer as timer
 
 from .config import load
 from .report import ReportFactory
+
+DEFAULT_CONF_DIR = "/etc/kpireporter"
 
 
 def simple_date(date_str):
@@ -36,7 +39,8 @@ def run(argv=None):
     )
     parser.add_argument("-s", "--start-date", type=simple_date)
     parser.add_argument("-e", "--end-date", type=simple_date)
-    parser.add_argument("--theme-dir", default="/etc/kpireport/theme")
+    parser.add_argument("--theme-dir", default=f"{DEFAULT_CONF_DIR}/theme")
+    parser.add_argument("--license-file", type=argparse.FileType("r"))
     parser.add_argument("-v", "--verbose", dest="verbosity", action="count", default=0)
 
     args = parser.parse_args(argv[1:])
@@ -62,6 +66,18 @@ def run(argv=None):
         conf.update(end_date=args.end_date)
     if args.theme_dir:
         conf.get("theme").update(theme_dir=args.theme_dir)
+
+    license_file = args.license_file
+    if not license_file:
+        matches = list(chain(*[
+            glob(f"{DEFAULT_CONF_DIR}/*.{ext}") for ext in ["key", "pub"]
+        ]))
+        if matches:
+            license_file = open(matches[0], "r")
+    if license_file:
+        with license_file:
+            license_content = license_file.read()
+            conf.update(license_key="".join(license_content.split("\n")[1:-1]))
 
     start = timer()
 

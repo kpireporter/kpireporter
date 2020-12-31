@@ -43,7 +43,7 @@ publish_path() {
     _maybe git push --tags origin HEAD
     rm -rf build dist
     python setup.py -q sdist bdist_wheel
-    _maybe twine upload -q -u __token__ -p $pypi_token dist/*
+    _maybe twine upload -u __token__ -p $pypi_token dist/*
     popd >/dev/null
   else
     echo "Skipping $root ($current_tag == $next_tag)"

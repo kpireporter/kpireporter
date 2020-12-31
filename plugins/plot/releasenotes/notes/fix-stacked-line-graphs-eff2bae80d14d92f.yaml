@@ -1,0 +1,4 @@
+---
+fixes:
+  - |
+    Fixes issue where stacked line graphs would not render properly in some cases.

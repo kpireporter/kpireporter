@@ -81,8 +81,7 @@ class Plot(View):
         time_column (str): the name of the column in the query result table that
             contains timeseries data. (Default ``"time"``)
         kind (str): the kind of plot to draw. Currently only "line" and "bar"
-            are officially supported, though other types supported by matplotlib
-            may be possible. (Default ``"line"``)
+            are supported. (Default ``"line"``)
         stacked (bool): whether to display the line/bar graph types as a stacked
             plot, where each series is stacked atop the last. (Default
             ``False``)
@@ -165,10 +164,10 @@ class Plot(View):
             rc_params.setdefault(k, v)
         return rc_params
 
-    def _plot_bar(self, df: "pandas.DataFrame", ax):
+    def _make_plot(self, df: "pandas.DataFrame", ax):
         """Render a bar chart with the current DataFrame."""
 
-        def label_bars(rects):
+        def with_labels(rects):
             if not self.bar_labels:
                 return
             for rect in rects:
@@ -187,19 +186,22 @@ class Plot(View):
         if isinstance(df.index, pd.DatetimeIndex):
             ax.xaxis.set_major_formatter(mdates.DateFormatter(DATE_FORMAT))
 
-        plot_fn = getattr(ax, self.kind, None)
-        if not (plot_fn and callable(plot_fn)):
+        if self.kind == "line":
+            if self.stacked:
+                ax.stackplot(df.index, *[df[col] for col in df.columns])
+            else:
+                for col in df.columns:
+                    ax.plot(df.index, df[col])
+        elif self.kind == "bar":
+            with_labels(ax.bar(df.index, df[df.columns[0]]))
+            bottom = df[df.columns[0]]
+            for col in df.columns[1:]:
+                with_labels(
+                    ax.bar(df.index, df[col], bottom=(bottom if self.stacked else None))
+                )
+                bottom += df[col]
+        else:
             raise ValueError(f"Plot function {self.kind} does not exist")
-
-        label_bars(plot_fn(df.index, df[df.columns[0]]))
-        bottom = df[df.columns[0]]
-        for col in df.columns[1:]:
-            label_bars(plot_fn(df.index, df[col], bottom=(
-                bottom if self.stacked else None)))
-            bottom += df[col]
-
-    def _plot_default(self, df: "pandas.DataFrame", ax):
-        df.plot(ax=ax, kind=self.kind, legend=None, title=None, stacked=self.stacked)
 
     def render_figure(self):
         df = self.datasources.query(self.datasource, self.query, **self.query_args)
@@ -211,22 +213,28 @@ class Plot(View):
         df = df.sort_index()
 
         if self.groupby:
-            df = df.groupby(self.groupby)
+            df = df.groupby(self.groupby, as_index=False)
 
         with plt.rc_context(self.matplotlib_rc):
             figsize = [((self.cols * self.report.theme.column_width) / FIGURE_PPI), 2]
             fig, ax = plt.subplots(figsize=figsize, constrained_layout=True)
 
-            if self.kind == "bar":
-                self._plot_bar(df, ax)
-            else:
-                self._plot_default(df, ax)
-
             groups = getattr(df, "groups", None)
+            if groups:
+                for group in groups:
+                    # Drop the 'groupby' column; we've already split it into
+                    # subplots. This prevents confusion when plotting later.
+                    group_df = df.get_group(group).drop(self.groupby, axis=1)
+                    self._make_plot(group_df, ax)
+            else:
+                self._make_plot(df, ax)
+
             if self.legend is None and (groups or len(df.columns) > 1):
                 # Automatically generate legend by default if we're plotting
                 # multiple series or grouped data.
-                ax.legend((groups or df.columns), bbox_to_anchor=(0, -0.5))
+                ax.legend(
+                    (groups or df.columns), bbox_to_anchor=(0, -0.5), ncol=self.cols
+                )
             elif self.legend:
                 l_kwargs = self.legend if isinstance(self.legend, dict) else {}
                 ax.legend(df.columns, **l_kwargs)

@@ -24,20 +24,22 @@ publish_path() {
   local version_file="$4"
 
   if [[ "$root" != "." ]]; then
-    commit_line="$root: $next_tag"
-    tag_name="$next_tag+$(basename $root)"
+    current_version="$(cut -d/ -f2 <<<"$current_tag")"
+    next_version="$(cut -d/ -f2 <<<"$next_tag")"
+    commit_line="$(basename $root): $next_version"
   else
-    commit_line="$next_tag"
-    tag_name="$next_tag"
+    current_version = "$current_tag"
+    next_version="$next_tag"
+    commit_line="$next_version"
   fi
 
-  if [[ "$current_tag" != "$next_tag" ]]; then
-    echo "Publishing $root ($current_tag -> $next_tag) ..."
+  if [[ "$current_version" != "$next_version" ]]; then
+    echo "Publishing $root ($current_version -> $next_version) ..."
     pushd "$root" >/dev/null
-    _maybe sed -i "s!$current_tag!$next_tag!g" "$version_file"
+    _maybe sed -i -E "s!(version=\").*(\")!\1$next_version\2!g" "$version_file"
     _maybe git add "$version_file"
     _maybe git commit -m "$commit_line"
-    _maybe git tag -a -m "$next_tag" "$tag_name"
+    _maybe git tag -a -m "$next_tag" "$next_tag"
     _maybe git push --tags origin HEAD
     rm -rf build dist
     python setup.py sdist bdist_wheel

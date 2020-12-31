@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Fixes an issue with rendering the license text when the license was valid or
+    expired.

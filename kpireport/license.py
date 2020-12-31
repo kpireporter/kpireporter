@@ -52,8 +52,9 @@ class OKState(LicenseState):
         self.claims = claims
         assert self.claims is not None
 
-    def render(self):
-        expires = datetime.strftime(self.claims["exp"], "%Y-%m-%d")
+    def render(self, fmt):
+        exp_date = datetime.utcfromtimestamp(self.claims["exp"])
+        expires = datetime.strftime(exp_date, "%Y-%m-%d")
         return f"Licensed to {self.claims['name']} until {expires}."
 
 
@@ -63,7 +64,8 @@ class ExpiredState(LicenseState):
         assert self.claims is not None
 
     def render(self, fmt):
-        expires = datetime.strftime(self.claims["exp"], "%Y-%m-%d")
+        exp_date = datetime.utcfromtimestamp(self.claims["exp"])
+        expires = datetime.strftime(exp_date, "%Y-%m-%d")
         return join(
             fmt,
             [

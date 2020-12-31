@@ -25,8 +25,8 @@ jobs:
       - name: Install tox
         run: pip install tox
 
-      - name: Run PEP8
-        run: tox -e pep8
+      - name: Run lint
+        run: tox -e lint
 
       - name: Run tests
         run: tox -e unit

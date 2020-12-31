@@ -95,9 +95,9 @@ you are a sponsor.
 One-time payment
 ^^^^^^^^^^^^^^^^
 
-You can purchase a one-year license for $99/year (for individuals/small
-businesses) or $499/year (for larger businesses.) You can use discretion about
-which tier you belong to.
+You can `purchase a one-year license <https://kpireporter.com/pricing/>`_ for $99/year
+(for individuals/small businesses) or $499/year (for larger businesses.) You can use
+discretion about which tier you belong to.
 
 .. _about-comparisons:
 

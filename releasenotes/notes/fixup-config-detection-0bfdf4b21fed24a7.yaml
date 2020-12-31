@@ -1,0 +1,4 @@
+---
+fixes:
+  - |
+    Fixes error due to missing import when loading configuration files automatically.

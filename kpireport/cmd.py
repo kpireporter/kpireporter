@@ -3,6 +3,7 @@ from datetime import datetime
 from itertools import chain
 from glob import glob
 import logging
+import os
 import sys
 
 from timeit import default_timer as timer

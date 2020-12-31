@@ -28,7 +28,7 @@ publish_path() {
     next_version="$(cut -d/ -f2 <<<"$next_tag")"
     commit_line="$(basename $root): $next_version"
   else
-    current_version = "$current_tag"
+    current_version="$current_tag"
     next_version="$next_tag"
     commit_line="$next_version"
   fi

@@ -42,8 +42,8 @@ publish_path() {
     _maybe git tag -a -m "$next_tag" "$next_tag"
     _maybe git push --tags origin HEAD
     rm -rf build dist
-    python setup.py sdist bdist_wheel
-    _maybe twine upload -u __token__ -p $pypi_token dist/*
+    python setup.py -q sdist bdist_wheel
+    _maybe twine upload -q -u __token__ -p $pypi_token dist/*
     popd >/dev/null
   else
     echo "Skipping $root ($current_tag == $next_tag)"
@@ -51,13 +51,13 @@ publish_path() {
 }
 
 publish_plugin() {
-  local current_tag="$(git describe --tags $(git rev-list --no-walk --max-count=1 --tags -- $1))"
+  local current_tag="$(git tag -l "$1/*" | tail -n1)"
   local next_tag="$(reno -q --rel-notes-dir $1/releasenotes semver-next)"
   publish_path "$1" "$current_tag" "$next_tag" setup.py
 }
 
 publish_root() {
-  local current_tag="$(git describe --tags $(git rev-list --no-walk --tags) | grep -v '.*+.*')"
+  local current_tag="$(git tag -l '[0-9].[0-9].[0-9]' | tail -n1)"
   local next_tag="$(reno -q semver-next)"
   publish_path "." "$current_tag" "$next_tag" kpireport/version.py
 }

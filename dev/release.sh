@@ -6,7 +6,16 @@ export pypi_token="${PYPI_TOKEN:-}"
 # Navigate to root
 pushd "$DIR/.." >/dev/null
 
-PLUGIN=""
+export PLUGIN=""
+export DRY_RUN=no
+
+_maybe() {
+  if [[ "$DRY_RUN" == "yes" ]]; then
+    echo "$@"
+  else
+    "$@"
+  fi
+}
 
 publish_path() {
   local root="$(realpath --relative-to=. $1)"
@@ -25,14 +34,14 @@ publish_path() {
   if [[ "$current_tag" != "$next_tag" ]]; then
     echo "Publishing $root ($current_tag -> $next_tag) ..."
     pushd "$root" >/dev/null
-    sed -i "s!$current_tag!$next_tag!g" "$version_file"
-    git add "$version_file"
-    git commit -m "$commit_line"
-    git tag -a -m "$next_tag" "$tag_name"
-    # git push --tags origin HEAD
+    _maybe sed -i "s!$current_tag!$next_tag!g" "$version_file"
+    _maybe git add "$version_file"
+    _maybe git commit -m "$commit_line"
+    _maybe git tag -a -m "$next_tag" "$tag_name"
+    _maybe git push --tags origin HEAD
     rm -rf build dist
     python setup.py sdist bdist_wheel
-    # twine upload -u __token__ -p $pypi_token dist/*
+    _maybe twine upload -u __token__ -p $pypi_token dist/*
     popd >/dev/null
   else
     echo "Skipping $root ($current_tag == $next_tag)"
@@ -58,7 +67,8 @@ cmd_publish() {
     publish_root
     export -f publish_plugin
     export -f publish_path
-    # find $DIR/../plugins -maxdepth 1 -mindepth 1 -type d -exec bash -c 'publish_plugin {}' \;
+    export -f _maybe
+    find $DIR/../plugins -maxdepth 1 -mindepth 1 -type d -exec bash -c 'publish_plugin {}' \;
   fi
 }
 
@@ -70,19 +80,38 @@ cmd_note() {
   reno "${reno_args[@]}" "$@"
 }
 
+usage() {
+  cat <<USAGE
+release.sh [--plugin PLUGIN] CMD
+
+Options:
+  --plugin PLUGIN: target operation to a specific plugin
+  --dry-run: don't perform destructive operations (applies to 'publish' only.)
+
+Commands:
+  publish: publish a new version of the module(s).
+  note: manage release notes. This wraps the ``reno`` utility.
+USAGE
+  exit 1
+}
+
+cmd=""
 while [[ $# -gt 0 ]]; do
   case "$1" in
     note)
       shift
-      cmd_note "$@"
+      cmd=cmd_note "$@"
       break
       ;;
     publish)
-      cmd_publish
+      cmd=cmd_publish
       ;;
     --plugin)
-      PLUGIN="$2"
+      export PLUGIN="$2"
       shift
+      ;;
+    --dry-run)
+      export DRY_RUN=yes
       ;;
     -h|--help)
       usage
@@ -90,3 +119,7 @@ while [[ $# -gt 0 ]]; do
   esac
   shift
 done
+
+tox -e dev echo Setup env
+source .tox/dev/bin/activate
+"$cmd"

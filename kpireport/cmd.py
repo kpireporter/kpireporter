@@ -69,11 +69,13 @@ def run(argv=None):
 
     license_file = args.license_file
     if not license_file:
-        matches = list(chain(*[
-            glob(f"{DEFAULT_CONF_DIR}/*.{ext}") for ext in ["key", "pub"]
-        ]))
+        matches = list(
+            chain(*[glob(f"{DEFAULT_CONF_DIR}/*.{ext}") for ext in ["key", "pub"]])
+        )
         if matches:
-            license_file = open(matches[0], "r")
+            # Use the last found file. This is helpful so that later license files
+            # (if date is in the name) are used in preference to earlier ones.
+            license_file = open(matches[-1], "r")
     if license_file:
         with license_file:
             license_content = license_file.read()

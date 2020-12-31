@@ -9,12 +9,11 @@ KPI Reporter is a Python module that is installable via ``pip``:
 .. image:: https://img.shields.io/pypi/v/kpireport
    :target: https://pypi.org/project/kpireport
 
-.. image:: https://img.shields.io/pypi/pyversions/kpireport
-   :target: https://pypi.org/project/kpireport
-
 .. code-block:: shell
 
   pip install kpireport
+
+.. _docker:
 
 Docker
 ======
@@ -24,7 +23,7 @@ A `Docker image
 on DockerHub with all dependencies required by :ref:`all available plugins
 <plugins-available>`.
 
-.. image:: https://images.microbadger.com/badges/version/kpireporter/kpireporter.svg
+.. image:: https://img.shields.io/docker/v/kpireporter/kpireporter
    :target: https://hub.docker.com/repository/docker/kpireporter/kpireporter
 
 Usage
@@ -37,13 +36,46 @@ one week ago. To specify different windows, use the ``--start-date`` and
 
 .. code-block:: shell
 
-  # Generate report over last 7 days
+  # Generate report over last 7 days (default)
   kpireport --config-file kpireport.yaml
 
   # Generate report from last week
   kpireport --config-file kpireport.yaml \
     --start-date $(date +%Y-%m-%d -d'-2 week') \
     --end-date $(date +%Y-%m-%d -d'-1 week')
+
+Installing licenses
+-------------------
+
+.. important::
+   Your license file should be kept secret! If you post your license file online or in a
+   source code repository, anyone could steal your license. If you would like to request
+   a new license in case of compromise, you can `send an email here
+   <mailto:help@kpireporter.com>`_.
+
+By default, KPI Reporter looks for a license files (ending in ``.pem`` or ``.key``) in
+``/etc/kpireporter``. The *last file found* is used. This allows you to name your
+license files by date if you want.
+
+.. code-block:: shell
+
+   mv path/to/license.pem /etc/kpireporter/
+
+If using the :ref:`Docker image <docker>`, you can mount the license file inside the
+container:
+
+.. code-block:: shell
+
+   docker run --rm -v license.pem:/etc/kpireporter/license.pem:ro \
+     kpireporter/kpireporter:
+
+You can also use the ``--license-file`` flag to load the license from a different
+location.
+
+.. code-block:: shell
+
+   kpireport --license-file path/to/license.pem [...args]
+
 
 Plugins
 =======
@@ -71,4 +103,11 @@ and so are installed like the following:
 
       .. code-block:: shell
 
-          pip install kpireport[all]
+         pip install kpireport[all]
+
+    In practice due to how pip handles (or doesn't handle) cross-dependencies this can
+    be tricky. It may be better to install some "core" plugins first before attempting:
+
+      .. code-block:: shell
+
+         pip install kpireport kpireport-static && pip install kpireport[all]

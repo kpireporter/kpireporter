@@ -2,8 +2,8 @@
 KPI Reporter
 ============
 
-KPI Reporter is a **developer-friendly**, **highly customizable** tool for
-sending periodic reports for the metrics that matter for your team or project.
+KPI Reporter is a **dev-friendly**, **on-premises** tool for for crafting automated
+reports.
 
 Support for a variety of reporting sources is built-in, including, e.g.,
 :ref:`MySQL databases <mysql-plugin>`, :ref:`Prometheus metrics

@@ -38,17 +38,18 @@ Why Dataframes?
 The data interchange format between the View and Datasource layers is the
 :class:`pandas.DataFrame`. There are a few reasons for this:
 
-  * The abstraction is already widely used by data scientists.
+  * The abstraction is already widely used by data scientists and maps well to other
+    concepts developers are exposed to (e.g., arrays, matrices, databases.)
   * A wide variety of shapes of data can be expressed.
   * The abstraction maps easily to most database storage abstractions (e.g.,
     row-based or column-based tabular data.)
   * Documentation is plentiful and kept up-to-date.
-  * Visualization libraries (e.g., :module:`matplotlib`) have good support for
+  * Visualization libraries (e.g., :mod:`matplotlib`) have good support for
     rendering DataFrames built-in.
 
 That said, there are some downsides:
 
-  * DataFrames are arguably harder to transform than plan JSON data structures.
+  * DataFrames are harder to transform than plan JSON data structures.
   * DataFrames don't readily support mixing list and dict-like structures; some
     normalization is typically needed (see the source for the
     :ref:`jenkins-plugin` for an example.)

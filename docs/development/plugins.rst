@@ -4,4 +4,4 @@
 Plugins
 ========
 
-TODO
+.. note:: Plugin development guide coming soon.

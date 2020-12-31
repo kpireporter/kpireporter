@@ -108,66 +108,34 @@ There are several existing products and applications that do some of what KPI
 Reporter does. Many of them do a far better job depending on your specific
 use-case. Here is a brief summary of the ones I know of.
 
-`Daily Metrics <https://thedailymetrics.com/>`_
------------------------------------------------
+Cloud SaaS
+----------
 
-Daily Metrics is a new product that has a very similar design and offering. It
-has a user-friendly web interface that allows you to hook up integrations with,
-e.g., Google Analytics, MySQL, and even supports uploading custom metrics.
-Additionally, the app handles sending of the mail for you, so you don't need to
-manage that.
+All of these services are rather sophisticated and focus on delivering user-friendly
+interfaces so that a wider range of employees can be useful. They are also more
+expensive for that reason. Most support some overlapping (and typically wider) set of
+data sources and reporting/visualization capabilities as KPI Reporter.
 
-It cannot as of this writing be run on-premises, so in order to utilize
-connectors like MySQL, you have to expose your database publicly on the Internet
-or at minimum learn the requesting IPs of Daily Metrics in order to establish
-firewall rules. Daily Metrics also only supports sending email and cannot export
-your report to a file or send to Slack. However, some of these features may well
-be available in the future.
+* `Chartio <https://chartio.com/>`_: subscriptions start at $40/month per user after a
+  14 day trial.
+* `Databox <https://databox.com>`_: subscriptions start at $49/month for 10 users and
+  10 data sources.
+* `Daily Metrics <https://thedailymetrics.com/>`_: a subscription is $10/month
+* `Grafana Enterprise Reporting
+  <https://grafana.com/docs/grafana/latest/enterprise/reporting/>`_: pricing is only
+  available on request, putting it safely above any of the other products.
+* `Grow.com <https://grow.com>`_: pricing available on request, similar to Grafana
+  Enterprise.
+* `Klipfolio <https://www.klipfolio.com/>`_: a subscription is $70/month after a 14-day
+  trial.
+* `Sunrise KPI <https://sunrisekpi.com/>`_: a subscription is $15/month after a 14-day
+  trial.
 
-The code for Daily Metrics is not published and no plugin capability exists, so
-the appearance of your report will be limited by what the app supports.
+On-premises
+-----------
 
-A subscription is $10/month, but a free tier exists for exploring and
-maintaining the simplest of reports.
-
-`Grafana Enterprise Reporting <https://grafana.com/docs/grafana/latest/enterprise/reporting/>`_
------------------------------------------------------------------------------------------------
-
-Grafana has supported automatically sending a PDF of an existing dashboard for
-some time now, if you are an Enterprise customer. Grafana dashboards are very
-customizable, so you can express a large variety of reports. However, Grafana
-only supports so many `data sources
-<https://grafana.com/docs/grafana/latest/datasources/>`_. One possible downside
-of Grafana Reporting is that PDFs must always be downloaded and viewed, and
-cannot be simply displayed inline in email clients. The main downside for
-Grafana Reporting is cost, as it requires an Enterprise plan.
-
-Grafan Enterprise pricing is only available on request, putting it safely
-above any of the other products reviewed here.
-
-`Klipfolio <https://www.klipfolio.com/>`_
------------------------------------------
-
-Klipfolio is a complete analytics platform that specializes in helping you
-customize rich dashboards that incorporate a variety of metrics. The product
-has many `integrations <https://www.klipfolio.com/integrations>`_ to other
-services, which lean heavily towards marketing products, but there are also
-pure data integrations sugh as MySQL. Klipfolio cannot be run on-premises and
-reports are built interactively via a web application. As with Daily Metrics,
-this is perhaps a better solution for those who are not as comfortable working
-with configuration files and code.
-
-As of writing, there is no support for displaying some types of metrics that
-may be valuable to development teams, such as Prometheus.
-
-A subscription is $70/month ($49/month if annual) after a 14-day trial.
-
-`Sunrise KPI <https://sunrisekpi.com/>`_
-----------------------------------------
-
-Sunrise KPI groups metrics from several services into one email report, and
-additionally displays them in a single dashboard within a web app. Currently
-the integrations are mostly with marketing software, although there is support
-for calling a custom JSON API.
-
-A subscription is $15/month ($12.50/month if annual) after a 14-day trial.
+* `Zoho Analytics <https://www.zoho.com/analytics/onpremise.html>`_: while principally
+  another cloud SaaS product, Zoho Analytics is the only offering I could find that
+  supports an on-premises deployment at time of writing. The on-premises version is
+  $30/month per seat, with a minimum of 5 seats, so $150/month. The online version is
+  $45/month for the same number of users.

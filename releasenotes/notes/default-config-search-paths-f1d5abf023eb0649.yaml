@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    If no configuration file is provided via the --config-file flag, a ``config.yaml``
+    file will be searched for, first in the working directory and then in
+    ``/etc/kpireporter``.

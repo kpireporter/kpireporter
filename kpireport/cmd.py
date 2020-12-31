@@ -4,6 +4,7 @@ from itertools import chain
 from glob import glob
 import logging
 import sys
+
 from timeit import default_timer as timer
 
 from .config import load
@@ -17,10 +18,6 @@ def simple_date(date_str):
         return datetime.strptime(date_str, "%Y-%m-%d")
     except ValueError:
         raise argparse.ArgumentTypeError(f"Not a valid date: {date_str}")
-
-
-class ConfigFiles(argparse._AppendAction):
-    pass
 
 
 def run(argv=None):
@@ -57,7 +54,19 @@ def run(argv=None):
 
     config_files = list(chain(*args.config_file))
     if not config_files:
-        config_files.append(argparse.FileType("r")("kpireport.yml"))
+        for search_dir in [".", DEFAULT_CONF_DIR]:
+            search_path = os.path.join(search_dir, "config.yaml")
+            if os.path.isfile(search_path):
+                config_files.append(open(search_path, "r"))
+                break
+        if not config_files:
+            raise ValueError(
+                (
+                    "Could not find any configuration file! Use the --config-file "
+                    "option when using a non-standard configuration location."
+                )
+            )
+
     conf = load(*config_files)
 
     if args.start_date:

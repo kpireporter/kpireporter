@@ -37,12 +37,26 @@ one week ago. To specify different windows, use the ``--start-date`` and
 .. code-block:: shell
 
   # Generate report over last 7 days (default)
-  kpireport --config-file kpireport.yaml
+  kpireport --config-file my-report.yaml
 
   # Generate report from last week
-  kpireport --config-file kpireport.yaml \
+  kpireport --config-file my-report.yaml \
     --start-date $(date +%Y-%m-%d -d'-2 week') \
     --end-date $(date +%Y-%m-%d -d'-1 week')
+
+If you do not specify a ``--config-file`` option, the tool will attempt to find a
+configuration in the following locations (in order):
+
+1. ``./config.yaml``
+2. ``/etc/kpireporter/config.yaml``
+
+If using the :ref:`Docker image <docker>`, the configuration file can be mounted in
+to one of these locations:
+
+  .. code-block:: shell
+
+    docker run --rm -v my-config.yaml:/etc/kpireporter/config.yaml \
+      kpireporter/kpireporter:edge
 
 Installing licenses
 -------------------

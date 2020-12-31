@@ -98,12 +98,11 @@ USAGE
 }
 
 cmd=""
+declare -a posargs
 while [[ $# -gt 0 ]]; do
   case "$1" in
     note)
-      shift
-      cmd=cmd_note "$@"
-      break
+      cmd=cmd_note
       ;;
     publish)
       cmd=cmd_publish
@@ -118,10 +117,15 @@ while [[ $# -gt 0 ]]; do
     -h|--help)
       usage
       ;;
+    *)
+      posargs+=("$1")
+      ;;
   esac
   shift
 done
 
+if [[ -z "$cmd" ]]; then usage; fi
+
 tox -e dev echo Setup env
 source .tox/dev/bin/activate
-"$cmd"
+"$cmd" "${posargs[@]}"

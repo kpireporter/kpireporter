@@ -69,8 +69,8 @@ class ExpiredState(LicenseState):
             [
                 self.strong(fmt, f"Your license expired on {expires}."),
                 (
-                    f"Please {link(fmt, URL_PRICING, 'renew your license')} to continue "
-                    "using KPI Reporter."
+                    f"Please {link(fmt, URL_PRICING, 'renew your license')} to "
+                    "continue using KPI Reporter."
                 ),
             ],
         )

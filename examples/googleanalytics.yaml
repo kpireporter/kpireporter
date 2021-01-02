@@ -1,0 +1,14 @@
+---
+title: Marketing report
+
+datasources:
+  ga:
+    plugin: googleanalytics
+
+views:
+  engagement:
+    plugin: plot
+    args:
+      datasource: ga
+      query: foo
+      kind: bar

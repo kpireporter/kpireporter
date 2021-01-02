@@ -12,6 +12,7 @@ pylama
 # extend from others (currently the 'static' plugin is the
 # only one used as a base representation)
 -e ./plugins/static
+-e ./plugins/googleanalytics
 -e ./plugins/jenkins
 -e ./plugins/mysql
 -e ./plugins/plot

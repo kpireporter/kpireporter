@@ -76,6 +76,10 @@ services:
         target: /root/.ssh/id_rsa
         read_only: True
       - type: bind
+        source: ${GOOGLE_OAUTH2_KEY_FILE}
+        target: /etc/kpireporter/google_oauth2_key.json
+        read_only: True
+      - type: bind
         source: .kpireport_ready_signal
         target: /root/kpireport_ready_signal
     depends_on:

@@ -8,10 +8,8 @@ import sys
 
 from timeit import default_timer as timer
 
-from .config import load
+from .config import load, DEFAULT_CONF_DIR
 from .report import ReportFactory
-
-DEFAULT_CONF_DIR = "/etc/kpireporter"
 
 
 def simple_date(date_str):

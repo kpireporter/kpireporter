@@ -1,4 +1,5 @@
 from cycler import cycler
+from functools import lru_cache
 import io
 import matplotlib.dates as mdates
 import matplotlib.pyplot as plt
@@ -203,6 +204,7 @@ class Plot(View):
         else:
             raise ValueError(f"Plot function {self.kind} does not exist")
 
+    @lru_cache
     def render_figure(self):
         df = self.datasources.query(self.datasource, self.query, **self.query_args)
         if self.time_column in df:

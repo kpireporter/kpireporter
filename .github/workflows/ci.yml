@@ -141,12 +141,14 @@ jobs:
     - name: Generate example output
       run: |
         touch $SCP_IDENTITY_FILE
+        touch $GOOGLE_OAUTH2_KEY_FILE
 
         ./dev/run.sh -c examples/mysql.yaml
         ./dev/run.sh --no-rebuild -c examples/jenkins.yaml
         ./dev/run.sh --no-rebuild -c examples/prometheus.yaml
       env:
         SCP_IDENTITY_FILE: /tmp/dummy_scp_identity_file
+        GOOGLE_OAUTH2_KEY_FILE: /tmp/dummy_google_oauth2_key.json
 
     - name: Archive examples
       uses: actions/upload-artifact@v1

@@ -2,6 +2,7 @@ import os
 import re
 import yaml
 
+DEFAULT_CONF_DIR = "/etc/kpireporter"
 
 path_matcher = re.compile(r".*\$\{([^}^{]+)\}.*")
 

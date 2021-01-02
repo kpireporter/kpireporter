@@ -16,6 +16,8 @@ plugin-requirements.txt
 docs/_build/
 # Dev environment ready signal
 dev/.kpireport_ready_signal
+# Dev testing credentials
+dev/secrets/
 # Env files
 .env
 # Prevent licenses from being accidentally committed

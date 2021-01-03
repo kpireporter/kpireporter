@@ -1,4 +1,6 @@
 from abc import ABC, abstractmethod
+import traceback
+
 from jinja2 import Environment, ChoiceLoader, PackageLoader
 from jinja2 import evalcontextfilter
 
@@ -27,8 +29,7 @@ class View(ABC):
     title: str = None
     description: str = None
 
-    def __init__(self, report: 'Report', datasources: DatasourceManager,
-                 **kwargs):
+    def __init__(self, report: "Report", datasources: DatasourceManager, **kwargs):
         self.report = report
         self.datasources = datasources
         self._blobs = {}
@@ -153,6 +154,7 @@ class ViewManager(PluginManager):
                 self.log.error(
                     (f"Error rendering {self.type_noun} {id} ({fmt}): {exc}")
                 )
+                self.log.debug(traceback.format_exc())
                 block.update(output=f"Error rendering {id}", tags=["error"])
 
             blocks.append(block)

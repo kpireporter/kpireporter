@@ -65,7 +65,12 @@ class GoogleAnalyticsDatasource(Datasource):
             ) from e
 
     def query(
-        self, input: str, view_id=None, dimensions=None, metrics=None
+        self,
+        input: str,
+        view_id=None,
+        dimensions=None,
+        metrics=None,
+        filtersExpression=None,
     ) -> pd.DataFrame:
         date_fmt = "%Y-%m-%d"
 
@@ -78,33 +83,37 @@ class GoogleAnalyticsDatasource(Datasource):
             return datetime.strftime(dt.astimezone(self.view_tz), date_fmt)
 
         # Ensure date dimension is first; we use this later for the Dataframe index
-        dimensions = [{"name": DATE_DIMENSION}] + (dimensions or [])
+        dimensions = [{"name": DATE_DIMENSION}] + [
+            {"name": d} for d in dimensions or []
+        ]
         if not metrics:
             # Default to just showing number of users
             metrics = [{"expression": "ga:users"}]
+
+        reportRequest = {
+            "viewId": view_id or self.view_id,
+            "dateRanges": [
+                {
+                    "startDate": date_range_param(self.report.start_date),
+                    "endDate": date_range_param(self.report.end_date),
+                }
+            ],
+            # Ensure rows with 0 values for metrics are still included
+            # (only works if ONLY date-derived dimensions are used, i.e.,
+            # dimensions with known low cardinality.)
+            # See: https://stackoverflow.com/a/44394541
+            "includeEmptyRows": True,
+            "metrics": metrics,
+            "dimensions": dimensions,
+            "orderBys": [{"fieldName": DATE_DIMENSION, "sortOrder": "ASCENDING"}],
+        }
+
+        if filtersExpression:
+            reportRequest["filtersExpression"] = filtersExpression
+
         res = self.reports.batchGet(
             body={
-                "reportRequests": [
-                    {
-                        "viewId": view_id or self.view_id,
-                        "dateRanges": [
-                            {
-                                "startDate": date_range_param(self.report.start_date),
-                                "endDate": date_range_param(self.report.end_date),
-                            }
-                        ],
-                        # Ensure rows with 0 values for metrics are still included
-                        # (only works if ONLY date-derived dimensions are used, i.e.,
-                        # dimensions with known low cardinality.)
-                        # See: https://stackoverflow.com/a/44394541
-                        "includeEmptyRows": True,
-                        "metrics": metrics,
-                        "dimensions": dimensions,
-                        "orderBys": [
-                            {"fieldName": DATE_DIMENSION, "sortOrder": "ASCENDING"}
-                        ],
-                    },
-                ],
+                "reportRequests": [reportRequest],
             }
         ).execute()
 
@@ -122,7 +131,7 @@ class GoogleAnalyticsDatasource(Datasource):
             df_idx.append(self.view_tz.localize(datetime.strptime(date_dim, "%Y%m%d")))
             df_rows.append(
                 [d for d in row["dimensions"][1:]]
-                + [m["values"][0] for m in row["metrics"]]
+                + [float(m["values"][0]) for m in row["metrics"]]
             )
 
         df = pd.DataFrame(df_rows, index=df_idx, columns=df_columns)

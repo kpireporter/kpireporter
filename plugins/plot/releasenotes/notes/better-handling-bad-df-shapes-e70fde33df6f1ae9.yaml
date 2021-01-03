@@ -1,0 +1,6 @@
+---
+fixes:
+  - |
+    When trying to plot DataFrames with multiple non-numeric columns, the plotter will
+    now log a warning and drop the non-numeric columns. Non-numeric columns should be
+    grouped over, not plotted.

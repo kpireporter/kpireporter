@@ -165,7 +165,7 @@ class Plot(View):
             rc_params.setdefault(k, v)
         return rc_params
 
-    def _make_plot(self, df: "pandas.DataFrame", ax):
+    def _make_plot(self, ax, index_data, series_data):
         """Render a bar chart with the current DataFrame."""
 
         def with_labels(rects):
@@ -184,25 +184,40 @@ class Plot(View):
                     fontweight="bold",
                 )
 
-        if isinstance(df.index, pd.DatetimeIndex):
+        if isinstance(index_data, pd.DatetimeIndex):
             ax.xaxis.set_major_formatter(mdates.DateFormatter(DATE_FORMAT))
 
         if self.kind == "line":
             if self.stacked:
-                ax.stackplot(df.index, *[df[col] for col in df.columns])
+                ax.stackplot(index_data, *[s for s in series_data])
             else:
-                for col in df.columns:
-                    ax.plot(df.index, df[col])
+                for s in series_data:
+                    ax.plot(index_data, s)
         elif self.kind == "bar":
-            with_labels(ax.bar(df.index, df[df.columns[0]]))
-            bottom = df[df.columns[0]]
-            for col in df.columns[1:]:
+            with_labels(ax.bar(index_data, series_data[0]))
+            bottom = series_data[0]
+            for s in series_data[1:]:
                 with_labels(
-                    ax.bar(df.index, df[col], bottom=(bottom if self.stacked else None))
+                    ax.bar(index_data, s, bottom=(bottom if self.stacked else None))
                 )
-                bottom += df[col]
+                bottom += s
         else:
             raise ValueError(f"Plot function {self.kind} does not exist")
+
+    def _prune_nonnumeric_columns(self, df):
+        orig_cols = set(df.columns)
+        df = df.select_dtypes(include=["number"])
+        pruned_cols = orig_cols - set(df.columns)
+        if pruned_cols:
+            LOG.warn(
+                (
+                    "Input DataFrame contained several non-numeric columns, which "
+                    "have been pruned from the output, as they cannot be plotted: "
+                    f"{pruned_cols}. Consider removing the extraneous columns or using "
+                    "'groupby' to use the columns to denote multiple series instead."
+                )
+            )
+        return df
 
     @lru_cache
     def render_figure(self):
@@ -215,31 +230,47 @@ class Plot(View):
         df = df.sort_index()
 
         if self.groupby:
-            df = df.groupby(self.groupby, as_index=False)
+            index_data = df.index.unique()
+            df = df.groupby(self.groupby)
+            series_labels = df.groups
+
+            def _flatten_group(group_df):
+                # When extracting a group as a Dataframe, the grouping column is once
+                # again present. Remove it, as it is redundant (all rows will have the
+                # same value)
+                df = group_df.drop(self.groupby, axis=1)
+                df = self._prune_nonnumeric_columns(df)
+                # Ensure all groups are of the same size
+                df = df.reindex(index_data, fill_value=0)
+                if len(df.columns) > 1:
+                    LOG.warn(
+                        (
+                            "After grouping data, there are still multiple columns. "
+                            f"Taking just the first column '{df.columns[0]}'."
+                        )
+                    )
+                return df[df.columns[0]]
+
+            series_data = [_flatten_group(df.get_group(g)) for g in df.groups]
+        else:
+            index_data = df.index
+            pruned_df = self._prune_nonnumeric_columns(df)
+            series_labels = pruned_df.columns
+            series_data = [pruned_df[col] for col in pruned_df.columns]
 
         with plt.rc_context(self.matplotlib_rc):
             figsize = [((self.cols * self.report.theme.column_width) / FIGURE_PPI), 2]
             fig, ax = plt.subplots(figsize=figsize, constrained_layout=True)
 
-            groups = getattr(df, "groups", None)
-            if groups:
-                for group in groups:
-                    # Drop the 'groupby' column; we've already split it into
-                    # subplots. This prevents confusion when plotting later.
-                    group_df = df.get_group(group).drop(self.groupby, axis=1)
-                    self._make_plot(group_df, ax)
-            else:
-                self._make_plot(df, ax)
+            self._make_plot(ax, index_data, series_data)
 
-            if self.legend is None and (groups or len(df.columns) > 1):
+            if self.legend is None and len(series_labels) > 1:
                 # Automatically generate legend by default if we're plotting
                 # multiple series or grouped data.
-                ax.legend(
-                    (groups or df.columns), bbox_to_anchor=(0, -0.5), ncol=self.cols
-                )
+                ax.legend(series_labels, bbox_to_anchor=(0, -0.5), ncol=self.cols)
             elif self.legend:
                 l_kwargs = self.legend if isinstance(self.legend, dict) else {}
-                ax.legend(df.columns, **l_kwargs)
+                ax.legend(series_labels, **l_kwargs)
 
             ax.set_xlabel("")
             plt.xticks(rotation=self.xtick_rotation)

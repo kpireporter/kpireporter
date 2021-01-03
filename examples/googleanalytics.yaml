@@ -6,9 +6,25 @@ datasources:
     plugin: googleanalytics
 
 views:
-  engagement:
+  all_visitors:
+    title: All visitors
     plugin: plot
     args:
       datasource: ga
       query: foo
+
+  blog_visitors:
+    title: Blog visitors by traffic source
+    description: |
+      (none): direct visit, either by typing URL or perhaps via email link
+      organic: referral was search engine
+      referral: referral was some other URL
+    plugin: plot
+    args:
+      datasource: ga
+      query: foo
+      query_args:
+        dimensions: ['ga:medium']
+        filtersExpression: 'ga:pagepath=~^/blog/'
       kind: bar
+      groupby: ga:medium

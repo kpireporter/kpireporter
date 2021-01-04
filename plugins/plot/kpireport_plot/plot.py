@@ -13,6 +13,7 @@ LOG = logging.getLogger(__name__)
 
 DATE_FORMAT = "%b %-d\n(%a)"
 FIGURE_PPI = 72  # Default PPI in matplotlib, not customizable
+DEFAULT_FONT_SIZE = 10
 
 
 class Plot(View):
@@ -139,23 +140,23 @@ class Plot(View):
         rc_defaults = {
             "lines.linewidth": 3,
             "text.color": self.text_color,
+            "font.size": DEFAULT_FONT_SIZE,
             "axes.edgecolor": self.axis_color,
             "axes.titlecolor": self.text_color,
             "axes.labelcolor": self.text_color,
             "axes.prop_cycle": cycler(color=self.plot_colors),
             "axes.spines.top": False,
             "axes.spines.right": False,
-            "xtick.labelsize": 8,
+            "xtick.labelsize": DEFAULT_FONT_SIZE,
             "xtick.color": self.text_color,
             "xtick.direction": "in",
-            "ytick.labelsize": 8,
+            "ytick.labelsize": DEFAULT_FONT_SIZE,
             "ytick.color": self.text_color,
             "ytick.direction": "in",
             "legend.loc": "lower left",
             "legend.frameon": False,
             "legend.fancybox": False,
             "legend.borderpad": 0,
-            "legend.fontsize": "small",
             "date.autoformatter.day": DATE_FORMAT,
             "figure.dpi": FIGURE_PPI * 2,
             "savefig.bbox": "tight",
@@ -257,6 +258,9 @@ class Plot(View):
             pruned_df = self._prune_nonnumeric_columns(df)
             series_labels = pruned_df.columns
             series_data = [pruned_df[col] for col in pruned_df.columns]
+
+        if not series_data:
+            raise ValueError("The query returned no plottable results.")
 
         with plt.rc_context(self.matplotlib_rc):
             figsize = [((self.cols * self.report.theme.column_width) / FIGURE_PPI), 2]

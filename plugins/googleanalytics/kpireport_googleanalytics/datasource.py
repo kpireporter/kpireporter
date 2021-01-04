@@ -134,15 +134,19 @@ class GoogleAnalyticsDatasource(Datasource):
                    of those options is to naively take the first account/property found,
                    which may not have the view you're looking for.
 
-            dimensions (List[str]): a list of `dimensions <https://developers.google.com/analytics/devguides/reporting/core/v4/basics#dimensions>`_.
+            dimensions (List[str]): a list of `dimensions
+                <https://developers.google.com/analytics/devguides/reporting/core/v4/basics#dimensions>`_.
                 These can be just dimension names, or the full object syntax. If one
                 of these dimensions is a "date-like" dimension (e.g., "ga:date.*"), the
                 output DataFrame will have this dimension treated as a DateTimeIndex,
                 making it effectively return something that looks like a time series.
-            metrics (List[str]): a list of `metrics <https://developers.google.com/analytics/devguides/reporting/core/v4/basics#metrics>`_.
+            metrics (List[str]): a list of `metrics
+                <https://developers.google.com/analytics/devguides/reporting/core/v4/basics#metrics>`_.
                 These can be just metric expressions, or the full object syntax.
-            filters_expression (str): an optional `filter expression <https://developers.google.com/analytics/devguides/reporting/core/v3/reference#filters>`_.
-            order_bys (List[dict]): a list of `orderings <https://developers.google.com/analytics/devguides/reporting/core/v4/basics#ordering>`_.
+            filters_expression (str): an optional `filter expression
+                <https://developers.google.com/analytics/devguides/reporting/core/v3/reference#filters>`_.
+            order_bys (List[dict]): a list of `orderings
+                <https://developers.google.com/analytics/devguides/reporting/core/v4/basics#ordering>`_.
 
         Returns:
             pd.DataFrame: a :class:`pd.DataFrame` with dimensions and metrics added.

@@ -11,7 +11,7 @@ views:
     plugin: plot
     args:
       datasource: ga
-      query: foo
+      query: report
 
   blog_visitors:
     title: Blog visitors by traffic source
@@ -22,9 +22,9 @@ views:
     plugin: plot
     args:
       datasource: ga
-      query: foo
+      query: report
       query_args:
-        dimensions: ['ga:medium']
-        filtersExpression: 'ga:pagepath=~^/blog/'
+        dimensions: ['ga:date', 'ga:medium']
+        filters_expression: 'ga:pagepath=~^/blog/'
       kind: bar
       groupby: ga:medium

@@ -22,7 +22,32 @@ DATE_DIMENSIONS = {
 
 
 class GoogleAnalyticsDatasource(Datasource):
-    def init(self, key_file=None, view_id=None):
+    """A Datasource that provides data from the Google Analytics APIs.
+
+    This Datasource supports a whitelist of query types:
+
+        ``report``: Get a Report from the V4 Reporting API.
+            See :func:`query_report` for additional options/arguments.
+
+    To use in a View, the type of query is specified as the first argument.
+    Any additional keyword arguments are interpreted as options specific to that
+    query type.
+
+    .. code-block:: python
+
+       # From within a View member function...
+       df = self.datasources.query("ga", "report", account_like="MyAccount")
+
+    Attributes:
+        key_file (str): The Google service account key file (must be in JSON format.)
+            Refer to the `Google Cloud documentation
+            <https://cloud.google.com/docs/authentication/production#manually>`_ for
+            more information on how to set up this authentication credential.
+            Default ``/etc/kpireporter/google_oauth2_key.json``.
+
+    """
+
+    def init(self, key_file=None):
         if not key_file:
             key_file = f"{DEFAULT_CONF_DIR}/google_oauth2_key.json"
 
@@ -102,6 +127,15 @@ class GoogleAnalyticsDatasource(Datasource):
             ) from e
 
     def query(self, input: str, **kwargs) -> pd.DataFrame:
+        """Query the Google Analytics API.
+
+        Args:
+            input (str): The name of the query command to invoke.
+                Currently supports only "report".
+
+        Returns:
+            A DataFrame with the query results.
+        """
         if input == "report":
             return self.query_report(**kwargs)
         else:

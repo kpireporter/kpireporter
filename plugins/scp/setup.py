@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="kpireport-scp",
-    version="0.0.1",
+    version="0.0.2",
     author="KPI Reporter LLC",
     author_email="dev@kpireporter.com",
     license="Prosperity Public License",

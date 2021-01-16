@@ -1,0 +1,4 @@
+---
+fixes:
+  - |
+    The destination path on the remote host will be lazily created if not existing.

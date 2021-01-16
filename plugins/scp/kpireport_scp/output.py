@@ -52,6 +52,7 @@ class SCPOutputDriver(StaticOutputDriver):
 
                 safe_path = shlex.quote(self.remote_path)
 
+                run(f"mkdir -p {safe_path}")
                 run(
                     (f"tar -xf {remote_tarball} -C {safe_path} " "--strip-components=1")
                 )

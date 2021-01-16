@@ -5,6 +5,7 @@ setup(
     version="0.0.1",
     author="KPI Reporter LLC",
     author_email="dev@kpireporter.com",
+    url="https://kpireporter.com",
     license="Prosperity Public License",
     packages=["kpireport_googleanalytics"],
     install_requires=["kpireport", "google-api-python-client", "oauth2client", "pytz"],

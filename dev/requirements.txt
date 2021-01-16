@@ -1,3 +1,4 @@
+build
 numpy
 pandas
 git+https://github.com/kpireporter/reno.git

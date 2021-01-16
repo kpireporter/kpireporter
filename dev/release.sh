@@ -36,13 +36,17 @@ publish_path() {
   if [[ "$current_version" != "$next_version" ]]; then
     echo "Publishing $root ($current_version -> $next_version) ..."
     pushd "$root" >/dev/null
-    _maybe sed -i -E "s!(version\s*=\s*\").*(\")!\1$next_version\2!gi" "$version_file"
+    _maybe sed -i -E "s!(version\s*=\s*\"?).*(\"?)!\1$next_version\2!gi" "$version_file"
     _maybe git add "$version_file"
     _maybe git commit -m "$commit_line"
     _maybe git tag -a -m "$next_tag" "$next_tag"
     _maybe git push --tags origin HEAD
     rm -rf build dist
-    python setup.py -q sdist bdist_wheel
+    if [[ -f pyproject.toml ]]; then
+      python -m build
+    else
+      python setup.py -q sdist bdist_wheel
+    fi
     _maybe twine upload -u __token__ -p $pypi_token dist/*
     popd >/dev/null
   else
@@ -53,7 +57,7 @@ publish_path() {
 publish_plugin() {
   local current_tag="$(git tag -l "$(basename $1)/*" | tail -n1)"
   local next_tag="$(reno -q --rel-notes-dir $(realpath --relative-to="$PWD" "$1/releasenotes") semver-next)"
-  publish_path "$1" "$current_tag" "$next_tag" setup.py
+  publish_path "$1" "$current_tag" "$next_tag" "$(find $1 -name setup.py -o -name setup.cfg)"
 }
 
 publish_root() {

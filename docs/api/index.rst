@@ -16,3 +16,8 @@ KPI Reporter API Reference:
    datasource
    view
    output
+
+Changelog
+=========
+
+.. release-notes::

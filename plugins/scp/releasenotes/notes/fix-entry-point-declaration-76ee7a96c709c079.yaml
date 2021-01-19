@@ -1,0 +1,4 @@
+---
+fixes:
+  - |
+    Fixes the entry point declaration to be valid so the plugin is discoverable.

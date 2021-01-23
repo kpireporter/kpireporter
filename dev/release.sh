@@ -57,7 +57,7 @@ publish_path() {
 publish_plugin() {
   local current_tag="$(git tag -l "$(basename $1)/*" | tail -n1)"
   local next_tag="$(reno -q --rel-notes-dir $(realpath --relative-to="$PWD" "$1/releasenotes") semver-next)"
-  publish_path "$1" "$current_tag" "$next_tag" "$(find $1 -name setup.py -o -name setup.cfg -exec basename {} \; | sort | head -n1)"
+  publish_path "$1" "$current_tag" "$next_tag" "$(find $1 \( -name setup.py -o -name setup.cfg \) -exec basename {} \; | sort | head -n1)"
 }
 
 publish_root() {

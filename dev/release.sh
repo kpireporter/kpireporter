@@ -36,7 +36,7 @@ publish_path() {
   if [[ "$current_version" != "$next_version" ]]; then
     echo "Publishing $root ($current_version -> $next_version) ..."
     pushd "$root" >/dev/null
-    _maybe sed -i -E "s!(version\s*=\s*\"?).*(\"?)!\1$next_version\2!gi" "$version_file"
+    _maybe sed -i -E "s!(version\s*=\s*\"?)[^\"]*(\"?)!\1$next_version\2!gi" "$version_file"
     _maybe git add "$version_file"
     _maybe git commit -m "$commit_line"
     _maybe git tag -a -m "$next_tag" "$next_tag"

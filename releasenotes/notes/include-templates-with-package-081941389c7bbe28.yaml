@@ -1,0 +1,4 @@
+---
+fixes:
+  - |
+    Include report templates in the published PyPI package.

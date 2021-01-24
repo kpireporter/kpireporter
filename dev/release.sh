@@ -7,6 +7,7 @@ export pypi_token="${PYPI_TOKEN:-}"
 pushd "$DIR/.." >/dev/null
 
 export PLUGIN=""
+export ALL_PLUGINS=no
 export DRY_RUN=no
 
 _maybe() {
@@ -71,10 +72,12 @@ cmd_publish() {
     publish_plugin plugins/$PLUGIN
   else
     publish_root
-    export -f publish_plugin
-    export -f publish_path
-    export -f _maybe
-    find $DIR/../plugins -maxdepth 1 -mindepth 1 -type d -exec bash -c 'publish_plugin {}' \;
+    if [[ "$ALL_PLUGINS" == "yes" ]]; then
+      export -f publish_plugin
+      export -f publish_path
+      export -f _maybe
+      find $DIR/../plugins -maxdepth 1 -mindepth 1 -type d -exec bash -c 'publish_plugin {}' \;
+    fi
   fi
 }
 
@@ -92,6 +95,7 @@ release.sh [--plugin PLUGIN] CMD
 
 Options:
   --plugin PLUGIN: target operation to a specific plugin
+  --all: publish all changed packages
   --dry-run: don't perform destructive operations (applies to 'publish' only.)
 
 Commands:
@@ -114,6 +118,9 @@ while [[ $# -gt 0 ]]; do
     --plugin)
       export PLUGIN="$2"
       shift
+      ;;
+    --all)
+      ALL_PLUGINS=yes
       ;;
     --dry-run)
       export DRY_RUN=yes

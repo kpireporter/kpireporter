@@ -7,7 +7,7 @@
 <style>
 {% block global_styles %}
 {% set outer_padding = 20 %}
-{% set wrapper_padding = 20 %}
+{% set wrapper_padding = report.theme.padding_width %}
 {% set max_width = (report.theme.column_width * report.theme.num_columns) + (wrapper_padding * 2) %}
     /* -------------------------------------
         GLOBAL RESETS

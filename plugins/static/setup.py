@@ -10,6 +10,7 @@ setup(
     packages=["kpireport_static"],
     install_requires=[
         "kpireport",
+        "imgkit",
     ],
     entry_points={
         "kpireport.output": ["static = kpireport_static:StaticOutputDriver"],

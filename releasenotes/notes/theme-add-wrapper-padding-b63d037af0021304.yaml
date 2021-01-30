@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    The wrapper margin is now customizable on the Theme via the ``padding_width``
+    attribute. It defaults to 20, which was the old value in the built-in theme.

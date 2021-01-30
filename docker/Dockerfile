@@ -19,6 +19,12 @@ RUN pip install --no-cache-dir \
 
 FROM python:$python_version as base
 
+# Install any binaries required by the default set of plugins.
+RUN apt-get update -y \
+  && apt-get install --no-install-recommends -y \
+    wkhtmltopdf \
+  && rm -rf /var/lib/apt/lists/*
+
 RUN mkdir /opt/kpireport
 WORKDIR /opt/kpireport
 

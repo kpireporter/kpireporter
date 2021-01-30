@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    A new ``output_path`` option is now available and can be used to instruct the plugin
+    to output a rendered PNG file instead of the default HTML contents. PNG output
+    requires the ``wkhtmltopdf`` binary to be installed on the host.

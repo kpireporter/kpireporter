@@ -22,6 +22,8 @@ class Theme:
     Attributes:
         num_columns (int): the number of columns in the report grid. (Default 6)
         column_width (int): the width of each column, in pixels. (Default 86)
+        padding_width (int): the width of the horizontal padding at the report edges
+            (Default 20)
         theme_dir (str): a directory where additional templates can be found.
             These templates will override the default templates of the same
             name, and can be used to alter the overall report appearance.
@@ -44,6 +46,7 @@ class Theme:
         self,
         num_columns=6,
         column_width=86,
+        padding_width=20,
         theme_dir=None,
         ui_colors=None,
         error_colors=None,
@@ -52,6 +55,7 @@ class Theme:
     ):
         self.num_columns = num_columns
         self.column_width = column_width
+        self.padding_width = padding_width
         self.theme_dir = theme_dir
         self.ui_colors = ui_colors or [
             "#222222",

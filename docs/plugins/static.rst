@@ -1,9 +1,9 @@
 .. _static-plugin:
 .. currentmodule:: kpireport_static
 
-============
-Static HTML
-============
+===========
+Static file
+===========
 
 .. include:: ../../plugins/static/README.rst
    :start-line: 4

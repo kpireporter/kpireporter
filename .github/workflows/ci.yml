@@ -146,6 +146,7 @@ jobs:
         ./dev/run.sh -c examples/mysql.yaml
         ./dev/run.sh --no-rebuild -c examples/jenkins.yaml
         ./dev/run.sh --no-rebuild -c examples/prometheus.yaml
+        sudo chown -R $USER: _build
       env:
         SCP_IDENTITY_FILE: /tmp/dummy_scp_identity_file
         GOOGLE_OAUTH2_KEY_FILE: /tmp/dummy_google_oauth2_key.json

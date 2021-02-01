@@ -82,11 +82,19 @@ class StaticOutputDriver(OutputDriver):
                 theme.padding_width * 2
             )
             with open(report_file, "r") as f:
+                # It works better to render at a larger width and then
+                # crop down, don't ask me why. The fonts render at strange
+                # sizes otherwise.
+                width = 1024
                 imgkit.from_file(
                     f,
                     output_file,
                     options={
-                        "width": crop_width,
+                        "width": width,
+                        # Crop center portion of rendered image
+                        "crop-x": int((width - crop_width) / 2),
+                        "crop-w": int(crop_width),
+                        "crop-y": int(theme.padding_width),
                         "format": "png",
                     },
                 )

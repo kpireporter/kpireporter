@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Fixes an issue where relative font sizes would not be rendered accurately when
+    using the PNG output format.

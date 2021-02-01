@@ -83,18 +83,6 @@ A noncommercial organization is defined as:
 Obtaining a license
 -------------------
 
-There are two ways to obtain a license.
-
-GitHub Sponsors
-^^^^^^^^^^^^^^^
-
-If you `sponsor the development of KPI Reporter
-<https://github.com/sponsors/diurnalist>`_, you will get a new license each year
-you are a sponsor.
-
-One-time payment
-^^^^^^^^^^^^^^^^
-
 You can `purchase a one-year license <https://kpireporter.com/pricing/>`_ for $99/year
 (for individuals/small businesses) or $499/year (for larger businesses.) You can use
 discretion about which tier you belong to.

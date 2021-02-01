@@ -40,6 +40,8 @@ class Theme:
             few series colors in the theme; you just want to ensure you can handle
             whatever needs you have for plotting or displaying data in charts or graphs
             such that series can be identified clearly.
+        heading_font (str): A CSS font-family declaration, which will define how the
+            headings are styled. (Default "'Helvetica', 'Arial', sans-serif")
     """
 
     def __init__(
@@ -52,6 +54,7 @@ class Theme:
         error_colors=None,
         success_colors=None,
         series_colors=None,
+        heading_font=None,
     ):
         self.num_columns = num_columns
         self.column_width = column_width
@@ -81,6 +84,8 @@ class Theme:
             "#B25B8C",
             "#5F0F3C",
         ]
+        self.heading_font = heading_font or "'Helvetica', 'Arial', sans-serif"
+        self.text_font = "'Helvetica', 'Arial', sans-serif"
 
     @property
     def text_color(self):

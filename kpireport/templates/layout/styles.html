@@ -21,7 +21,7 @@
 
     body {
       background-color: {{ report.theme.background_offset() }};
-      font-family: sans-serif;
+      font-family: {{ report.theme.text_font }};
       -webkit-font-smoothing: antialiased;
       font-size: 14px;
       line-height: 1.4;
@@ -37,7 +37,7 @@
       mso-table-rspace: 0pt;
       width: 100%; }
       table td {
-        font-family: sans-serif;
+        font-family: {{ report.theme.text_font }};
         font-size: 14px;
         vertical-align: top; }
       table th {
@@ -137,7 +137,7 @@
     h3,
     h4 {
       color: {{ report.theme.text_color }};
-      font-family: sans-serif;
+      font-family: {{ report.theme.heading_font }};
       font-weight: 400;
       line-height: 1.4;
       margin: 0;
@@ -157,7 +157,7 @@
     p,
     ul,
     ol {
-      font-family: sans-serif;
+      font-family: {{ report.theme.text_font }};
       font-size: 14px;
       font-weight: normal;
       margin: 0;

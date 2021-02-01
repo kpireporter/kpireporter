@@ -1,0 +1,6 @@
+---
+fixes:
+  - |
+    The font-family of the heading font(s) can now be specified via the ``heading_font``
+    theme argument. It defaults to a font-stack that renders something that looks like
+    Helvetica and falls back to any sans-serif font installed.

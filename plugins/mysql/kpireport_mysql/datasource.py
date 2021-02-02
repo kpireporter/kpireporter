@@ -62,6 +62,7 @@ class MySQLDatasource(Datasource):
         """
         sql, params = self._format_sql(sql)
         kwargs.setdefault("params", params)
+        LOG.debug(f"Query: {sql} {params}")
         df = pd.read_sql(sql, self.db, **kwargs)
         df = df.set_index(df.columns[0])
         LOG.debug(f"Query result: {df}")

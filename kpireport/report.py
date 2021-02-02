@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
 from functools import partial
 
+from dateutil.parser import parse as parse_date
+from dateutil.tz import gettz, tzlocal
 from jinja2 import TemplateNotFound
 from slugify import slugify
 
@@ -135,18 +137,26 @@ class Report:
         interval_days (int): number of days.
         start_date (dateobj): the start date.
         end_date (dateobj): the end date.
+        timezone (str): the timezone name. Defaults to the system timezone.
         theme (Theme): the report Theme.
     """
 
     version = VERSION
 
     def __init__(
-        self, title=None, interval_days=None, start_date=None, end_date=None, theme=None
+        self,
+        title=None,
+        interval_days=None,
+        start_date=None,
+        end_date=None,
+        timezone=None,
+        theme=None,
     ):
         self.title = title
         self.interval_days = interval_days
         self.start_date = start_date
         self.end_date = end_date
+        self.timezone = timezone
         self.title_slug = slugify(self.title)
         self.id = "_".join(
             [
@@ -270,8 +280,27 @@ class ReportFactory:
         output_conf = config.get("outputs", {})
 
         interval_days = config.get("interval_days", 7)
-        end_date = config.get("end_date", datetime.now())
-        start_date = config.get("start_date", end_date - timedelta(days=interval_days))
+
+        timezone = config.get("timezone", None)
+        if timezone:
+            timezone = gettz(timezone)
+        else:
+            timezone = tzlocal()
+
+        end_date = config.get("end_date")
+        if end_date:
+            end_date = parse_date(end_date).replace(tzinfo=timezone)
+        else:
+            # Start of today
+            end_date = datetime.now(tz=timezone).replace(
+                hour=0, minute=0, second=0, microsecond=0
+            )
+
+        start_date = config.get("start_date")
+        if start_date:
+            start_date = parse_date(start_date).replace(tzinfo=timezone)
+        else:
+            start_date = end_date - timedelta(days=interval_days)
 
         title = config.get("title", "Status report")
         theme = Theme(**config.get("theme", {}))
@@ -281,6 +310,7 @@ class ReportFactory:
             interval_days=interval_days,
             start_date=start_date,
             end_date=end_date,
+            timezone=timezone,
             theme=theme,
         )
         self.dm = DatasourceManager(self.report, datasource_conf)

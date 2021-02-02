@@ -1,0 +1,8 @@
+---
+fixes:
+  - |
+    The default values for ``start_date`` and ``end_date`` will now be timezone-aware
+    and derive their timezones from the local timezone on the system running the
+    report process. A ``timezone`` report argument is also now available, which can
+    be a timezone strong, and will override the timezone for automatically-generated
+    values for the start and end date.

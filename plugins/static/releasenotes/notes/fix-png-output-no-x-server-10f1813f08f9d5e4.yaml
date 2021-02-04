@@ -1,0 +1,6 @@
+---
+fixes:
+  - |
+    Fixes issue with PNG output when no X server is installed; imgkit will fail because
+    wkhtmltoimage requires an X server to capture the output. Xvfb is already supported
+    as a workaround; if this is installed on the host, configure imgkit to use it.

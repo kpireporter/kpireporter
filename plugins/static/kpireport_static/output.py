@@ -29,7 +29,9 @@ class StaticOutputDriver(OutputDriver):
                 report in the output path, and a "latest" PNG will also be outputted.
 
             .. note::
-               ``wkhtmltopdf`` is required if using PNG output.
+               ``wkhtmltopdf`` is required if using PNG output. You will probably also
+               need to install ``Xvfb`` if using a Docker container that doesn't already
+               have an X server packaged.
 
     """
 
@@ -37,6 +39,8 @@ class StaticOutputDriver(OutputDriver):
         self.output_dir = os.path.abspath(output_dir)
         self.output_format = output_format
         self.tmp_dir = tempfile.TemporaryDirectory()
+
+        self._has_xvfb = shutil.which("Xvfb") is not None
 
     @property
     def _render_dir(self):
@@ -78,26 +82,27 @@ class StaticOutputDriver(OutputDriver):
         elif self.output_format == "png":
             output_file = os.path.join(self._render_dir, f"{self.report.id}.png")
             theme = self.report.theme
+            # It works better to render at a larger width and then
+            # crop down, don't ask me why. The fonts render at strange
+            # sizes otherwise.
+            width = 1024
             crop_width = (theme.num_columns * theme.column_width) + (
                 theme.padding_width * 2
             )
+            imgkit_options = {
+                "width": width,
+                # Crop center portion of rendered image
+                "crop-x": int((width - crop_width) / 2),
+                "crop-w": int(crop_width),
+                "crop-y": int(theme.padding_width),
+                "format": "png",
+            }
+            if self._has_xvfb:
+                imgkit_options["xvfb"] = ""
+
             with open(report_file, "r") as f:
-                # It works better to render at a larger width and then
-                # crop down, don't ask me why. The fonts render at strange
-                # sizes otherwise.
-                width = 1024
-                imgkit.from_file(
-                    f,
-                    output_file,
-                    options={
-                        "width": width,
-                        # Crop center portion of rendered image
-                        "crop-x": int((width - crop_width) / 2),
-                        "crop-w": int(crop_width),
-                        "crop-y": int(theme.padding_width),
-                        "format": "png",
-                    },
-                )
+                imgkit.from_file(f, output_file, options=imgkit_options)
+
             output_paths = [
                 os.path.join(self.output_dir, f"{self.report.id}.png"),
                 os.path.join(self.output_dir, f"latest-{self.report.title_slug}.png"),

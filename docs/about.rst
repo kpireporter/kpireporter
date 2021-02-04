@@ -99,10 +99,11 @@ use-case. Here is a brief summary of the ones I know of.
 Cloud SaaS
 ----------
 
-All of these services are rather sophisticated and focus on delivering user-friendly
-interfaces so that a wider range of employees can be useful. They are also more
-expensive for that reason. Most support some overlapping (and typically wider) set of
-data sources and reporting/visualization capabilities as KPI Reporter.
+All of these services are rather sophisticated and focus on delivering
+user-friendly interfaces aimed at a wider range of skill-sets. They are also
+more expensive for that reason. Most support some overlapping (and typically
+wider) set of data sources and reporting/visualization capabilities as KPI
+Reporter.
 
 * `Chartio <https://chartio.com/>`_: subscriptions start at $40/month per user after a
   14 day trial.

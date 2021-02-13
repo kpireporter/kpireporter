@@ -23,3 +23,4 @@ pylama
 -e ./plugins/slack
 -e ./plugins/smtp
 -e ./plugins/table
+-e ./plugins/twitter

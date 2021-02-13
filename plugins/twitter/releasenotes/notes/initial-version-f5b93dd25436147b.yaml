@@ -1,0 +1,7 @@
+---
+prelude: >
+    Initial commit.
+features:
+  - |
+    A new ``twitter`` Datasource is available from this plugin, which allows you to
+    query for Tweets of a given user.

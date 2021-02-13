@@ -17,7 +17,7 @@ DEFAULT_FONT_SIZE = 10
 
 
 class Plot(View):
-    """Render a line or bar graph as a PNG file inline.
+    """Render a graph as a PNG file inline.
 
     The :mod:`matplotlib` module handles rendering the plot. The Plot view
     sets a few default styles that make sense for plotting timeseries data,
@@ -82,11 +82,11 @@ class Plot(View):
             Some Datasources may support additional parameters.
         time_column (str): the name of the column in the query result table that
             contains timeseries data. (Default ``"time"``)
-        kind (str): the kind of plot to draw. Currently only "line" and "bar"
-            are supported. (Default ``"line"``)
+        kind (str): the kind of plot to draw. Currently only "line", "bar", and
+            "scatter" are supported. (Default ``"line"``)
         stacked (bool): whether to display the line/bar graph types as a stacked
-            plot, where each series is stacked atop the last. (Default
-            ``False``)
+            plot, where each series is stacked atop the last. This does not have any
+            effect when rendering scatter plots. (Default ``False``)
         groupby (str): the name of the column in the query result table that should be
             used to group the data into separate series. (Default ``None``)
         bar_labels (bool): whether to label each bar with its value (only
@@ -194,13 +194,24 @@ class Plot(View):
             else:
                 for s in series_data:
                     ax.plot(index_data, s)
+        elif self.kind == "scatter":
+            for s in series_data:
+                ax.plot(index_data, s, "o")
         elif self.kind == "bar":
-            with_labels(ax.bar(index_data, series_data[0]))
+            # FIXME: currently rendering multiple bar series will just render them
+            # all on top of one another, which is not helpful. However, ensuring the
+            # bars render side-by-side is complicated by the fact that the x-axis and
+            # distribution of the data is highly variable, e.g., could be a date index
+            # or a "regular" x-index depending on the query result. Should probably try
+            # to do something reasonable and fall back to default behavior if it can't
+            # be done.
+            bar_kwargs = {}
+            with_labels(ax.bar(index_data, series_data[0], **bar_kwargs))
             bottom = series_data[0]
-            for s in series_data[1:]:
-                with_labels(
-                    ax.bar(index_data, s, bottom=(bottom if self.stacked else None))
-                )
+            for _, s in enumerate(series_data[1:]):
+                if self.stacked:
+                    bar_kwargs["bottom"] = bottom
+                with_labels(ax.bar(index_data, s, **bar_kwargs))
                 bottom += s
         else:
             raise ValueError(f"Plot function {self.kind} does not exist")

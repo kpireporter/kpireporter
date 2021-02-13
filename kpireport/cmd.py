@@ -12,13 +12,6 @@ from .config import load, DEFAULT_CONF_DIR
 from .report import ReportFactory
 
 
-def simple_date(date_str):
-    try:
-        return datetime.strptime(date_str, "%Y-%m-%d")
-    except ValueError:
-        raise argparse.ArgumentTypeError(f"Not a valid date: {date_str}")
-
-
 def run(argv=None):
     if not argv:
         argv = sys.argv
@@ -33,8 +26,8 @@ def run(argv=None):
         action="append",
         default=[],
     )
-    parser.add_argument("-s", "--start-date", type=simple_date)
-    parser.add_argument("-e", "--end-date", type=simple_date)
+    parser.add_argument("-s", "--start-date")
+    parser.add_argument("-e", "--end-date")
     parser.add_argument("--theme-dir", default=f"{DEFAULT_CONF_DIR}/theme")
     parser.add_argument("--license-file", type=argparse.FileType("r"))
     parser.add_argument("-v", "--verbose", dest="verbosity", action="count", default=0)

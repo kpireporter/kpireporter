@@ -1,0 +1,23 @@
+---
+title: Something
+
+datasources:
+  twitter:
+    plugin: twitter
+    args:
+      consumer_key: ${TWITTER_CONSUMER_KEY}
+      consumer_secret: ${TWITTER_CONSUMER_SECRET}
+      access_token_key: ${TWITTER_ACCESS_TOKEN_KEY}
+      access_token_secret: ${TWITTER_ACCESS_TOKEN_SECRET}
+
+views:
+  tweets:
+    plugin: plot
+    args:
+      datasource: twitter
+      query: tweets
+      kind: scatter
+      legend:
+        loc: lower left
+        ncol: 3
+        bbox_to_anchor: [0, -0.75]

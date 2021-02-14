@@ -104,9 +104,11 @@ if [[ ${#POSARGS[@]} -eq 0 ]]; then
   usage
 fi
 
+declare -a stack_args=(--quiet-pull -d)
 if [[ $REBUILD -eq 1 ]]; then
   echo 0 >"$DIR/.kpireport_ready_signal"
   rebuild
+  stack_args+=(--force-recreate)
 else
   # Fake the output signal; we assume the container is ready.
   echo 1 >"$DIR/.kpireport_ready_signal"
@@ -117,7 +119,7 @@ tox -e examples
 log "Done"
 
 log_step "Starting docker-compose stack ..."
-_dockercompose up --quiet-pull --force-recreate -d
+_dockercompose up "${stack_args[@]}"
 log "Done"
 
 # This is a bit of a hack; it's possible to `exec` inside a container before

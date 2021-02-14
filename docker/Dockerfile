@@ -19,11 +19,17 @@ RUN pip install --no-cache-dir \
 
 FROM python:$python_version as base
 
-# Install any binaries required by the default set of plugins.
-RUN apt-get update -y \
-  && apt-get install --no-install-recommends -y \
-    wkhtmltopdf \
+# Install wait-for helper script.
+RUN apt-get update \
+  && apt-get install --no-install-recommends -y netcat \
   && rm -rf /var/lib/apt/lists/*
+ADD https://raw.githubusercontent.com/eficode/wait-for/master/wait-for /usr/local/bin/wait-for
+RUN chmod +x /usr/local/bin/wait-for
+
+# Install any binaries required by the default set of plugins.
+RUN apt-get update && apt-get install -y --no-install-recommends \
+      wkhtmltopdf \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir /opt/kpireport
 WORKDIR /opt/kpireport
@@ -37,12 +43,9 @@ ENV PATH="/opt/venv/bin:$PATH"
 
 FROM base as dev
 
-RUN apt-get update -y && apt-get install -y --no-install-recommends \
-        entr netcat silversearcher-ag \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        entr silversearcher-ag \
     && rm -rf /var/lib/apt/lists/*
-
-ADD https://raw.githubusercontent.com/eficode/wait-for/master/wait-for /usr/local/bin/wait-for
-RUN chmod +x /usr/local/bin/wait-for
 
 RUN pip install --no-cache-dir tox
 
@@ -66,5 +69,3 @@ RUN pip install --no-cache-dir . plugins/static \
 
 COPY docker/entrypoint.sh /docker-entrypoint.sh
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
-
-# CMD [ "python", "-m", "kpireport" ]

@@ -60,12 +60,6 @@ log_and_run() {
 }
 
 rebuild() {
-  mkdir -p "$PROJ/_build"
-  touch "$DIR/.env"
-
-  log_step "Removing existing containers ..."
-  _dockercompose down
-
   log_step "Rebuilding application container ..."
   cat "$PROJ/plugins/"*/requirements.txt >"$PROJ/plugin-requirements.txt"
   declare -a build_cmd=()
@@ -103,6 +97,9 @@ done
 if [[ ${#POSARGS[@]} -eq 0 ]]; then
   usage
 fi
+
+mkdir -p "$PROJ/_build"
+touch "$DIR/.env"
 
 declare -a stack_args=(--quiet-pull -d)
 if [[ $REBUILD -eq 1 ]]; then

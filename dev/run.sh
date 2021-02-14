@@ -74,6 +74,7 @@ rebuild() {
 
 REBUILD=1
 WATCH=0
+SHELL=0
 declare -a POSARGS=()
 
 while [[ $# -gt 0 ]]; do
@@ -83,6 +84,9 @@ while [[ $# -gt 0 ]]; do
       ;;
     -w|--watch)
       WATCH=1
+      ;;
+    --shell)
+      SHELL=1
       ;;
     -h|--help)
       usage
@@ -94,21 +98,17 @@ while [[ $# -gt 0 ]]; do
   shift
 done
 
-if [[ ${#POSARGS[@]} -eq 0 ]]; then
+if [[ ${#POSARGS[@]} -eq 0 && ! $SHELL -eq 1 ]]; then
   usage
 fi
 
 mkdir -p "$PROJ/_build"
 touch "$DIR/.env"
 
-declare -a stack_args=(--quiet-pull -d)
+declare -a stack_args=(--quiet-pull -d --scale kpireport=0)
 if [[ $REBUILD -eq 1 ]]; then
-  echo 0 >"$DIR/.kpireport_ready_signal"
   rebuild
   stack_args+=(--force-recreate)
-else
-  # Fake the output signal; we assume the container is ready.
-  echo 1 >"$DIR/.kpireport_ready_signal"
 fi
 
 log_step "Regenerating fixture data ..."
@@ -119,40 +119,6 @@ log_step "Starting docker-compose stack ..."
 _dockercompose up "${stack_args[@]}"
 log "Done"
 
-# This is a bit of a hack; it's possible to `exec` inside a container before
-# the (dev) entrypoint has finished execution on the initial command. The
-# entrypoint is responsible for doing local installs of all the plugins,
-# so if an exec comes in too quickly, it can fail due to missing deps.
-log_step "Waiting for container to install all local dependencies ..."
-timeout=120
-attempts=0
-while [[ $(cat "$DIR/.kpireport_ready_signal") -eq 0 ]]; do
-  sleep 1
-  attempts=$((attempts + 1))
-  [[ $attempts -gt $timeout ]] && {
-    echo "Failed to get ready signal after ${timeout}s"
-    exit 1
-  }
-done
-echo "Waited ${attempts}s"
-
-declare -a cmd=(
-  docker-compose -f "$DIR/docker-compose.yaml" -p kpireport \
-    exec -T kpireport wait-for mysql:3306 -t 60 -- python -m kpireport
-)
-
-if [[ $WATCH -eq 1 ]]; then
-  for bin in ag entr; do
-    if ! type -f "$bin" >/dev/null 2>&1; then
-      log "ERROR: You must install the '$bin' tool to take advantage of the"
-      log "watch functionality."
-      exit 1
-    fi
-  done
-
-  log_step "Starting watcher ..."
-  ag -l -G 'examples|kpireport' . "$PROJ" | entr "${cmd[@]}" "${POSARGS[@]}"
-else
-  log_step "Running command kpireporter " "${POSARGS[@]}" " ..."
-  "${cmd[@]}" "${POSARGS[@]}"
-fi
+log_step "Running command kpireporter" "${POSARGS[@]}" "..."
+_dockercompose run -e KPIREPORT_WATCH="$WATCH" -e KPIREPORT_SHELL="$SHELL" \
+  kpireport "${POSARGS[@]}"

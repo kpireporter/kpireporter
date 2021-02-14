@@ -93,7 +93,7 @@ jobs:
         with:
           context: .
           file: ./docker/Dockerfile
-          platforms: linux/amd64,linux/386
+          platforms: linux/amd64
           push: true
           tags: ${{ steps.prep.outputs.tags }}
           build-args: python_version=${{ env.PYTHON_VERSION }}

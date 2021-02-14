@@ -6,7 +6,7 @@ PROJ="$DIR/.."
 
 # Allow overriding the name of the docker image to use in the compose env.
 export DOCKER_IMAGE="${DOCKER_IMAGE:-kpireporter/kpireporter}"
-export DOCKER_TAG=dev
+export DOCKER_TAG="${DOCKER_TAG:-dev}"
 export PYTHON_VERSION=${PYTHON_VERSION:-3.8}
 
 pushd "$DIR" >/dev/null
@@ -73,23 +73,9 @@ rebuild() {
   if [[ -n "${PYTHON_VERSION:-}" ]]; then
     build_cmd+=(--build-arg "python_version=$PYTHON_VERSION")
   fi
-  if [[ "${CI:-false}" == "true" ]]; then
-    build_cmd+=(--cache-from "type=local,src=/tmp/.buildx-cache")
-    build_cmd+=(--cache-to "type=local,dest=/tmp/.buildx-cache")
-    build_cmd+=(--load)
-    build_cmd+=(--platform amd64)
-  fi
   build_cmd+=("$PROJ")
   log_and_run "${build_cmd[@]}"
   _dockercompose rm -f --stop kpireport
-
-  log_step "Regenerating fixture data ..."
-  tox -e examples
-  log "Done"
-
-  log_step "Starting docker-compose stack ..."
-  _dockercompose up --quiet-pull --force-recreate -d
-  log "Done"
 }
 
 REBUILD=1
@@ -121,23 +107,35 @@ fi
 if [[ $REBUILD -eq 1 ]]; then
   echo 0 >"$DIR/.kpireport_ready_signal"
   rebuild
-  # This is a bit of a hack; it's possible to `exec` inside a container before
-  # the entrypoint has finished execution on the initial command. The
-  # entrypoint is responsible for doing local installs of all the plugins,
-  # so if an exec comes in too quickly, it can fail due to missing deps.
-  log_step "Waiting for container to install all local dependencies ..."
-  timeout=120
-  attempts=0
-  while [[ $(cat "$DIR/.kpireport_ready_signal") -eq 0 ]]; do
-    sleep 1
-    attempts=$((attempts + 1))
-    [[ $attempts -gt $timeout ]] && {
-      echo "Failed to get ready signal after ${timeout}s"
-      exit 1
-    }
-  done
-  echo "Waited ${attempts}s"
+else
+  # Fake the output signal; we assume the container is ready.
+  echo 1 >"$DIR/.kpireport_ready_signal"
 fi
+
+log_step "Regenerating fixture data ..."
+tox -e examples
+log "Done"
+
+log_step "Starting docker-compose stack ..."
+_dockercompose up --quiet-pull --force-recreate -d
+log "Done"
+
+# This is a bit of a hack; it's possible to `exec` inside a container before
+# the (dev) entrypoint has finished execution on the initial command. The
+# entrypoint is responsible for doing local installs of all the plugins,
+# so if an exec comes in too quickly, it can fail due to missing deps.
+log_step "Waiting for container to install all local dependencies ..."
+timeout=120
+attempts=0
+while [[ $(cat "$DIR/.kpireport_ready_signal") -eq 0 ]]; do
+  sleep 1
+  attempts=$((attempts + 1))
+  [[ $attempts -gt $timeout ]] && {
+    echo "Failed to get ready signal after ${timeout}s"
+    exit 1
+  }
+done
+echo "Waited ${attempts}s"
 
 declare -a cmd=(
   docker-compose -f "$DIR/docker-compose.yaml" -p kpireport \

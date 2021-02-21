@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+import inspect
 import traceback
 
 from jinja2 import Environment, ChoiceLoader, PackageLoader
@@ -130,17 +131,26 @@ class ViewManager(PluginManager):
 
             try:
                 # Allow any extending package to optionally define its own
-                # ./templates directory at the root module level.
-                view_pkg_loader = PackageLoader(module_root(view.__module__))
+                # ./templates directory at the root module level. To do this, we
+                # inspect the current View class and find all modules in its inheritance
+                # tree up until the base View class. We will search each one in order,
+                # from the concrete class up through each base class, until we get to
+                # the root.
+                mod_tree = [c.__module__ for c in inspect.getmro(view.__class__)]
+                view_pkg_loaders = [
+                    PackageLoader(module_root(mod))
+                    # Ignore base clases higher than this module.
+                    for mod in (mod_tree[: mod_tree.index("kpireport.view") + 1])
+                ]
                 if isinstance(env.loader, ChoiceLoader):
                     # If we're already using a ChoiceLoader it's because there
                     # is a theme directory loader in place; ensure we always
                     # let the theme take priority.
                     loaders = env.loader.loaders.copy()
-                    loaders.insert(1, view_pkg_loader)
+                    loaders = loaders[:1] + view_pkg_loaders + loaders[1:]
                     new_loader = ChoiceLoader(loaders)
                 else:
-                    new_loader = ChoiceLoader([view_pkg_loader, env.loader])
+                    new_loader = ChoiceLoader(view_pkg_loaders + [env.loader])
                 view_env = env.overlay(loader=new_loader)
                 view_env.extend(view_id=id, fmt=fmt)
                 view_env.filters["blob"] = self._blob_filter(output_driver)

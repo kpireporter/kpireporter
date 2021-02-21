@@ -1,0 +1,8 @@
+---
+fixes:
+  - |
+    Plugin template resolution now supports walking up class hierachies. If a concrete
+    class extends an existing plugin, templates will be first searched for in the
+    concrete class' module, then its parent class, and so on. Before, only the concrete
+    class and the base View module were included in the lookup paths, so parent class
+    templates would be ignored.

@@ -1,0 +1,6 @@
+---
+features:
+  - |
+    A new View ``twitter.engagement`` is available. The view will show a scatter
+    plot of recent tweets, displaying their like/reply/retweet counts. The highest-
+    liked tweet is called out visually as well.

@@ -3,7 +3,7 @@ from time import sleep
 import pandas as pd
 from TwitterAPI import TwitterAPI, TwitterRequestError, TwitterConnectionError
 
-from kpireport.datasource import Datasource
+from kpireport.datasource import Datasource, DatasourceError
 
 import logging
 
@@ -94,6 +94,26 @@ class TwitterDatasource(Datasource):
             return col
 
         df = df.rename(_rename_column, axis="columns")
+        df["retweet_and_quote_count"] = df["retweet_count"] + df["quote_count"]
+        df = df.drop(["retweet_count", "quote_count"], axis="columns")
+
+        def _sort_cols(col):
+            count_ordering = [
+                "like_count",
+                "retweet_and_quote_count",
+                "reply_count",
+                "impression_count",
+            ]
+            # Time column goes first
+            if col == "time":
+                return -1
+            # Try to order count columns by highest to lowest, generally
+            elif col in count_ordering:
+                return count_ordering.index(col) / len(count_ordering)
+            else:
+                return 1
+
+        df = df[sorted(df.columns, key=_sort_cols)]
         LOG.debug(df)
         return df
 
@@ -107,7 +127,12 @@ class TwitterDatasource(Datasource):
         if pagination_token:
             query_args["pagination_token"] = pagination_token
         res = self.twitter.request(f"users/:{user_id}/tweets", query_args)
-        return list(res), res.json()["meta"].get("next_token")
+        res_json = res.json()
+        if "errors" in res_json:
+            details = set(err["detail"] for err in res_json["errors"])
+            raise DatasourceError(f"Twiter API responded with errors: {details}")
+        # Handle empty pages; "data" is not present in such cases.
+        return res_json.get("data", []), res_json["meta"].get("next_token")
 
     def _get_user_id(self, username) -> str:
         if not username:

@@ -109,6 +109,7 @@ class Plot(View):
         groupby=None,
         stacked=False,
         legend=None,
+        label_map=None,
         bar_labels=False,
         xtick_rotation=0,
         plot_rc={},
@@ -121,6 +122,7 @@ class Plot(View):
         self.kind = kind
         self.groupby = groupby
         self.stacked = stacked
+        self.label_map = label_map
         self.bar_labels = bar_labels
         self.xtick_rotation = xtick_rotation
         self.legend = legend
@@ -273,6 +275,10 @@ class Plot(View):
         if not series_data:
             raise ValueError("The query returned no plottable results.")
 
+        if self.label_map:
+            # Attempt to lookup name mapping from `label_map`
+            series_labels = [self.label_map.get(lbl, lbl) for lbl in series_labels]
+
         with plt.rc_context(self.matplotlib_rc):
             figsize = [((self.cols * self.report.theme.column_width) / FIGURE_PPI), 2]
             fig, ax = plt.subplots(figsize=figsize, constrained_layout=True)
@@ -291,6 +297,8 @@ class Plot(View):
             plt.xticks(rotation=self.xtick_rotation)
             plt.tick_params(length=0)
 
+            self.post_plot(ax, df=df, index_data=index_data, series_data=series_data)
+
             fig = ax.get_figure()
             figbytes = io.BytesIO()
             fig.savefig(figbytes)
@@ -300,6 +308,14 @@ class Plot(View):
             plt.close(fig)
 
             return figname
+
+    def post_plot(self, ax, df=None, index_data=None, series_data=None):
+        """A post-render hook that can be used to process the plot before outputting.
+
+        Subclasses of the Plot class can override this to add, e.g., annotations or
+        otherwise tweak the final plot output.
+        """
+        pass
 
     def render_html(self, j2):
         template = j2.get_template("plot.html")

@@ -1,0 +1,12 @@
+---
+features:
+  - |
+    Plots now support a ``label_map`` option, which maps series names (column
+    names) to some text value. This can be used to make nicer, more readable
+    legends.
+  - |
+    The Plot class now defines a ``post_plot`` function. This is called directly
+    after running most of the plot logic, but before rendering the final output.
+    It is a good place to modify legends or add additional presentation to the
+    plot output. The intention is that a plugin could subclass Plot and provide
+    some additional hooks here.

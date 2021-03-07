@@ -13,6 +13,15 @@ LOG = logging.getLogger(__name__)
 class TwitterDatasource(Datasource):
     """A datasource that can fetch metrics from Twitter's V2 API.
 
+    Currently the following queries are supported:
+
+    * ``tweets``: request a list of the user's latest Tweets via the `Timeline API
+      <https://developer.twitter.com/en/docs/twitter-api/tweets/timelines/api-reference/get-users-id-tweets>`_.
+      If requesting the authenticated user's own timeline, "non-public" metrics such
+      as impression counts are included in the output table result. Otherwise, only
+      public metrics such as like, reply, and retweet counts are retrieved. The text
+      and ID of the Tweet are also included in the output table.
+
     Attributes:
         consumer_key (str): The Twitter application consumer public key.
         consumer_secret (str): The Twitter application consumer secret.

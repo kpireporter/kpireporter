@@ -13,6 +13,13 @@ def human_format(num, pos):
 
 
 class TwitterEngagement(Plot):
+    """Display a summary of engagement with an account's own Tweets.
+
+    Attributes:
+        **kwargs: keyword arguments passed to the parent :class:`~kpireport_plot.Plot`
+            plugin.
+    """
+
     def init(self, **kwargs):
         kwargs["query"] = "tweets"
         kwargs.setdefault("kind", "scatter")

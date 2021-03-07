@@ -16,6 +16,11 @@ API
    :show-inheritance:
    :exclude-members: init
 
+.. autoclass:: TwitterEngagement
+   :members:
+   :show-inheritance:
+   :exclude-members: init
+
 Changelog
 =========
 

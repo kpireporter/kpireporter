@@ -24,11 +24,17 @@ unset site_packages
 # Wait for dependent services to start
 wait-for mysql:3306 -t 60
 
+useradd --uid "$KPIREPORT_USER" --comment "KPI Reporter" \
+  --home-dir "$PWD" --shell /bin/bash \
+  kpireporter
+
+declare -a cmd=(/opt/venv/bin/python -m kpireport "$@")
+
 if [[ $KPIREPORT_SHELL -eq 1 ]]; then
-  exec bash
+  su --login kpireporter
 elif [[ $KPIREPORT_WATCH -eq 1 ]]; then
   echo "Starting watcher ..."
-  ag -l -G 'examples|kpireport' . | entr python -m kpireport "$@"
+  ag -l -G 'examples|kpireport' . | entr su kpireporter -c "'${cmd[@]}'"
 else
-  python -m kpireport "$@"
+  su kpireporter -c "'${cmd[@]}'"
 fi

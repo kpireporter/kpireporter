@@ -29,6 +29,7 @@ Options:
   -h|--help: Prints this help message
   --no-rebuild: Skip a full rebuild of the Docker-Compose stack
   -w|--watch: Automatically re-run on changes
+  --shell: Open an interactive shell within the composed environment
 
 Examples:
   ./run.sh -c examples/mysql.yaml
@@ -120,5 +121,8 @@ _dockercompose up "${stack_args[@]}"
 log "Done"
 
 log_step "Running command kpireporter" "${POSARGS[@]}" "..."
-_dockercompose run -e KPIREPORT_WATCH="$WATCH" -e KPIREPORT_SHELL="$SHELL" \
+_dockercompose run \
+  -e KPIREPORT_USER="$(id -u)" \
+  -e KPIREPORT_WATCH="$WATCH" \
+  -e KPIREPORT_SHELL="$SHELL" \
   kpireport "${POSARGS[@]}"

@@ -137,11 +137,16 @@ class ViewManager(PluginManager):
                 # from the concrete class up through each base class, until we get to
                 # the root.
                 mod_tree = [c.__module__ for c in inspect.getmro(view.__class__)]
-                view_pkg_loaders = [
-                    PackageLoader(module_root(mod))
-                    # Ignore base clases higher than this module.
-                    for mod in (mod_tree[: mod_tree.index("kpireport.view") + 1])
-                ]
+                view_pkg_loaders = []
+
+                # Ignore base clases higher than this module.
+                for mod in mod_tree[: mod_tree.index("kpireport.view") + 1]:
+                    try:
+                        view_pkg_loaders.append(PackageLoader(module_root(mod)))
+                    except ValueError:
+                        # The module has no "templates" folder; skip it.
+                        pass
+
                 if isinstance(env.loader, ChoiceLoader):
                     # If we're already using a ChoiceLoader it's because there
                     # is a theme directory loader in place; ensure we always

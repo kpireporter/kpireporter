@@ -1,0 +1,4 @@
+---
+fixes:
+  - If the "templates" folder inside a view plugin is missing, an error will no longer
+    be thrown when initializing the PackageLoader for the plugin.

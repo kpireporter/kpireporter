@@ -42,7 +42,7 @@ class TwitterDatasource(Datasource):
         pagination_delay_s=5,
     ):
         self._user_context = access_token_key is not None
-        auth_type = "oAuth1" if self._user_context else "oAuth2"
+        auth_type = "oAuth2"
         self.twitter = TwitterAPI(
             consumer_key=consumer_key,
             consumer_secret=consumer_secret,

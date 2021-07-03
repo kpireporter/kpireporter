@@ -1,0 +1,5 @@
+---
+fixes:
+  - Always use OAuth2 when authenticating, even when using consumer key/secret
+    application-only authentication. OAuth1.0 will throw an error from the TwitterAPI
+    module.

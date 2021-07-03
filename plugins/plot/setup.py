@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(
     name="kpireport-plot",
-    version="0.2.0",
+    version="0.2.1",
     author="KPI Reporter LLC",
     author_email="dev@kpireporter.com",
     url="https://kpireporter.com",

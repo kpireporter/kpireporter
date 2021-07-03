@@ -3,6 +3,11 @@ from textwrap import wrap
 from kpireport_plot import Plot
 import matplotlib.dates as mdates
 
+# How many characters to show in tweet text callout, per line
+TWEET_LINE_LENGTH = 24
+# How many lines of text to show in callout
+TWEET_LINE_COUNT = 2
+
 
 def human_format(num, pos):
     magnitude = 0
@@ -50,19 +55,19 @@ class TwitterEngagement(Plot):
         for row in top_tweets.itertuples():
             x = row.Index.to_pydatetime()
             y = row.like_count
-            tweet_lines = wrap(row.text, 15)
-            if len(tweet_lines) > 2:
-                tweet_lines = tweet_lines[:2]
+            tweet_lines = wrap(row.text, TWEET_LINE_LENGTH)
+            if len(tweet_lines) > TWEET_LINE_COUNT:
+                tweet_lines = tweet_lines[:TWEET_LINE_COUNT]
                 tweet_lines[1] += "..."
             ax.annotate(
-                "\n".join(tweet_lines),
+                ('"' + "\n".join(tweet_lines) + '"'),
                 xy=(x, y),
                 xycoords="data",
                 xytext=(20, 15),
                 textcoords="offset points",
                 horizontalalignment="left",
                 verticalalignment="top",
-                size="x-small",
+                size="small",
                 arrowprops={
                     "arrowstyle": "->",
                     "connectionstyle": "arc3,rad=.2",

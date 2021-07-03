@@ -91,7 +91,9 @@ class TwitterDatasource(Datasource):
             tweets.extend(_tweets)
 
         df = pd.json_normalize(tweets)
+        # Convert timestamps to report timezone
         df["created_at"] = pd.to_datetime(df["created_at"])
+        df["created_at"] = df["created_at"].dt.tz_convert(self.report.timezone)
 
         def _rename_column(col):
             # Rename time column for easier integration with e.g., plot plugin

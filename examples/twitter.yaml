@@ -1,5 +1,5 @@
 ---
-title: Something
+title: Social media report
 
 datasources:
   twitter:
@@ -12,6 +12,7 @@ datasources:
 
 views:
   tweets:
+    title: Tweet engagement
     plugin: twitter.engagement
     args:
       datasource: twitter

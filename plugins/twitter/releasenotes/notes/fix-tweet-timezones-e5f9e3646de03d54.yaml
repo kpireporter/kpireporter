@@ -1,0 +1,3 @@
+---
+fixes:
+  - Tweets are now displayed in the timezone configured in the report.

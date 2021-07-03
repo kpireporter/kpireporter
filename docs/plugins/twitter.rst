@@ -19,7 +19,7 @@ API
 .. autoclass:: TwitterEngagement
    :members:
    :show-inheritance:
-   :exclude-members: init
+   :exclude-members: init,post_plot
 
 Changelog
 =========

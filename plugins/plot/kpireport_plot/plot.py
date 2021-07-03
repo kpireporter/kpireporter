@@ -163,6 +163,7 @@ class Plot(View):
             "figure.dpi": FIGURE_PPI * 2,
             "savefig.bbox": "tight",
             "savefig.pad_inches": 10 / FIGURE_PPI,
+            "timezone": self.report.timezone,
         }
         for k, v in rc_defaults.items():
             rc_params.setdefault(k, v)
@@ -189,6 +190,7 @@ class Plot(View):
 
         if isinstance(index_data, pd.DatetimeIndex):
             ax.xaxis.set_major_formatter(mdates.DateFormatter(DATE_FORMAT))
+            plt.xlim([self.report.start_date, self.report.end_date])
 
         if self.kind == "line":
             if self.stacked:

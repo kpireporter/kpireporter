@@ -1,0 +1,3 @@
+---
+fixes:
+  - Plots will now be clipped on the x-axis to the report window.

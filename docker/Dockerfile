@@ -44,7 +44,7 @@ ENV PATH="/opt/venv/bin:$PATH"
 FROM base as dev
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        entr silversearcher-ag \
+        entr silversearcher-ag sudo \
     && rm -rf /var/lib/apt/lists/*
 
 RUN pip install --no-cache-dir tox

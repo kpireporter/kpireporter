@@ -34,7 +34,9 @@ if [[ $KPIREPORT_SHELL -eq 1 ]]; then
   su --login kpireporter
 elif [[ $KPIREPORT_WATCH -eq 1 ]]; then
   echo "Starting watcher ..."
-  ag -l -G 'examples|kpireport' . | entr su kpireporter -c "'${cmd[@]}'"
+  echo "${cmd[@]}" >/tmp/run_report.sh
+  ag -l -G 'examples|kpireport' . | entr sudo -u kpireporter --preserve-env bash /tmp/run_report.sh
+  rm -f /tmp/run_report.sh
 else
-  su kpireporter -c "'${cmd[@]}'"
+  sudo -u kpireporter --preserve-env bash <<<"${cmd[@]}"
 fi

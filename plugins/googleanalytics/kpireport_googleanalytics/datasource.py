@@ -60,7 +60,7 @@ class GoogleAnalyticsDatasource(Datasource):
         self.reports = build("analyticsreporting", "v4", **build_kwargs).reports()
         self.mgmt = build("analytics", "v3", **build_kwargs).management()
 
-    @lru_cache
+    @lru_cache(maxsize=1)
     def _lookup_view(self, account_like=None, property_like=None, view_like=None):
         try:
             all_accounts = self.mgmt.accounts().list().execute().get("items", [])

@@ -235,7 +235,7 @@ class Plot(View):
             )
         return df
 
-    @lru_cache
+    @lru_cache(maxsize=1)
     def render_figure(self):
         df = self.datasources.query(self.datasource, self.query, **self.query_args)
         if self.time_column in df:

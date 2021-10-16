@@ -120,6 +120,6 @@ jobs:
         run: |
           curl -Ssf --data-binary '' \
             -H "Authorization: Token $READTHEDOCS_API_TOKEN" \
-            "https://readthedocs.org.api/v2/projects/kpi-reporter/versions/latest/builds/"
+            "https://readthedocs.org/api/v3/projects/kpi-reporter/versions/latest/builds/"
         env:
           READTHEDOCS_API_TOKEN: ${{ secrets.READTHEDOCS_API_TOKEN }}

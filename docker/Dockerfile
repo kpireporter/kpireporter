@@ -49,7 +49,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 RUN pip install --no-cache-dir tox
 
-COPY ./dev/entrypoint.sh /docker-entrypoint.sh
+COPY ./docker/entrypoint-dev.sh /docker-entrypoint.sh
 ENTRYPOINT [ "/docker-entrypoint.sh" ]
 
 FROM base as release

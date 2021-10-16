@@ -1,7 +1,0 @@
----
-outputs:
-  sendgrid:
-    plugin: sendgrid
-    args:
-      email_from: sender@${EMAIL_DOMAIN}
-      email_to: ${EMAIL_TO}

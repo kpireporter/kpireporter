@@ -116,42 +116,10 @@ jobs:
     needs: docker
 
     steps:
-    - uses: actions/checkout@v2
-
-    - name: Set up Python 3.x
-      uses: actions/setup-python@v1
-      with:
-        python-version: "3.x"
-
-    - name: Install tox
-      run: pip install tox
-
-    - name: Generate example output
-      run: |
-        touch $SCP_IDENTITY_FILE
-        touch $GOOGLE_OAUTH2_KEY_FILE
-
-        ./dev/run.sh --no-rebuild -c examples/mysql.yaml
-        ./dev/run.sh --no-rebuild -c examples/jenkins.yaml
-        ./dev/run.sh --no-rebuild -c examples/prometheus.yaml
-        sudo chown -R $USER: _build
-      env:
-        # Use image built in prior stage
-        DOCKER_TAG: ${{ needs.docker.outputs.version }}
-        SCP_IDENTITY_FILE: /tmp/dummy_scp_identity_file
-        GOOGLE_OAUTH2_KEY_FILE: /tmp/dummy_google_oauth2_key.json
-
-    - name: Archive examples
-      uses: actions/upload-artifact@v1
-      with:
-        name: examples
-        path: _build
-
-    - name: Trigger ReadTheDocs build
-      run: |
-        api_base=https://readthedocs.org/api/v3
-        curl -Ssf --data-binary '' \
-          -H "Authorization: Token $READTHEDOCS_API_TOKEN" \
-          "$api_base/projects/kpi-reporter/versions/latest/builds/"
-      env:
-        READTHEDOCS_API_TOKEN: ${{ secrets.READTHEDOCS_API_TOKEN }}
+      - name: Trigger ReadTheDocs build
+        run: |
+          curl -Ssf --data-binary '' \
+            -H "Authorization: Token $READTHEDOCS_API_TOKEN" \
+            "https://readthedocs.org.api/v2/projects/kpi-reporter/versions/latest/builds/"
+        env:
+          READTHEDOCS_API_TOKEN: ${{ secrets.READTHEDOCS_API_TOKEN }}

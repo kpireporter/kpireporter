@@ -18,7 +18,7 @@ show a high-level overview of the number of new signups over the last week
    <details>
      <summary><strong>Show/hide configuration YAML</strong></summary>
 
-.. literalinclude:: ../../examples/mysql.yaml
+.. literalinclude:: ../_extra/examples/top_of_funnel_report.yaml
    :language: yaml
 
 .. raw:: html
@@ -38,7 +38,7 @@ show an overview of build jobs and their success/failure statuses.
    <details>
      <summary><strong>Show/hide configuration YAML</strong></summary>
 
-.. literalinclude:: ../../examples/jenkins.yaml
+.. literalinclude:: ../_extra/examples/ci_report.yaml
    :language: yaml
 
 .. raw:: html
@@ -60,7 +60,7 @@ window.
    <details>
      <summary><strong>Show/hide configuration YAML</strong></summary>
 
-.. literalinclude:: ../../examples/prometheus.yaml
+.. literalinclude:: ../_extra/examples/ops_report.yaml
     :language: yaml
 
 .. raw:: html

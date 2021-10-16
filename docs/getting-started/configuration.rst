@@ -28,13 +28,13 @@ A full example
 
 For more examples see :ref:`getting-started-examples`.
 
-.. literalinclude:: ../../examples/full.yaml
+.. literalinclude:: ../_extra/examples/combined_report.yaml
    :language: yaml
 
 Schema
 ======
 
-.. jsonschema:: ../../schema/configuration.schema.json
+.. jsonschema:: ../_extra/configuration.schema.json
    :lift_definitions:
    :auto_reference:
 

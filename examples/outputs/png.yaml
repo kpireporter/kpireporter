@@ -1,5 +1,0 @@
-outputs:
-  png:
-    plugin: static
-    args:
-      output_format: png

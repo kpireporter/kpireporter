@@ -17,7 +17,7 @@ against an existing MySQL database.
    <details>
      <summary><strong>Show/hide example configuration YAML</strong></summary>
 
-.. literalinclude:: ../../examples/mysql.yaml
+.. literalinclude:: ../_extra/examples/top_of_funnel_report.yaml
    :language: yaml
 
 .. raw:: html

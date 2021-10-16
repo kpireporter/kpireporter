@@ -132,6 +132,19 @@ except Exception as e:
     print("Unable to fetch GHA artifacts: ", e)
 
 
+zip_res = requests.get(
+    "https://github.com/kpireporter/kpireporter-examples/archive/main.zip"
+)
+path_prefix = "kpireporter-examples-main/examples/"
+zip_res.raise_for_status()
+zipfile = ZipFile(BytesIO(zip_res.content))
+for zip_info in zipfile.infolist():
+    if not zip_info.filename.endswith(".yaml"):
+        continue
+    if zip_info.filename.startswith(path_prefix):
+        zip_info.filename = zip_info.filename.replace(path_prefix, "")
+        zipfile.extract(zip_info, "_extra/examples")
+
 # Mock all the extra_requires modules. Without this, Sphinx cannot
 # generate documentation via autodoc unless the relevant dependencies
 # are explicitly installed, which we don't want to require. It is fine

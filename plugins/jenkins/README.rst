@@ -21,7 +21,7 @@ Datasource
    <details>
      <summary><strong>Show/hide example configuration YAML</strong></summary>
 
-.. literalinclude:: ../../examples/jenkins.yaml
+.. literalinclude:: ../_extra/examples/ci_report.yaml
    :language: yaml
 
 .. raw:: html

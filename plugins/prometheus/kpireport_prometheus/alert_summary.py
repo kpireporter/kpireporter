@@ -147,6 +147,7 @@ class PrometheusAlertSummary(View):
 
             # Round data points to resolution steps
             offset = pd.tseries.frequencies.to_offset(self.resolution)
+            df_a["time"] = df_a["time"].dt.tz_localize(self.report.timezone)
             df_a["time"] = df_a["time"].dt.round(offset)
 
             # Find common label sets and which times those alerts fired
@@ -178,7 +179,9 @@ class PrometheusAlertSummary(View):
         timeline = self._render_timeline(summary) if self.show_timeline else None
 
         return dict(
-            summary=time_ordered, timeline=timeline, theme=self.report.theme,
+            summary=time_ordered,
+            timeline=timeline,
+            theme=self.report.theme,
         )
 
     def _render_timeline(self, summary):
@@ -193,14 +196,14 @@ class PrometheusAlertSummary(View):
         with Image.new("RGB", (twidth, theight), color=theme.background_offset()) as im:
             draw = ImageDraw.Draw(im)
             for x1, x2 in timeline_data:
-                draw.rectangle([
-                    (x1 * twidth, 0),
-                    ((x1 + x2) * twidth, theight)
-                ], fill=theme.error_color)
+                draw.rectangle(
+                    [(x1 * twidth, 0), ((x1 + x2) * twidth, theight)],
+                    fill=theme.error_color,
+                )
             im.save(figbytes, format="PNG")
             self.add_blob(
-                figname, figbytes, mime_type="image/png",
-                title="Alert timeline")
+                figname, figbytes, mime_type="image/png", title="Alert timeline"
+            )
         return figname
 
     def _render(self, j2, fmt):

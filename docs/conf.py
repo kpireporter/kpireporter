@@ -139,7 +139,8 @@ path_prefix = "kpireporter-examples-main/examples/"
 zip_res.raise_for_status()
 zipfile = ZipFile(BytesIO(zip_res.content))
 for zip_info in zipfile.infolist():
-    if not zip_info.filename.endswith(".yaml"):
+    # Skip directories
+    if zip_info.filename.endswith("/"):
         continue
     if zip_info.filename.startswith(path_prefix):
         zip_info.filename = zip_info.filename.replace(path_prefix, "")

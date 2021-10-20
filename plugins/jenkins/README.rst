@@ -31,7 +31,7 @@ Datasource
 Build summary
 =============
 
-.. figure:: ../../examples/rendered/html/jenkins.build_summary.png
+.. figure:: ../_extra/examples/rendered/html/jenkins.build_summary.png
    :target: ./examples/latest-ci-report/index.html
    :alt: jenkins.build_summary
 

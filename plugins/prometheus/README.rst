@@ -72,7 +72,7 @@ Alert summary
 
    </details>
 
-.. figure:: ../../examples/rendered/html/prometheus.alert_summary.png
+.. figure:: ../_extra/examples/rendered/html/prometheus.alert_summary.png
    :target: ./examples/latest-ops-report/index.html
    :alt: prometheus.alert_summary
 

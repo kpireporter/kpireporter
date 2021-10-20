@@ -46,7 +46,7 @@ a set of related metrics. It utilizes :mod:`matplotlib` under the hood.
 
    </details>
 
-.. figure:: ../../examples/rendered/html/plot.png
+.. figure:: ../_extra/examples/rendered/html/plot.png
    :target: ./examples/latest-top-of-funnel-report/index.html
    :alt: plot example
 
@@ -87,7 +87,7 @@ which is included as part of the Plot plugin for convenience.
 
    </details>
 
-.. figure:: ../../examples/rendered/html/single_stat.png
+.. figure:: ../_extra/examples/rendered/html/single_stat.png
    :target: ./examples/latest-top-of-funnel-report/index.html
    :alt: example of single stat combined with plot
 

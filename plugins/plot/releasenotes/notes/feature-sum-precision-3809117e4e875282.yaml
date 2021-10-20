@@ -1,0 +1,10 @@
+---
+features:
+  - |
+    A new ``precision`` argument is available to allow you to define the displayed
+    precision of the stat. Precision defaults to 0, meaning the stat is rounded to
+    the nearest integer.
+  - |
+    Query results that return multiple rows are columns now have some attempted support.
+    If there are columns, the first column is summed and displayed. If there is only
+    an index, but it contains multiple rows, the rows are summed.

@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    Fixes issue creating single stat view from single-column (i.e. index-only)
+    DataFrame from a datasource query.

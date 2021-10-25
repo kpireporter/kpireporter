@@ -7,7 +7,7 @@ def _summarize(df):
     if not df.columns.empty:
         return float(df[df.columns[0]].sum())
     else:
-        return float(df.index.sum())
+        return float(df.index.to_series().sum())
 
 
 class SingleStat(View):

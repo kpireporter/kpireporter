@@ -140,4 +140,4 @@ if [[ -z "$cmd" ]]; then usage; fi
 
 tox -e dev echo Setup env
 source .tox/dev/bin/activate
-"$cmd" "${posargs[@]}"
+"$cmd" "${posargs[@]:-}"

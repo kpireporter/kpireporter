@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Adds a new ``columns`` option, which can be used to only display a subset of
+    columns from the query result. By default all columns in the result are displayed.

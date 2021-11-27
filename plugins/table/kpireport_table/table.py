@@ -20,13 +20,18 @@ class Table(View):
             query operation.
         max_rows (int): maximum number of rows to display. If the output table
             has more rows, they are ignored. (Default 10)
+        columns (list[str]): names of columns in the query result to display in the
+            table. (Default None, meaning all columns are displayed.)
     """
 
-    def init(self, datasource=None, query=None, query_args=None, max_rows=None):
+    def init(
+        self, datasource=None, query=None, query_args=None, max_rows=None, columns=None
+    ):
         self.datasource = datasource
         self.query = query
         self.query_args = query_args or {}
         self.max_rows = max_rows or DEFAULT_MAX_ROWS
+        self.columns = columns
 
         if not (self.datasource and self.query):
             raise ValueError(("Both a 'datasource' and 'query' parameter are required"))
@@ -38,6 +43,8 @@ class Table(View):
     @lru_cache(maxsize=1)
     def _query(self):
         df = self.datasources.query(self.datasource, self.query, **self.query_args)
+        if self.columns:
+            df = df[self.columns]
         if self.max_rows:
             return df.head(self.max_rows)
         else:

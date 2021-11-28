@@ -46,6 +46,16 @@ class SingleStat(View):
             meaning the raw difference between the two values
             is displayed, or "percent", meaning the percentage
             increase/decrease is displayed. (Default ``"raw"``)
+        comparison_ideal (str): what is the "ideal" relationship between the original
+            query and the comparison query. This affects if the stat is indicated
+            positively (e.g., with a green color) or negatively (red). Possible values:
+
+              * ``higher``: the current stat value should be higher than the comparison.
+              * ``lower``: the current stat value should be lower than the comparison.
+              * ``equal``: the two values should be the same.
+
+            (Default ``"higher"``)
+
         precision (int): The floating point precision to use on the resulting stat.
             Set to the number of significant digits you want displayed. If 0, the stat
             is rounded to the nearest integer (Default ``0``)
@@ -61,6 +71,7 @@ class SingleStat(View):
         comparison_query=None,
         comparison_query_args={},
         comparison_type="raw",
+        comparison_ideal="higher",
         precision=0,
     ):
         self.datasource = datasource
@@ -71,6 +82,7 @@ class SingleStat(View):
         self.comparison_query = comparison_query
         self.comparison_query_args = comparison_query_args
         self.comparison_type = comparison_type
+        self.comparison_ideal = comparison_ideal
         self.precision = round(max(0, precision))
 
         if not (self.datasource and self.query):
@@ -89,7 +101,13 @@ class SingleStat(View):
             )
             stat_cmp_value = _summarize(df_cmp)
             stat_delta = stat_value - stat_cmp_value
-            stat_delta_direction = "up" if stat_delta >= 0 else "down"
+
+            if stat_delta > 0:
+                direction = "higher"
+            elif stat_delta < 0:
+                direction = "lower"
+            else:
+                direction = "equal"
 
             if self.comparison_type == "percent":
                 if stat_cmp_value == 0:
@@ -104,7 +122,8 @@ class SingleStat(View):
             label=label,
             link_url=self.link_url,
             stat_delta=stat_delta,
-            direction=stat_delta_direction,
+            stat_direction=direction,
+            stat_ideal_direction=self.comparison_ideal,
             theme=self.report.theme,
         )
 

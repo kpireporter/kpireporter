@@ -10,10 +10,10 @@
     font-size: 50%;
     margin-left: 10px;
 }
-  .kpireport__stat .delta.up {
+  .kpireport__stat .delta.ideal {
       color: {{ theme.success_color }};
   }
-  .kpireport__stat .delta.down {
+  .kpireport__stat .delta {
       color: {{ theme.error_color }};
   }
 </style>
@@ -24,7 +24,7 @@
 {% endif %}
     <span>{{ label }}</span>
     {%- if stat_delta is not none %}
-    <span class="delta {{ direction }}">{% if direction == "up" %}▲{% else %}▼{% endif %}{{ stat_delta }}</span>
+    <span class="delta {% if stat_direction == stat_ideal_direction %}ideal{% endif %}">{% if stat_direction == "higher" %}▲{% elif stat_direction == "lower" %}▼{% else %}∓{% endif %}{{ stat_delta }}</span>
     {% endif -%}
 {% if link_url %}
   </a>

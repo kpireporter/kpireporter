@@ -1,0 +1,7 @@
+---
+features:
+  - |
+    Adds a new ``comparison_ideal`` argument, which can help indicate if it is desired
+    that a stat has gone up or down, or stayed the same. Prior, there was an assumption
+    that all stats should go up. Defaults to "higher" to preserve old behavior, and
+    because in the general case most metrics are positively oriented.

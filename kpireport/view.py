@@ -161,9 +161,6 @@ class ViewManager(PluginManager):
                 view_env.filters["blob"] = self._blob_filter(output_driver)
 
                 output = view.render(view_env, fmt=fmt)
-                if not isinstance(output, str):
-                    raise ViewException(("The view did not render a valid string"))
-
                 block.update(output=output)
             except Exception as exc:
                 self.log.error(

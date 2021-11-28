@@ -1,0 +1,14 @@
+---
+features:
+  - |
+    Any view that supports the Slack output format can now return a Slack Block
+    structure instead of a mrkdwn string. If a Block or a list of Blocks is returned
+    from ``render_slack``, they are added to the existing list of Blocks that make
+    up the report. Views are still demarcated by divider blocks.
+
+    The render function can either return a Block object assembled via the Slack SDK,
+    or it can return a dict, which must adhere to the Block specification.
+other:
+  - |
+    This release requires later versions of KPI Reporter core, which drop the constraint
+    that View output must be a string.

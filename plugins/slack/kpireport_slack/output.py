@@ -111,32 +111,14 @@ class SlackOutputDriver(OutputDriver):
         )
 
         for i, view in enumerate(views):
-            title = view.get("title")
-            output_lines = [f"*{title}*" if title else None, view.get("output") or None]
-            output = "\n\n".join(list(filter(None, output_lines)))
+            output = view.get("output")
 
-            if output:
-                blks.append(
-                    blocks.SectionBlock(text=objects.MarkdownTextObject(text=output))
-                )
-
-            if self.image_remote_base_url:
-                for blob in view.get("blobs"):
-                    image_url = f"{self.image_remote_base_url}/{blob.id}"
-                    title = blob.title or blob.id
-                    blks.append(
-                        blocks.ImageBlock(
-                            title=title, image_url=image_url, alt_text=title
-                        )
-                    )
-
-            description = view.get("description")
-            if description:
-                blks.append(
-                    blocks.ContextBlock(
-                        elements=[blocks.MarkdownTextObject(text=description)]
-                    )
-                )
+            if (not output) or isinstance(output, str):
+                blks.extend(self._render_simple(view))
+            else:
+                if not isinstance(output, list):
+                    output = [output]
+                blks.extend(blocks.Block.parse_all(output))
 
             if (i + 1) < len(views):
                 blks.append(blocks.DividerBlock())
@@ -148,3 +130,34 @@ class SlackOutputDriver(OutputDriver):
                 self.slack.chat_postMessage(channel=channel, **msg.to_dict())
         except SlackApiError as e:
             LOG.error(f"Got an error: {self._parse_slack_error(e)}")
+
+    def _render_simple(self, view: "View") -> "list[blocks.Block]":
+        """A default render implementation that transforms output text to blocks."""
+        blks = []
+
+        title = view.get("title")
+        output_lines = [f"*{title}*" if title else None, view.get("output") or None]
+        output = "\n\n".join(list(filter(None, output_lines)))
+
+        if output:
+            blks.append(
+                blocks.SectionBlock(text=objects.MarkdownTextObject(text=output))
+            )
+
+        if self.image_remote_base_url:
+            for blob in view.get("blobs"):
+                image_url = f"{self.image_remote_base_url}/{blob.id}"
+                title = blob.title or blob.id
+                blks.append(
+                    blocks.ImageBlock(title=title, image_url=image_url, alt_text=title)
+                )
+
+        description = view.get("description")
+        if description:
+            blks.append(
+                blocks.ContextBlock(
+                    elements=[blocks.MarkdownTextObject(text=description)]
+                )
+            )
+
+        return blks

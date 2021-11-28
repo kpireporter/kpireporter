@@ -1,0 +1,4 @@
+---
+other:
+  - |
+    Removes the constraint that output from View render functions must be a string.

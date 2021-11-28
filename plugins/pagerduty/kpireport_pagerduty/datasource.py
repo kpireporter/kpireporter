@@ -47,11 +47,13 @@ class PagerDutyDatasource(Datasource):
     def query_log_entries(self, **kwargs) -> pd.DataFrame:
         since = kwargs.pop("since", self.report.start_date)
         until = kwargs.pop("until", self.report.end_date)
+        is_overview = kwargs.pop("is_overview", True)
         log_entries = self._session.list_all(
             "log_entries",
             params={
                 "since": since,
                 "until": until,
+                "is_overview": is_overview,
             },
         )
         le_df = pd.json_normalize(log_entries)

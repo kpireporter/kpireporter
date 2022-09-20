@@ -1,73 +1,78 @@
 import pandas as pd
-import unittest
+import pytest
 from unittest.mock import MagicMock
 
 from kpireport.datasource import DatasourceError
 from kpireport.datasource import DatasourceManager
-from kpireport.tests.utils import BaseTestPlugin, make_test_extension_manager
+from kpireport.tests.utils import FakePlugin, make_fake_extension_manager
 
 NAME = "my_datasource"
 PLUGIN = "my_plugin"
 
 
-class DatasourceManagerTestCase(unittest.TestCase):
-    def _make_datasource_manager(
-        self, conf={NAME: {"plugin": PLUGIN}}, plugins=[(PLUGIN, MagicMock())]
-    ):
-        mgr = make_test_extension_manager(plugins)
-        return DatasourceManager(MagicMock(), conf, extension_manager=mgr)
+def make_datasource_manager(conf=None, plugins=None):
+    if conf is None:
+        conf = {NAME: {"plugin": PLUGIN}}
+    if plugins is None:
+        plugins = [(PLUGIN, MagicMock())]
+    mgr = make_fake_extension_manager(plugins)
+    return DatasourceManager(MagicMock(), conf, extension_manager=mgr)
 
-    def test_invalid_query_return_type(self):
-        class TestPlugin(BaseTestPlugin):
-            def query(self, input):
-                return None
 
-        mgr = self._make_datasource_manager(plugins=[(PLUGIN, TestPlugin)])
+def test_invalid_query_return_type():
+    class TestPlugin(FakePlugin):
+        def query(self, input):
+            return None
 
-        with self.assertRaises(DatasourceError):
-            mgr.query(NAME, "some input")
+    mgr = make_datasource_manager(plugins=[(PLUGIN, TestPlugin)])
 
-    def test_valid_query_result(self):
-        df = pd.DataFrame()
+    with pytest.raises(DatasourceError):
+        mgr.query(NAME, "some input")
 
-        class TestPlugin(BaseTestPlugin):
-            def query(self, input):
-                return df
 
-        mgr = self._make_datasource_manager(plugins=[(PLUGIN, TestPlugin)])
+def test_valid_query_result():
+    df = pd.DataFrame()
 
-        pd.testing.assert_frame_equal(df, mgr.query(NAME, "some input"))
+    class TestPlugin(FakePlugin):
+        def query(self, input):
+            return df
 
-    def test_multiple_datasources(self):
-        df = pd.DataFrame()
+    mgr = make_datasource_manager(plugins=[(PLUGIN, TestPlugin)])
 
-        class TestPlugin(BaseTestPlugin):
-            def query(self, input):
-                return df
+    pd.testing.assert_frame_equal(df, mgr.query(NAME, "some input"))
 
-        mgr = self._make_datasource_manager(
-            conf={
-                NAME: {"plugin": PLUGIN},
-                "second": {"plugin": PLUGIN},
-            },
-            plugins=[(PLUGIN, TestPlugin)],
-        )
 
-        pd.testing.assert_frame_equal(df, mgr.query("second", "some input"))
+def test_multiple_datasources():
+    df = pd.DataFrame()
 
-    def test_multiple_plugins(self):
-        df = pd.DataFrame()
+    class TestPlugin(FakePlugin):
+        def query(self, input):
+            return df
 
-        class FirstTestPlugin(BaseTestPlugin):
-            def query(self, input):
-                return None
+    mgr = make_datasource_manager(
+        conf={
+            NAME: {"plugin": PLUGIN},
+            "second": {"plugin": PLUGIN},
+        },
+        plugins=[(PLUGIN, TestPlugin)],
+    )
 
-        class SecondTestPlugin(BaseTestPlugin):
-            def query(self, input):
-                return df
+    pd.testing.assert_frame_equal(df, mgr.query("second", "some input"))
 
-        mgr = self._make_datasource_manager(
-            plugins=[("first", FirstTestPlugin), (PLUGIN, SecondTestPlugin)]
-        )
 
-        pd.testing.assert_frame_equal(df, mgr.query(NAME, "some input"))
+def test_multiple_plugins():
+    df = pd.DataFrame()
+
+    class FirstTestPlugin(FakePlugin):
+        def query(self, input):
+            return None
+
+    class SecondTestPlugin(FakePlugin):
+        def query(self, input):
+            return df
+
+    mgr = make_datasource_manager(
+        plugins=[("first", FirstTestPlugin), (PLUGIN, SecondTestPlugin)]
+    )
+
+    pd.testing.assert_frame_equal(df, mgr.query(NAME, "some input"))

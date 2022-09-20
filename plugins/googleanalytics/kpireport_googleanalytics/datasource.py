@@ -1,10 +1,10 @@
 from datetime import datetime, timezone
 from functools import lru_cache
 
-from apiclient.discovery import build
 from kpireport.config import DEFAULT_CONF_DIR
 from kpireport.datasource import Datasource
 from oauth2client.service_account import ServiceAccountCredentials
+from googleapiclient.discovery import build
 import pandas as pd
 import pytz
 

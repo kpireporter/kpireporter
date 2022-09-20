@@ -2,12 +2,12 @@ import stevedore
 from unittest.mock import MagicMock
 
 
-class BaseTestPlugin:
+class FakePlugin:
     def __init__(self, report, id=None):
         pass
 
 
-def make_test_extension_manager(plugins=[]):
+def make_fake_extension_manager(plugins=[]):
     extensions = [
         stevedore.extension.Extension(
             name, entry_point=MagicMock(), plugin=plugin, obj=None

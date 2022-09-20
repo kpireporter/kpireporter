@@ -1,8 +1,7 @@
 black
-nose
-nose-watch
 pycodestyle
 pylama
+pytest
 # We have to install the base package explicitly
 # because tox will attempt to install it only after
 # processing this list, and the plugins require

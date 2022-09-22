@@ -1,3 +1,4 @@
+import logging
 from datetime import datetime, timedelta
 from functools import partial
 
@@ -9,11 +10,9 @@ from slugify import slugify
 from .datasource import DatasourceManager
 from .license import License
 from .output import OutputDriverManager
-from .view import ViewManager
 from .utils import create_jinja_environment
 from .version import VERSION
-
-import logging
+from .view import ViewManager
 
 LOG = logging.getLogger(__name__)
 
@@ -147,8 +146,8 @@ class Report:
         self,
         title=None,
         interval_days=None,
-        start_date=None,
-        end_date=None,
+        start_date: "datetime" = None,
+        end_date: "datetime" = None,
         timezone=None,
         theme=None,
     ):

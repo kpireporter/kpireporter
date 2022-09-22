@@ -3,7 +3,7 @@ import inspect
 import traceback
 
 from jinja2 import Environment, ChoiceLoader, PackageLoader
-from jinja2 import evalcontextfilter
+from jinja2 import pass_eval_context
 
 from kpireport.datasource import DatasourceManager
 from kpireport.output import OutputDriver
@@ -96,7 +96,7 @@ class ViewManager(PluginManager):
         return plugin_class(self.report, self.datasource_manager, **plugin_kwargs)
 
     def _blob_filter(self, output_driver):
-        @evalcontextfilter
+        @pass_eval_context
         def render_blob(eval_ctx, blob_id):
             view_id = eval_ctx.environment.view_id
             fmt = eval_ctx.environment.fmt

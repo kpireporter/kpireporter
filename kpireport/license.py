@@ -3,7 +3,7 @@ from datetime import datetime
 
 from authlib.jose import jwt
 from authlib.jose.errors import BadSignatureError, ExpiredTokenError, JoseError
-from jinja2 import Markup
+from jinja2.utils import markupsafe
 
 from . import license_keys
 
@@ -128,10 +128,10 @@ class License:
                     # Key is valid and signature is OK, but license has expired.
                     self.state = ExpiredState(self.claims)
                     break
-                except JoseError:
+                except (BadSignatureError, JoseError):
                     # Malformed token or key not valid for token.
                     self.state = InvalidState()
 
     def render(self, fmt=None):
         self.rendered = True
-        return Markup(self.state.render(fmt))
+        return markupsafe.Markup(self.state.render(fmt))

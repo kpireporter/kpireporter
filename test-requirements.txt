@@ -2,6 +2,7 @@ black
 pycodestyle
 pylama
 pytest
+pytest-mock
 # We have to install the base package explicitly
 # because tox will attempt to install it only after
 # processing this list, and the plugins require

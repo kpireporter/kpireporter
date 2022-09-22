@@ -1,9 +1,8 @@
+import logging
+
 import jenkins
 import pandas as pd
-
 from kpireport.datasource import Datasource
-
-import logging
 
 LOG = logging.getLogger(__name__)
 
@@ -64,10 +63,12 @@ class JenkinsDatasource(Datasource):
             :fullname: the full job name (will include folder path components)
             :url: a URL that resolves to the job on the Jenkins server
         """
-        jobs = pd.DataFrame.from_records(self.client.get_all_jobs())
+        df = pd.DataFrame.from_records(self.client.get_all_jobs())
         # Filter by jobs that don't have child jobs
-        leaf_jobs = jobs[jobs.jobs.isna()]
-        return leaf_jobs
+        if "jobs" in df.columns:
+            return df[df.jobs.isna()]
+        else:
+            return df
 
     def get_job_info(self, job_name):
         """Get a list of builds for a given job, including their statuses.

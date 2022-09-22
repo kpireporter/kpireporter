@@ -1,14 +1,13 @@
-from datetime import datetime, timezone
+import logging
+from datetime import datetime
 from functools import lru_cache
 
+import pandas as pd
+import pytz
+from googleapiclient.discovery import build
 from kpireport.config import DEFAULT_CONF_DIR
 from kpireport.datasource import Datasource
 from oauth2client.service_account import ServiceAccountCredentials
-from googleapiclient.discovery import build
-import pandas as pd
-import pytz
-
-import logging
 
 LOG = logging.getLogger(__name__)
 
@@ -132,6 +131,8 @@ class GoogleAnalyticsDatasource(Datasource):
         Args:
             input (str): The name of the query command to invoke.
                 Currently supports only "report".
+            **kwargs: keyword arguments to pass through to invoked
+                report command.
 
         Returns:
             A DataFrame with the query results.
@@ -263,12 +264,10 @@ class GoogleAnalyticsDatasource(Datasource):
             if date_dim:
                 df_idx.append(
                     # GA data is in the View's local TZ; force-cast it to this TZ
-                    view_tz.localize(
-                        datetime.strptime(
-                            row["dimensions"][hdr["dimensions"].index(date_dim)],
-                            DATE_DIMENSIONS[date_dim],
-                        )
-                    )
+                    datetime.strptime(
+                        row["dimensions"][hdr["dimensions"].index(date_dim)],
+                        DATE_DIMENSIONS[date_dim],
+                    ).astimezone(self.report.timezone)
                 )
             row_dims = [row["dimensions"][idx] for idx in dim_column_idx]
             row_metrics = [float(m["values"][0]) for m in row["metrics"]]

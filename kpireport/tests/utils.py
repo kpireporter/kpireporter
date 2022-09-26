@@ -1,35 +1,11 @@
-import json
 import typing
-from dataclasses import dataclass
 from unittest.mock import MagicMock
 
-import requests
 import stevedore
+from kpireport.datasource import DatasourceManager
 
 if typing.TYPE_CHECKING:
-    from typing import Dict, Union
-
     from kpireport.report import Report
-
-
-class FakePlugin:
-    def __init__(self, report, id=None):
-        pass
-
-
-@dataclass
-class FakeResponse:
-    status_code: int
-    content: "Union[str,Dict]"
-
-    def raise_for_status(self):
-        if self.status_code >= 300:
-            raise requests.HTTPError()
-
-    def json(self):
-        if isinstance(self.content, str):
-            return json.loads(self.content)
-        return self.content
 
 
 def make_fake_extension_manager(plugins=[]):
@@ -41,6 +17,17 @@ def make_fake_extension_manager(plugins=[]):
     ]
 
     return stevedore.ExtensionManager.make_test_instance(extensions=extensions)
+
+
+def make_datasource_manager(plugin_map: "Dict[str,Any]"):
+    conf = {}
+    plugins = []
+    for ds_name, ds_plugin_klass in plugin_map.items():
+        plugin_name = f"{ds_name}_plugin"
+        conf[ds_name] = {"plugin": plugin_name}
+        plugins.append((plugin_name, ds_plugin_klass))
+    mgr = make_fake_extension_manager(plugins)
+    return DatasourceManager(MagicMock(), conf, extension_manager=mgr)
 
 
 def assert_within_report_range(dateobj, report: "Report"):

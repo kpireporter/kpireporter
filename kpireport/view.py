@@ -39,7 +39,15 @@ class Blob:
     title: "Optional[str]"
 
 
-def make_view_jinja_env(env: "Environment", view: "View"):
+def make_render_env(
+    env: "Environment", view: "View", output_driver: "OutputDriver", fmt: str
+):
+    """Create a Jinja environment for rendering the view.
+
+    The environment is specific to the view, output driver, and output format, and
+    should only be used for that combination of entities. As such, it is best
+    to create this environment just before rendering the view.
+    """
     # Allow any extending package to optionally define its own
     # ./templates directory at the root module level. To do this, we
     # inspect the current View class and find all modules in its inheritance
@@ -67,7 +75,27 @@ def make_view_jinja_env(env: "Environment", view: "View"):
     else:
         new_loader = ChoiceLoader(view_pkg_loaders + [env.loader])
 
-    return env.overlay(loader=new_loader)
+    view_env = env.overlay(loader=new_loader)
+
+    @pass_eval_context
+    def render_blob(eval_ctx, blob_id):
+        fmt = eval_ctx.environment.fmt
+
+        blob = view.get_blob(blob_id)
+        if not blob:
+            raise ViewException(
+                (
+                    f"Missing content for blob '{blob_id}'. Make sure the "
+                    "blob was added before rendering the View template"
+                )
+            )
+
+        return output_driver.render_blob_inline(blob, fmt)
+
+    view_env.filters["blob"] = render_blob
+    view_env.fmt = fmt
+
+    return view_env
 
 
 class View(ABC):
@@ -102,7 +130,10 @@ class View(ABC):
     def supports(self, fmt) -> bool:
         return callable(getattr(self, f"render_{fmt}", None))
 
-    def render(self, env: Environment, fmt="html") -> str:
+    def render(self, env: Environment) -> str:
+        fmt = getattr(env, "fmt")
+        assert fmt is not None
+
         if not self.supports(fmt):
             raise ValueError(f"No {fmt} renderer found")
 
@@ -142,25 +173,6 @@ class ViewManager(PluginManager[View]):
 
         return plugin_class(self.report, self.datasource_manager, **plugin_kwargs)
 
-    def _blob_filter(self, output_driver):
-        @pass_eval_context
-        def render_blob(eval_ctx, blob_id):
-            view_id = eval_ctx.environment.view_id
-            fmt = eval_ctx.environment.fmt
-
-            blob = self.call_instance(view_id, "get_blob", blob_id)
-            if not blob:
-                raise ViewException(
-                    (
-                        f"Missing content for blob '{blob_id}'. Make sure the "
-                        "blob was added before rendering the View template"
-                    )
-                )
-
-            return output_driver.render_blob_inline(blob, fmt)
-
-        return render_blob
-
     def render(self, env: Environment, fmt: str, output_driver: OutputDriver) -> "List":
         if not output_driver.can_render(fmt):
             return []
@@ -177,11 +189,7 @@ class ViewManager(PluginManager[View]):
             )
 
             try:
-                view_env = make_view_jinja_env(env, view)
-                view_env.extend(view_id=id, fmt=fmt)
-                view_env.filters["blob"] = self._blob_filter(output_driver)
-
-                output = view.render(view_env, fmt=fmt)
+                output = view.render(make_render_env(env, view, output_driver, fmt))
                 if not isinstance(output, str):
                     raise ViewException(("The view did not render a valid string"))
 

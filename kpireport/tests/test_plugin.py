@@ -1,7 +1,8 @@
 from unittest.mock import MagicMock
 
 from kpireport.plugin import PluginManager
-from kpireport.tests.utils import FakePlugin, make_fake_extension_manager
+from kpireport.tests.fixtures import FakePlugin
+from kpireport.tests.utils import make_fake_extension_manager
 
 NAME = "my_name"
 PLUGIN = "my_plugin"

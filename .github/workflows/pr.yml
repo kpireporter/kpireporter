@@ -19,7 +19,7 @@ jobs:
           fetch-depth: 0
 
       - name: Lint codebase
-        uses: github/super-linter:v4
+        uses: github/super-linter@v4
         env:
           # Only lint new/changed files
           VALIDATE_ALL_CODEBASE: false

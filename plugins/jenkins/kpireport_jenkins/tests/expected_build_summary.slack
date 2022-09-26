@@ -1,2 +1,3 @@
 
-:small_red_triangle_down::small_blue_diamond::sunny: <https://jenkins.example.com/foo/bar|foo/bar>
+:small_red_triangle_down::small_blue_diamond::cloud: <https://jenkins.example.com/job1/main|job1/main>
+:small_blue_diamond::small_blue_diamond::sunny: <https://jenkins.example.com/job2/main|job2/main>

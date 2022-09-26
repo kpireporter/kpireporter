@@ -11,14 +11,26 @@ from kpireport_jenkins import JenkinsBuildSummary
 
 FAKE_JOBS = [
     {
-        "name": "foo",
-        "fullname": "foo/bar",
-        "url": "https://jenkins.example.com/foo/bar",
-    }
+        "name": "job1",
+        "fullname": "job1/main",
+        "url": "https://jenkins.example.com/job1/main",
+    },
+    {
+        "name": "job2",
+        "fullname": "job2/main",
+        "url": "https://jenkins.example.com/job2/main",
+    },
 ]
 
 FAKE_JOB_INFOS = {
-    "foo/bar": [{"result": "SUCCESS", "score": 80}, {"result": "FAILURE", "score": 80}]
+    "job1/main": [
+        {"result": "SUCCESS", "score": 50},
+        {"result": "FAILURE", "score": 50},
+    ],
+    "job2/main": [
+        {"result": "SUCCESS", "score": 100},
+        {"result": "SUCCESS", "score": 100},
+    ],
 }
 
 
@@ -47,7 +59,8 @@ def _mock_jenkins_response(ds_mgr: "DatasourceManager", all_jobs=[], job_infos={
 
 
 def _assert_matches_fixture(output, fixture_name):
-    with open(os.path.join(os.path.dirname(__file__), fixture_name), "r") as f:
+    fixture_path = os.path.join(os.path.dirname(__file__), fixture_name)
+    with open(fixture_path, "r") as f:
         assert output == f.read()
 
 

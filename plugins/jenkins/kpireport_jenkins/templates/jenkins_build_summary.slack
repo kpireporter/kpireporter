@@ -1,11 +1,11 @@
-{% for job in summary %}
-{% for build in job.builds -%}
+{%- for job in summary %}
+{% for build in job.builds %}
   {%- if build.result == "SUCCESS" -%}
 :small_blue_diamond:
   {%- else -%}
 :small_red_triangle_down:
   {%- endif -%}
-{%- endfor -%}
+{% endfor %}
 
 {%- if job.score >= 80 -%}
 :sunny:
@@ -18,6 +18,6 @@
 {%- elif job.score >= 0 -%}
 :thunder_cloud_and_rain:
 {%- endif %} <{{ job.url }}|{{ job.name }}>
-{% else %}
+{%- else -%}
 No jobs found. :shrug:
-{% endfor %}
+{% endfor -%}

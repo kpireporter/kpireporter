@@ -30,26 +30,26 @@
   }
 </style>
 
-{% if summary %}
+{%- if summary %}
 <div class="jenkinsBuild_header">Latest build →</div>
-{% endif %}
+{% endif -%}
 
 <table class="jenkinsBuild">
   <tbody>
-{% for job in summary %}
+{%- for job in summary %}
     <tr>
       <td>
-        {% if job.score >= 80 %}
+        {%- if job.score >= 80 %}
         <span class="jenkinsBuild_score">&#x2600;&#xFE0F;</span>
-        {% elif job.score >= 60 %}
+        {%- elif job.score >= 60 %}
         <span class="jenkinsBuild_score 60-79">&#x1F324;</span>
-        {% elif job.score >= 40 %}
+        {%- elif job.score >= 40 %}
         <span class="jenkinsBuild_score 40-59">&#x2601;</span>
-        {% elif job.score >= 20 %}
+        {%- elif job.score >= 20 %}
         <span class="jenkinsBuild_score 20-39">&#x1F327;</span>
-        {% elif job.score >= 0 %}
+        {%- elif job.score >= 0 %}
         <span class="jenkinsBuild_score 00-19">&#x1F329;</span>
-        {% endif %}
+        {%- endif %}
         <a href="{{ job.url }}" alt="View job {{ job.name }} on Jenkins">{{ job.name }}</a>
       </td>
       <td>
@@ -58,10 +58,10 @@
         {%- endfor %}
       </td>
     </tr>
-{% else %}
+{%- else %}
     <tr>
       <td>No jobs found.</td>
     </tr>
-{% endfor %}
+{%- endfor %}
   </tbody>
 </table>

@@ -89,7 +89,7 @@ class View(ABC):
         if "description" in kwargs:
             self.description = kwargs.pop("description")
         if "cols" in kwargs:
-            self.cols = kwargs.pop("cols")
+            self.cols = int(kwargs.pop("cols"))
         else:
             self.cols = report.theme.num_columns
 

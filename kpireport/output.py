@@ -1,6 +1,13 @@
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
 from kpireport.plugin import PluginManager
+
+if TYPE_CHECKING:
+    from typing import List
+
+    from kpireport.report import Content, Report
+    from kpireport.view import Blob
 
 
 class OutputDriverError(Exception):
@@ -20,7 +27,7 @@ class OutputDriver(ABC):
     id: str = None
     supported_formats: "List[str]" = ["md", "html"]
 
-    def __init__(self, report: "kpireport.report.Report", **kwargs):
+    def __init__(self, report: "Report", **kwargs):
         self.report = report
         if "id" in kwargs:
             self.id = kwargs.pop("id")
@@ -36,7 +43,7 @@ class OutputDriver(ABC):
         """
         pass
 
-    def render_blob_inline(self, blob: "kpireport.view.Blob", fmt=None):
+    def render_blob_inline(self, blob: "Blob", fmt=None):
         """Render a blob file inline in the report output.
 
         Blobs are typically binary image files; many output formats afford some
@@ -49,7 +56,7 @@ class OutputDriver(ABC):
         This function is used when invoking the ``blob`` template filter.
 
         Args:
-            blob (kpireport.view.Blob): the Blob to render.
+            blob (`~kpireport.view.Blob`): the Blob to render.
             fmt (str): the output format.
 
         Returns:
@@ -69,7 +76,7 @@ class OutputDriver(ABC):
         return fmt in self.supported_formats
 
     @abstractmethod
-    def render_output(self, content: "kpireport.report.Content", blobs):
+    def render_output(self, content: "Content", blobs):
         """Render the report content for the target delivery mechanism.
 
         Args:

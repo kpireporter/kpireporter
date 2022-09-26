@@ -43,10 +43,12 @@ def test_query_param_replacement(report: "Report", cursor):
     _mock_query_response(cursor, ["id"], [])
     ds = MySQLDatasource(report)
     df = ds.query(
-        "select * from users where join_date > date_sub({from}, {interval}) and join_date < {to}"
+        "select * from users where join_date > date_sub({from}, {interval}) and "
+        "join_date < {to}"
     )
     cursor.execute.assert_called_with(
-        f"select * from users where join_date > date_sub(%s, interval {report.interval_days} day) and join_date < %s",
+        "select * from users where join_date > date_sub(%s, interval "
+        f"{report.interval_days} day) and join_date < %s",
         [report.start_date, report.end_date],
     )
 
@@ -57,5 +59,6 @@ def test_query_param_invalid_replacement(report: "Report", cursor):
     ds = MySQLDatasource(report)
     with pytest.raises(ValueError):
         ds.query(
-            "select * from users where join_date > date_sub(current_timestamp(), {interval})"
+            "select * from users where join_date > date_sub(current_timestamp(), "
+            "{interval})"
         )

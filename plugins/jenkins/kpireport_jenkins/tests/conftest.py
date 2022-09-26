@@ -1,1 +1,1 @@
-from kpireport.tests.fixtures import report
+from kpireport.tests.fixtures import jinja_env, report

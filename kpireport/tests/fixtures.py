@@ -1,7 +1,8 @@
 from datetime import datetime, timezone
 
 import pytest
-from kpireport.report import Report
+from kpireport.report import Report, Theme
+from kpireport.utils import create_jinja_environment
 
 
 @pytest.fixture
@@ -14,3 +15,8 @@ def report():
         timezone=timezone.utc,
         theme=None,
     )
+
+
+@pytest.fixture
+def jinja_env():
+    return create_jinja_environment(Theme())

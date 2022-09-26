@@ -1,0 +1,53 @@
+<style>
+.jenkinsBuild {
+  table-layout: fixed;
+}
+.jenkinsBuild_header {
+  font-size: 12px;
+  position: absolute;
+  top: 1em;
+  right: 2px;
+  text-align: right;
+}
+
+.jenkinsBuild_status {
+  box-sizing: border-box;
+  width: 10%;
+  display: inline-block;
+  padding-right: 2px;
+}
+  .jenkinsBuild_icon {
+    width: 100%;
+    display: inline-block;
+    background: #cccccc;
+    border-radius: 3px;
+  }
+  .jenkinsBuild_icon.success {
+    background: #008000;
+  }
+  .jenkinsBuild_icon.failure {
+    background: #8b0000;
+  }
+</style>
+
+
+<div class="jenkinsBuild_header">Latest build →</div>
+
+
+<table class="jenkinsBuild">
+  <tbody>
+
+    <tr>
+      <td>
+        
+        <span class="jenkinsBuild_score">&#x2600;&#xFE0F;</span>
+        
+        <a href="https://jenkins.example.com/foo/bar" alt="View job foo/bar on Jenkins">foo/bar</a>
+      </td>
+      <td>
+        <span class="jenkinsBuild_status"><a href="" alt="View build  on Jenkins"><i class="jenkinsBuild_icon failure">&nbsp;</i></a></span><span class="jenkinsBuild_status"><a href="" alt="View build  on Jenkins"><i class="jenkinsBuild_icon success">&nbsp;</i></a></span>
+      </td>
+    </tr>
+
+  </tbody>
+</table>

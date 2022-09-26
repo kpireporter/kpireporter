@@ -1,15 +1,35 @@
+import json
 import typing
+from dataclasses import dataclass
 from unittest.mock import MagicMock
 
+import requests
 import stevedore
 
 if typing.TYPE_CHECKING:
+    from typing import Dict, Union
+
     from kpireport.report import Report
 
 
 class FakePlugin:
     def __init__(self, report, id=None):
         pass
+
+
+@dataclass
+class FakeResponse:
+    status_code: int
+    content: "Union[str,Dict]"
+
+    def raise_for_status(self):
+        if self.status_code >= 300:
+            raise requests.HTTPError()
+
+    def json(self):
+        if isinstance(self.content, str):
+            return json.loads(self.content)
+        return self.content
 
 
 def make_fake_extension_manager(plugins=[]):

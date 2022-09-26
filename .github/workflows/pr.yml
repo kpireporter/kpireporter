@@ -1,0 +1,45 @@
+---
+name: Pull request gate
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    name: Lint codebase
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10"]
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Lint codebase
+        uses: github/super-linter:v4
+        env:
+          # Only lint new/changed files
+          VALIDATE_ALL_CODEBASE: false
+          # Disable linting of templates; the linter does not understand
+          # the template syntax nor the fact that some are used as partials.
+          VALIDATE_MD: false
+          VALIDATE_HTML: false
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Assemble plugin requirements
+        run: |
+          make plugin-requirements.txt
+
+      - name: Install tox
+        run: pip install tox
+
+      - name: Run tests
+        run: tox -e unit

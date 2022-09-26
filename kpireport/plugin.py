@@ -1,16 +1,24 @@
-from collections import defaultdict
 import logging
-from typing import DefaultDict
+from collections import defaultdict
+from typing import TYPE_CHECKING, Generic, TypeVar
+
 import stevedore
 
+T = TypeVar("T")
 
-class PluginManager:
+if TYPE_CHECKING:
+    from typing import Any, Dict, ItemsView, List, TypedDict, TypeVar
+
+    from kpireport.report import Report
+
+
+class PluginManager(Generic[T]):
 
     namespace = None
     exc_class = Exception
     type_noun = "plugin"
 
-    def __init__(self, report, config, extension_manager=None):
+    def __init__(self, report: "Report", config: "Dict", extension_manager=None):
         self.log = logging.getLogger(__name__)
         self.report = report
 
@@ -40,7 +48,7 @@ class PluginManager:
             loaded_names = [e.name for e in self._mgr.extensions]
             self.log.info(f"Loaded {self.type_noun} plugins: {loaded_names}")
 
-        self._instances = {}
+        self._instances: "TypedDict[T]" = {}
         self._errors = defaultdict(list)
         for id, conf in config.items():
             try:
@@ -54,10 +62,10 @@ class PluginManager:
                 self._errors[id].append(exc)
 
     @property
-    def instances(self):
+    def instances(self) -> "ItemsView[str, T]":
         return self._instances.items()
 
-    def get_instance(self, id: str) -> any:
+    def get_instance(self, id: str) -> "T":
         if id not in self._instances:
             raise self.exc_class(
                 (f"Could not find {self.type_noun} {id}; is it loaded?")
@@ -65,7 +73,7 @@ class PluginManager:
 
         return self._instances[id]
 
-    def call_instance(self, id: str, method: str, *args, **kwargs) -> any:
+    def call_instance(self, id: str, method: str, *args, **kwargs) -> "Any":
         instance = self.get_instance(id)
         fn = getattr(instance, method)
 
@@ -74,7 +82,7 @@ class PluginManager:
 
         return fn(*args, **kwargs)
 
-    def create_instance(self, id: str, config: dict) -> any:
+    def create_instance(self, id: str, config: dict) -> "T":
         plugin = config.get("plugin")
 
         if not plugin:
@@ -98,7 +106,7 @@ class PluginManager:
         except Exception as exc:
             raise self.exc_class(f"Plugin {plugin} raised error on create") from exc
 
-    def plugin_factory(self, config, plugin_class, plugin_kwargs):
+    def plugin_factory(self, config, plugin_class, plugin_kwargs) -> "T":
         return plugin_class(self.report, **plugin_kwargs)
 
     def errors(self, id: str) -> "List[Exception]":

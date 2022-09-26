@@ -1,9 +1,9 @@
+import logging
 from abc import ABC, abstractmethod
+
 import pandas as pd
 
 from kpireport.plugin import PluginManager
-
-import logging
 
 LOG = logging.getLogger(__name__)
 
@@ -60,7 +60,7 @@ class Datasource(ABC):
         pass
 
 
-class DatasourceManager(PluginManager):
+class DatasourceManager(PluginManager[Datasource]):
 
     namespace = "kpireport.datasource"
     type_noun = "datasource"

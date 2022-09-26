@@ -79,7 +79,7 @@ class OutputDriver(ABC):
         pass
 
 
-class OutputDriverManager(PluginManager):
+class OutputDriverManager(PluginManager[OutputDriver]):
     namespace = "kpireport.output"
     type_noun = "output driver"
     exc_class = OutputDriverError

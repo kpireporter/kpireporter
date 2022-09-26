@@ -1,11 +1,10 @@
-import fabric
+import logging
 import shlex
 import tarfile
 import tempfile
 
+import fabric
 from kpireport_static import StaticOutputDriver
-
-import logging
 
 LOG = logging.getLogger(__name__)
 
@@ -56,7 +55,7 @@ class SCPOutputDriver(StaticOutputDriver):
                 run(
                     (f"tar -xf {remote_tarball} -C {safe_path} " "--strip-components=1")
                 )
-                run(f"rm -rf {remote_tarball}")
+                run(f"rm -f {remote_tarball}")
 
                 if self.remote_path_owner:
                     safe_owner = shlex.quote(self.remote_path_owner)

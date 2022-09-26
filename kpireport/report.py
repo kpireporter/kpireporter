@@ -1,6 +1,7 @@
 import logging
 from datetime import datetime, timedelta
 from functools import partial
+from typing import TYPE_CHECKING
 
 from dateutil.parser import parse as parse_date
 from dateutil.tz import gettz, tzlocal
@@ -13,6 +14,13 @@ from .output import OutputDriverManager
 from .utils import create_jinja_environment
 from .version import VERSION
 from .view import ViewManager
+
+if TYPE_CHECKING:
+    from typing import List, Optional
+
+    from jinja2 import Environment
+
+    from .view import View
 
 LOG = logging.getLogger(__name__)
 
@@ -191,7 +199,7 @@ class Content:
         self.report = report
         self._formats = {}
 
-    def add_format(self, fmt: str, views: "list[View]"):
+    def add_format(self, fmt: str, views: "List[View]"):
         """Render the specified format and add to the output contents.
 
         If a layout file is found for this format, it will be used to render
@@ -243,7 +251,7 @@ class Content:
         """
         return self._formats.get(fmt, {}).get("content")
 
-    def get_views(self, fmt: str) -> "list[View]":
+    def get_views(self, fmt: str) -> "List[View]":
         """Get the rendered views for the given format.
 
         Args:

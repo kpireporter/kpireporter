@@ -1,6 +1,8 @@
 import inspect
 import traceback
 from abc import ABC, abstractmethod
+from dataclasses import dataclass
+from typing import TYPE_CHECKING
 
 from jinja2 import ChoiceLoader, Environment, PackageLoader, pass_eval_context
 
@@ -9,17 +11,32 @@ from kpireport.output import OutputDriver
 from kpireport.plugin import PluginManager
 from kpireport.utils import module_root
 
+if TYPE_CHECKING:
+    from typing import List, Optional
+
+    from kpireport.report import Report
+
 
 class ViewException(Exception):
     pass
 
 
+@dataclass
+class Block:
+    id: str
+    title: str
+    description: str
+    cols: int
+    blobs: "List[Blob]"
+    tags: "List[str]"
+
+
+@dataclass
 class Blob:
-    def __init__(self, id, content, mime_type=None, title=None):
-        self.id = id
-        self.content = content
-        self.mime_type = mime_type
-        self.title = title
+    id: str
+    content: str
+    mime_type: "Optional[str]"
+    title: "Optional[str]"
 
 
 def make_view_jinja_env(env: "Environment", view: "View"):
@@ -99,7 +116,7 @@ class View(ABC):
             title=title or self.title,
         )
 
-    def get_blob(self, id) -> Blob:
+    def get_blob(self, id) -> "Blob":
         return self._blobs.get(id)
 
     @property
@@ -107,7 +124,7 @@ class View(ABC):
         return self._blobs.values()
 
 
-class ViewManager(PluginManager):
+class ViewManager(PluginManager[View]):
 
     namespace = "kpireport.view"
     type_noun = "view"
@@ -117,7 +134,7 @@ class ViewManager(PluginManager):
         self.datasource_manager = datasource_manager
         super(ViewManager, self).__init__(report, config, extension_manager)
 
-    def plugin_factory(self, config, plugin_class, plugin_kwargs):
+    def plugin_factory(self, config, plugin_class, plugin_kwargs) -> "View":
         for attr in ["title", "description", "cols"]:
             value = config.get(attr)
             if value:
@@ -144,13 +161,13 @@ class ViewManager(PluginManager):
 
         return render_blob
 
-    def render(self, env: Environment, fmt: str, output_driver: OutputDriver) -> list:
+    def render(self, env: Environment, fmt: str, output_driver: OutputDriver) -> "List":
         if not output_driver.can_render(fmt):
             return []
 
         blocks = []
         for id, view in self.instances:
-            block = dict(
+            block = Block(
                 id=id,
                 title=view.title or "",
                 description=view.description,
@@ -181,7 +198,7 @@ class ViewManager(PluginManager):
         return blocks
 
     @property
-    def blobs(self):
+    def blobs(self) -> "List":
         _blobs = []
         for id, view in self.instances:
             _blobs.extend(view.blobs)

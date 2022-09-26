@@ -5,8 +5,9 @@ import pandas as pd
 import pytest
 from kpireport.datasource import DatasourceManager
 from kpireport.report import Report
-from kpireport.tests.test_datasource import make_datasource_manager
-from kpireport.view import make_view_jinja_env
+from kpireport.tests.fixtures import FakeOutputDriver
+from kpireport.tests.utils import make_datasource_manager
+from kpireport.view import make_render_env
 from kpireport_jenkins import JenkinsBuildSummary
 
 FAKE_JOBS = [
@@ -36,11 +37,7 @@ FAKE_JOB_INFOS = {
 
 @pytest.fixture
 def ds_mgr():
-    jenkins = Mock()
-    _ds_mgr = make_datasource_manager(
-        conf={"jenkins": {"plugin": "fake_jenkins"}},
-        plugins=[("fake_jenkins", jenkins)],
-    )
+    _ds_mgr = make_datasource_manager({"jenkins": Mock()})
     # Put an initial mock reply in w/ empty value
     _mock_jenkins_response(_ds_mgr, FAKE_JOBS, FAKE_JOB_INFOS)
     return _ds_mgr
@@ -66,17 +63,17 @@ def _assert_matches_fixture(output, fixture_name):
 
 def test_render_html(report: "Report", ds_mgr: "DatasourceManager", jinja_env):
     view = JenkinsBuildSummary(report, ds_mgr)
-    j2 = make_view_jinja_env(jinja_env, view)
-    _assert_matches_fixture(view.render_html(j2), "expected_build_summary.html")
+    j2 = make_render_env(jinja_env, view, FakeOutputDriver(report), "html")
+    _assert_matches_fixture(view.render(j2), "expected_build_summary.html")
 
 
 def test_render_md(report: "Report", ds_mgr: "DatasourceManager", jinja_env):
     view = JenkinsBuildSummary(report, ds_mgr)
-    j2 = make_view_jinja_env(jinja_env, view)
-    _assert_matches_fixture(view.render_md(j2), "expected_build_summary.md")
+    j2 = make_render_env(jinja_env, view, FakeOutputDriver(report), "md")
+    _assert_matches_fixture(view.render(j2), "expected_build_summary.md")
 
 
 def test_render_slack(report: "Report", ds_mgr: "DatasourceManager", jinja_env):
     view = JenkinsBuildSummary(report, ds_mgr)
-    j2 = make_view_jinja_env(jinja_env, view)
-    _assert_matches_fixture(view.render_slack(j2), "expected_build_summary.slack")
+    j2 = make_render_env(jinja_env, view, FakeOutputDriver(report), "slack")
+    _assert_matches_fixture(view.render(j2), "expected_build_summary.slack")

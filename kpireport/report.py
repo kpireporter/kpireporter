@@ -11,7 +11,7 @@ from slugify import slugify
 from .datasource import DatasourceManager
 from .license import License
 from .output import OutputDriverManager
-from .utils import create_jinja_environment
+from .utils import make_jinja_environment
 from .version import VERSION
 from .view import ViewManager
 
@@ -323,7 +323,7 @@ class ReportFactory:
         self.dm = DatasourceManager(self.report, datasource_conf)
         self.vm = ViewManager(self.dm, self.report, view_conf)
         self.odm = OutputDriverManager(self.report, output_conf)
-        self.env = create_jinja_environment(theme)
+        self.env = make_jinja_environment(theme)
 
         self.license = License(config.get("license_key"))
         self.env.globals["print_license"] = self.license.render

@@ -4,7 +4,7 @@ from unittest import mock
 import pytest
 import requests
 from kpireport.report import Report
-from kpireport.tests.utils import FakeResponse
+from kpireport.tests.fixtures import FakeResponse
 from kpireport_prometheus import PrometheusDatasource
 
 

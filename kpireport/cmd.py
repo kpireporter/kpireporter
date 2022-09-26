@@ -1,14 +1,12 @@
 import argparse
-from datetime import datetime
-from itertools import chain
-from glob import glob
 import logging
 import os
 import sys
-
+from glob import glob
+from itertools import chain
 from timeit import default_timer as timer
 
-from .config import load, DEFAULT_CONF_DIR
+from .config import DEFAULT_CONF_DIR, load
 from .report import ReportFactory
 
 

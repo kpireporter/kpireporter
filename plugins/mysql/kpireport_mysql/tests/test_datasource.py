@@ -40,7 +40,7 @@ def test_query(report: "Report", cursor):
 
 
 def test_query_param_replacement(report: "Report", cursor):
-    _mock_query_response(cursor, [], [])
+    _mock_query_response(cursor, ["id"], [])
     ds = MySQLDatasource(report)
     df = ds.query(
         "select * from users where join_date > date_sub({from}, {interval}) and join_date < {to}"

@@ -33,8 +33,6 @@ def _mock_prometheus_response(ds_mgr: "DatasourceManager"):
 
 def _assert_matches_fixture(output, fixture_name):
     fixture_path = os.path.join(os.path.dirname(__file__), fixture_name)
-    # with open(fixture_path, "w") as f:
-    #     f.write(output)
     with open(fixture_path, "r") as f:
         assert output == f.read()
 
@@ -47,7 +45,9 @@ def ds_mgr():
     return _ds_mgr
 
 
-def test_render_html(report: "Report", ds_mgr: "DatasourceManager", jinja_env):
+@pytest.mark.parametrize("fmt", ["html", "md", "slack"])
+def test_render(report: "Report", ds_mgr: "DatasourceManager", jinja_env, fmt: str):
     view = PrometheusAlertSummary(report, ds_mgr)
-    j2 = make_render_env(jinja_env, view, FakeOutputDriver(report), "html")
-    _assert_matches_fixture(view.render(j2), "expected_alert_summary.html")
+    j2 = make_render_env(jinja_env, view, FakeOutputDriver(report), fmt)
+    _assert_matches_fixture(view.render(j2), f"expected_alert_summary.{fmt}")
+    assert len(view.blobs) == 1

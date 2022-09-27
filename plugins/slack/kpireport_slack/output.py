@@ -1,13 +1,18 @@
-from datetime import datetime
 import json
+import logging
 import os
-from slack import WebClient
-from slack.errors import SlackApiError
-from slack.web.classes import messages, blocks, objects
+from datetime import datetime
+from typing import TYPE_CHECKING
 
 from kpireport.output import OutputDriver
+from slack import WebClient
+from slack.errors import SlackApiError
+from slack.web.classes import blocks, messages, objects
 
-import logging
+if TYPE_CHECKING:
+    from typing import List
+
+    from kpireport.view import Block
 
 LOG = logging.getLogger(__name__)
 
@@ -94,7 +99,7 @@ class SlackOutputDriver(OutputDriver):
         return str(link)
 
     def render_output(self, content, blobs):
-        views = content.get_views("slack", [])
+        view_blocks: "List[Block]" = content.get_blocks("slack", [])
 
         blks = []
 
@@ -110,9 +115,12 @@ class SlackOutputDriver(OutputDriver):
             )
         )
 
-        for i, view in enumerate(views):
-            title = view.get("title")
-            output_lines = [f"*{title}*" if title else None, view.get("output") or None]
+        for i, block in enumerate(view_blocks):
+            title = block.title
+            output_lines = [
+                f"*{title}*" if title else None,
+                block.output or None,
+            ]
             output = "\n\n".join(list(filter(None, output_lines)))
 
             if output:
@@ -121,7 +129,7 @@ class SlackOutputDriver(OutputDriver):
                 )
 
             if self.image_remote_base_url:
-                for blob in view.get("blobs"):
+                for blob in block.blobs:
                     image_url = f"{self.image_remote_base_url}/{blob.id}"
                     title = blob.title or blob.id
                     blks.append(
@@ -130,7 +138,7 @@ class SlackOutputDriver(OutputDriver):
                         )
                     )
 
-            description = view.get("description")
+            description = block.description
             if description:
                 blks.append(
                     blocks.ContextBlock(
@@ -138,7 +146,7 @@ class SlackOutputDriver(OutputDriver):
                     )
                 )
 
-            if (i + 1) < len(views):
+            if (i + 1) < len(view_blocks):
                 blks.append(blocks.DividerBlock())
 
         msg = messages.Message(text="", blocks=blks)

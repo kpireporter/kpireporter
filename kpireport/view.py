@@ -28,6 +28,7 @@ class Block:
     description: str
     cols: int
     blobs: "List[Blob]"
+    output: str
     tags: "List[str]"
 
 
@@ -173,7 +174,9 @@ class ViewManager(PluginManager[View]):
 
         return plugin_class(self.report, self.datasource_manager, **plugin_kwargs)
 
-    def render(self, env: Environment, fmt: str, output_driver: OutputDriver) -> "List":
+    def render(
+        self, env: Environment, fmt: str, output_driver: OutputDriver
+    ) -> "List[Block]":
         if not output_driver.can_render(fmt):
             return []
 
@@ -185,6 +188,7 @@ class ViewManager(PluginManager[View]):
                 description=view.description,
                 cols=view.cols,
                 blobs=view.blobs,
+                output=None,
                 tags=[],
             )
 
@@ -193,21 +197,22 @@ class ViewManager(PluginManager[View]):
                 if not isinstance(output, str):
                     raise ViewException(("The view did not render a valid string"))
 
-                block.update(output=output)
+                block.output = output
             except Exception as exc:
                 self.log.error(
                     (f"Error rendering {self.type_noun} {id} ({fmt}): {exc}")
                 )
                 self.log.debug(traceback.format_exc())
-                block.update(output=f"Error rendering {id}", tags=["error"])
+                block.output = f"Error rendering {id}"
+                block.tags = ["error"]
 
             blocks.append(block)
 
         return blocks
 
     @property
-    def blobs(self) -> "List":
+    def blobs(self) -> "List[Blob]":
         _blobs = []
-        for id, view in self.instances:
+        for _, view in self.instances:
             _blobs.extend(view.blobs)
         return _blobs

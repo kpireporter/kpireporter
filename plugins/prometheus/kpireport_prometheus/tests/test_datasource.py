@@ -8,9 +8,9 @@ from kpireport.tests.fixtures import FakeResponse
 from kpireport_prometheus import PrometheusDatasource
 
 
-def _mock_response(mocker: "mock", status_code: int, content: "Dict" = None):
+def _mock_response(mocker: "mock", status_code: int, body: "Dict" = None):
     request = mocker.patch("requests.get")
-    request.return_value = FakeResponse(status_code, content)
+    request.return_value = FakeResponse(status_code, body)
     return request
 
 

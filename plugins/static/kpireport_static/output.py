@@ -1,13 +1,11 @@
+import logging
+import os
 import shutil
 import tempfile
-import os
 
 import imgkit
-from jinja2 import Markup
-
+from jinja2.utils import markupsafe
 from kpireport.output import OutputDriver
-
-import logging
 
 LOG = logging.getLogger(__name__)
 
@@ -54,7 +52,7 @@ class StaticOutputDriver(OutputDriver):
         if fmt == "md":
             return f"""![{blob.title}]({prefix}/{blob.id})"""
         else:
-            return Markup(f"""<img src="{prefix}/{blob.id}" />""")
+            return markupsafe.Markup(f"""<img src="{prefix}/{blob.id}" />""")
 
     def render_output(self, content, blobs):
         content = content.get_format("html")

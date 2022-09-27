@@ -1,10 +1,9 @@
-import boto3
-import tempfile
-import os
-
-from kpireport_static import StaticOutputDriver
-
 import logging
+import os
+import tempfile
+
+import boto3
+from kpireport_static import StaticOutputDriver
 
 LOG = logging.getLogger(__name__)
 
@@ -27,14 +26,14 @@ class S3OutputDriver(StaticOutputDriver):
         if not self.bucket:
             raise ValueError("'bucket' is required")
 
-        self.tmp_dir = tempfile.TemporaryDirectory()
+        self._s3_tmp_dir = tempfile.TemporaryDirectory()
 
-        super(S3OutputDriver, self).init(output_dir=self.tmp_dir.name)
+        super(S3OutputDriver, self).init(output_dir=self._s3_tmp_dir.name)
 
     def render_output(self, content, blobs):
         super(S3OutputDriver, self).render_output(content, blobs)
 
-        with self.tmp_dir as tmp_dir:
+        with self._s3_tmp_dir as tmp_dir:
             for root, _, files in os.walk(tmp_dir):
                 path = root.replace(tmp_dir, "").lstrip("/")
                 prefix = self.prefix or ""

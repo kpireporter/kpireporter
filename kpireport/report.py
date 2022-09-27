@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 
     from jinja2 import Environment
 
-    from .view import View
+    from .view import Block, View
 
 LOG = logging.getLogger(__name__)
 
@@ -199,7 +199,7 @@ class Content:
         self.report = report
         self._formats = {}
 
-    def add_format(self, fmt: str, views: "List[View]"):
+    def add_format(self, fmt: str, blocks: "List[Block]"):
         """Render the specified format and add to the output contents.
 
         If a layout file is found for this format, it will be used to render
@@ -216,7 +216,7 @@ class Content:
 
         Args:
             fmt (str): the output format, e.g., ``"md"`` or ``"html"``.
-            views (List[View]): the list of Views to render
+            blocks (List[Block]): the list of rendered view Blocks
         """
         try:
             template = self.j2.get_template(f"layout/default.{fmt}")
@@ -230,11 +230,11 @@ class Content:
             )
             content = None
         else:
-            content = template.render(views=views, report=self.report)
+            content = template.render(blocks=blocks, report=self.report)
 
-        # Also store a list of the raw views to allow the output
+        # Also store a list of the raw blocks to allow the output
         # driver to render its own output structure
-        self._formats[fmt] = dict(content=content, views=views)
+        self._formats[fmt] = dict(content=content, blocks=blocks)
 
     @property
     def formats(self):
@@ -251,16 +251,16 @@ class Content:
         """
         return self._formats.get(fmt, {}).get("content")
 
-    def get_views(self, fmt: str) -> "List[View]":
+    def get_blocks(self, fmt: str) -> "List[Block]":
         """Get the rendered views for the given format.
 
         Args:
             fmt (str): the desired output format.
 
         Returns:
-            List[View]: the list of Views rendered under that format.
+            List[Block]: the list of View Blocks rendered under that format.
         """
-        return self._formats.get(fmt, {}).get("views", [])
+        return self._formats.get(fmt, {}).get("blocks", [])
 
 
 class ReportFactory:
@@ -342,8 +342,8 @@ class ReportFactory:
             content = Content(self.env, self.report)
             for fmt in self.supported_formats:
                 self.env.globals["print_license"] = partial(self.license.render, fmt)
-                views = self.vm.render(self.env, fmt, output_driver)
-                content.add_format(fmt, views)
+                blocks = self.vm.render(self.env, fmt, output_driver)
+                content.add_format(fmt, blocks)
             if not self.license.rendered:
                 raise ValueError("Template is missing `{{ print_license() }}` call")
             output_driver.render_output(content, self.vm.blobs)

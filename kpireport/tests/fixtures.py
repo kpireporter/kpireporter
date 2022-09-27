@@ -6,8 +6,9 @@ from typing import Dict, Union
 import pytest
 import requests
 from kpireport.output import OutputDriver
-from kpireport.report import Report, Theme
+from kpireport.report import Content, Report, Theme
 from kpireport.utils import make_jinja_environment
+from kpireport.view import Blob, Block
 
 
 @pytest.fixture
@@ -24,7 +25,38 @@ def report():
 
 @pytest.fixture
 def jinja_env():
-    return make_jinja_environment(Theme())
+    j2 = make_jinja_environment(Theme())
+    j2.globals["print_license"] = lambda: "(fake license)"
+    return j2
+
+
+@pytest.fixture
+def content(report, jinja_env):
+    c = Content(j2=jinja_env, report=report)
+    blocks = [
+        Block(
+            id="first",
+            title="First block",
+            description="The first block in the rendered layout",
+            cols=4,
+            blobs=[],
+            output="First block output",
+            tags=["normal"],
+        ),
+        Block(
+            id="second",
+            title="Second block",
+            description="The second block in the rendered layout",
+            cols=2,
+            blobs=[],
+            output="Second block output",
+            tags=[],
+        ),
+    ]
+    c.add_format("html", blocks)
+    c.add_format("md", blocks)
+    c.add_format("slack", blocks)
+    return c
 
 
 class FakePlugin:

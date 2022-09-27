@@ -2,6 +2,6 @@
 
 {{ report.start_date | datetimeformat }} to {{ report.end_date | datetimeformat }}
 
-{% for view in views %}
-  {% include "view.md" %}
+{% for block in blocks %}
+{% include "block.md" %}
 {% endfor %}

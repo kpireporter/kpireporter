@@ -61,19 +61,8 @@ def _assert_matches_fixture(output, fixture_name):
         assert output == f.read()
 
 
-def test_render_html(report: "Report", ds_mgr: "DatasourceManager", jinja_env):
+@pytest.mark.parametrize("fmt", ["html", "md", "slack"])
+def test_render(report: "Report", ds_mgr: "DatasourceManager", jinja_env, fmt: str):
     view = JenkinsBuildSummary(report, ds_mgr)
-    j2 = make_render_env(jinja_env, view, FakeOutputDriver(report), "html")
-    _assert_matches_fixture(view.render(j2), "expected_build_summary.html")
-
-
-def test_render_md(report: "Report", ds_mgr: "DatasourceManager", jinja_env):
-    view = JenkinsBuildSummary(report, ds_mgr)
-    j2 = make_render_env(jinja_env, view, FakeOutputDriver(report), "md")
-    _assert_matches_fixture(view.render(j2), "expected_build_summary.md")
-
-
-def test_render_slack(report: "Report", ds_mgr: "DatasourceManager", jinja_env):
-    view = JenkinsBuildSummary(report, ds_mgr)
-    j2 = make_render_env(jinja_env, view, FakeOutputDriver(report), "slack")
-    _assert_matches_fixture(view.render(j2), "expected_build_summary.slack")
+    j2 = make_render_env(jinja_env, view, FakeOutputDriver(report), fmt)
+    _assert_matches_fixture(view.render(j2), f"expected_build_summary.{fmt}")

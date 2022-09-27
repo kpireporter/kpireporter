@@ -1,7 +1,7 @@
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime, timezone
-from typing import Dict, Union
+from typing import Dict, Optional, Union
 
 import pytest
 import requests
@@ -78,13 +78,14 @@ class FakeOutputDriver(OutputDriver):
 @dataclass
 class FakeResponse:
     status_code: int
-    content: "Union[str,Dict]"
+    body: "Union[str,Dict]"
+    headers: "Optional[Dict]" = field(default_factory=lambda: {})
 
     def raise_for_status(self):
         if self.status_code >= 300:
             raise requests.HTTPError()
 
     def json(self):
-        if isinstance(self.content, str):
-            return json.loads(self.content)
-        return self.content
+        if isinstance(self.body, str):
+            return json.loads(self.body)
+        return self.body

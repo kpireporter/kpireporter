@@ -1,14 +1,13 @@
-from base64 import b64encode
-from jinja2 import Markup
 import json
+import logging
 import os
+from base64 import b64encode
+
+from jinja2.utils import markupsafe
+from kpireport.output import OutputDriver
 from premailer import transform
 from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Attachment, Mail, MailSettings, SandBoxMode
-
-from kpireport.output import OutputDriver
-
-import logging
 
 LOG = logging.getLogger(__name__)
 
@@ -62,7 +61,7 @@ class SendGridOutputDriver(OutputDriver):
         return flag in ["1", "y", "yes", "true"]
 
     def render_blob_inline(self, blob, fmt=None):
-        return Markup(f"""<img src="cid:{blob.id}" />""")
+        return markupsafe.Markup(f"""<img src="cid:{blob.id}" />""")
 
     def render_output(self, content, blobs):
         msg = Mail(

@@ -1,3 +1,4 @@
+import pytest
 from kpireport.report import Report
 from kpireport.tests import utils
 from kpireport_googleanalytics import GoogleAnalyticsDatasource
@@ -10,6 +11,7 @@ misrepresenting the API's actual behavior.
 """
 
 
+@pytest.mark.integration
 def test_query_default(report: "Report", google_oauth2_keyfile):
     ds = GoogleAnalyticsDatasource(report, key_file=google_oauth2_keyfile)
     df = ds.query("report")
@@ -19,6 +21,7 @@ def test_query_default(report: "Report", google_oauth2_keyfile):
     utils.assert_within_report_range(df.index[-1].to_pydatetime(), report)
 
 
+@pytest.mark.integration
 def test_query_with_dimensions(report: "Report", google_oauth2_keyfile):
     ds = GoogleAnalyticsDatasource(report, key_file=google_oauth2_keyfile)
     df = ds.query(
@@ -32,12 +35,14 @@ def test_query_with_dimensions(report: "Report", google_oauth2_keyfile):
     utils.assert_within_report_range(df.index[-1].to_pydatetime(), report)
 
 
+@pytest.mark.integration
 def test_query_with_metrics(report: "Report", google_oauth2_keyfile):
     ds = GoogleAnalyticsDatasource(report, key_file=google_oauth2_keyfile)
     df = ds.query("report", metrics=[{"expression": "ga:pageviews"}])
     assert list(df.columns) == ["ga:pageviews"]
 
 
+@pytest.mark.integration
 def test_query_with_ordering(report: "Report", google_oauth2_keyfile):
     ds = GoogleAnalyticsDatasource(report, key_file=google_oauth2_keyfile)
     df = ds.query(

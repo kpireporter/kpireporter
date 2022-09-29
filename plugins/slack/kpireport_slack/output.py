@@ -6,7 +6,6 @@ from typing import TYPE_CHECKING
 
 from kpireport.output import OutputDriver
 from slack import WebClient
-from slack.errors import SlackApiError
 from slack.web.classes import blocks, messages, objects
 
 if TYPE_CHECKING:
@@ -99,7 +98,7 @@ class SlackOutputDriver(OutputDriver):
         return str(link)
 
     def render_output(self, content, blobs):
-        view_blocks: "List[Block]" = content.get_blocks("slack", [])
+        view_blocks: "List[Block]" = content.get_blocks("slack")
 
         blks = []
 
@@ -151,8 +150,5 @@ class SlackOutputDriver(OutputDriver):
 
         msg = messages.Message(text="", blocks=blks)
 
-        try:
-            for channel in self.channels:
-                self.slack.chat_postMessage(channel=channel, **msg.to_dict())
-        except SlackApiError as e:
-            LOG.error(f"Got an error: {self._parse_slack_error(e)}")
+        for channel in self.channels:
+            self.slack.chat_postMessage(channel=channel, **msg.to_dict())

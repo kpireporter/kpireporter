@@ -1,12 +1,11 @@
-from datetime import datetime
-
-from email.message import EmailMessage
-from email.headerregistry import Address
-from jinja2 import Markup
-from premailer import transform
 import smtplib
+from datetime import datetime
+from email.headerregistry import Address
+from email.message import EmailMessage
 
+from jinja2.utils import markupsafe
 from kpireport.output import OutputDriver
+from premailer import transform
 
 
 class SMTPOutputDriver(OutputDriver):
@@ -14,7 +13,7 @@ class SMTPOutputDriver(OutputDriver):
 
     Attributes:
         email_from (str): From email address.
-        email_to (List[str]): Email addresses to send to.
+        email_to (Union[str,List[str]]): Email address(es) to send to.
         smtp_host (str): SMTP server to relay mail through. Defaults to
             "localhost".
         smtp_port (int): SMTP port to use. Defaults to 25.
@@ -49,7 +48,7 @@ class SMTPOutputDriver(OutputDriver):
     def init(
         self,
         email_from=None,
-        email_to=[],
+        email_to=None,
         smtp_host="localhost",
         smtp_port=25,
         image_strategy="embed",
@@ -59,6 +58,8 @@ class SMTPOutputDriver(OutputDriver):
             raise ValueError("Both 'from' and 'to' addresses are required")
 
         self.email_from = self._parse_address(email_from)
+        if isinstance(email_to, str):
+            email_to = [email_to]
         self.email_to = [self._parse_address(to) for to in email_to]
         self.smtp_host = smtp_host
         self.smtp_port = smtp_port
@@ -77,10 +78,10 @@ class SMTPOutputDriver(OutputDriver):
 
     def render_blob_inline(self, blob, fmt=None):
         if self.image_strategy == "embed":
-            return Markup(f"""<img src="cid:{blob.id}" />""")
+            return markupsafe.Markup(f"""<img src="cid:{blob.id}" />""")
         elif self.image_strategy == "remote":
             path = "/".join([self.image_remote_base_url, blob.id])
-            return Markup(f"""<img src="{path}{self.cache_buster}" />""")
+            return markupsafe.Markup(f"""<img src="{path}{self.cache_buster}" />""")
         else:
             raise ValueError(f"Unsupported image strategy '{self.image_strategy}'")
 

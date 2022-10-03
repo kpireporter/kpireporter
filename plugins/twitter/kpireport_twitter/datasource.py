@@ -1,11 +1,9 @@
+import logging
 from time import sleep
 
 import pandas as pd
-from TwitterAPI import TwitterAPI, TwitterRequestError, TwitterConnectionError
-
 from kpireport.datasource import Datasource, DatasourceError
-
-import logging
+from TwitterAPI import TwitterAPI
 
 LOG = logging.getLogger(__name__)
 
@@ -91,6 +89,8 @@ class TwitterDatasource(Datasource):
             tweets.extend(_tweets)
 
         df = pd.json_normalize(tweets)
+        if df.empty:
+            return df
         # Convert timestamps to report timezone
         df["created_at"] = pd.to_datetime(df["created_at"])
         df["created_at"] = df["created_at"].dt.tz_convert(self.report.timezone)

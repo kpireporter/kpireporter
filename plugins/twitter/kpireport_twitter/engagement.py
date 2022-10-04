@@ -1,7 +1,6 @@
 from textwrap import wrap
 
 from kpireport_plot import Plot
-import matplotlib.dates as mdates
 
 # How many characters to show in tweet text callout, per line
 TWEET_LINE_LENGTH = 24

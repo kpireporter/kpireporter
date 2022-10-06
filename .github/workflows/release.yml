@@ -22,6 +22,10 @@ jobs:
         with:
           python-version: ${{ env.PYTHON_VERSION }}
 
+      - name: Assemble plugin requirements
+        run: |
+          make plugin-requirements.txt
+
       - name: Install tox
         run: pip install tox
 

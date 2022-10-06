@@ -34,6 +34,8 @@ jobs:
 
       - name: Run tests
         run: tox -e unit
+        env:
+          KPIREPORT_ENCRYPTION_KEY: ${{ secrets.KPIREPORT_ENCRYPTION_KEY }}
 
   docker:
     runs-on: ubuntu-latest

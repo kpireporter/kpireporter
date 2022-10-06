@@ -1,0 +1,5 @@
+---
+features:
+  - |
+    Adds support for SQLite in addition to MySQL. This is controlled via a new
+    ``driver`` kwargs, which defaults to "mysql".

@@ -95,7 +95,7 @@ usage() {
 release.sh [--plugin PLUGIN] CMD
 
 Options:
-  --plugin PLUGIN: target operation to a specific plugin
+  -p,--plugin PLUGIN: target operation to a specific plugin
   --all: publish all changed packages
   --dry-run: don't perform destructive operations (applies to 'publish' only.)
 
@@ -116,7 +116,7 @@ while [[ $# -gt 0 ]]; do
     publish)
       cmd=cmd_publish
       ;;
-    --plugin)
+    -p|--plugin)
       export PLUGIN="$2"
       shift
       ;;

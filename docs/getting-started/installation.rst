@@ -107,7 +107,7 @@ and so are installed like the following:
     # Install KPI reporter with MySQL, Prometheus and SendGrid plugins
     pip install \
       kpireport \
-      kpireport-mysql \
+      kpireport-sql \
       kpireport-prometheus \
       kpireport-sendgrid
 

@@ -1,0 +1,5 @@
+---
+fixes:
+  - |
+    The MySQL connector library is now PyMySQL, which is a pure Python implementation
+    and does not require additional libraries on the host.

@@ -4,14 +4,14 @@
 MySQL
 ======
 
-.. include:: ../../plugins/mysql/README.rst
+.. include:: ../../plugins/sql/README.rst
    :start-line: 4
 
 API
 ===
 
-.. currentmodule:: kpireport_mysql.datasource
-.. autoclass:: MySQLDatasource
+.. currentmodule:: kpireport_sql.datasource
+.. autoclass:: SQLDatasource
    :members:
    :show-inheritance:
    :exclude-members: init
@@ -20,4 +20,4 @@ Changelog
 =========
 
 .. release-notes::
-   :relnotessubdir: plugins/mysql/releasenotes
+   :relnotessubdir: plugins/sql/releasenotes

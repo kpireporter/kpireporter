@@ -14,7 +14,6 @@ pytest-mock
 -e ./plugins/static
 -e ./plugins/googleanalytics
 -e ./plugins/jenkins
--e ./plugins/mysql
 -e ./plugins/plot
 -e ./plugins/prometheus
 -e ./plugins/s3
@@ -22,5 +21,6 @@ pytest-mock
 -e ./plugins/sendgrid
 -e ./plugins/slack
 -e ./plugins/smtp
+-e ./plugins/sql
 -e ./plugins/table
 -e ./plugins/twitter

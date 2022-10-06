@@ -1,9 +1,13 @@
 import logging
 from abc import ABC, abstractmethod
+from typing import TYPE_CHECKING
 
 import pandas as pd
 
 from kpireport.plugin import PluginManager
+
+if TYPE_CHECKING:
+    from kpireport.report import Report
 
 LOG = logging.getLogger(__name__)
 
@@ -30,7 +34,7 @@ class Datasource(ABC):
 
     id = None
 
-    def __init__(self, report, **kwargs):
+    def __init__(self, report: "Report", **kwargs):
         self.report = report
 
         if "id" in kwargs:
